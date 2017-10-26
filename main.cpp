@@ -1,5 +1,6 @@
 
 #include "config.h"
+#include "commandHandler.h"
 
 #include <iostream>
 
@@ -21,6 +22,8 @@ int main(int argc, char** argv){
             std::cout << argv[i] << std::endl;
         }
     }
+
+	std::cin.get();
 
     return 0;
 }
