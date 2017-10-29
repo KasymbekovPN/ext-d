@@ -3,6 +3,9 @@
 #include "commandHandler.h"
 
 #include <iostream>
+#include <clocale>
+#include <vector>
+#include <string>
 
 const char g_project_version[] = {
 #ifdef PROJECT_VERSION
@@ -14,16 +17,25 @@ const char g_project_version[] = {
 
 int main(int argc, char** argv){
 
-    std::cout << g_project_version << std::endl;
+	setlocale(LC_ALL, "Russian");
 
-    if (argc > 0) {
-        
-        for(int i = 0; i < argc; ++i){
-            std::cout << argv[i] << std::endl;
-        }
-    }
+	CommandHandler cmdH = CommandHandler();
 
-	std::cin.get();
+	if (argc > 1) {
+
+		std::vector<std::string> cmd;
+
+		for (int i = 1; i < argc; ++i) {
+			cmd.push_back((std::string)argv[i]);
+		}
+
+		cmdH.setStringItems(cmd);
+	}
+	else {
+		std::cout << "Команды не введены." << std::endl;
+	}
+
+	cmdH.test();
 
     return 0;
 }
