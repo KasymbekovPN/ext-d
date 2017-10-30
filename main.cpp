@@ -35,7 +35,9 @@ int main(int argc, char** argv){
 		std::cout << "Команды не введены." << std::endl;
 	}
 
-	cmdH.test();
+	//cmdH.test();
+
+	cmdH.run();
 
     return 0;
 }
