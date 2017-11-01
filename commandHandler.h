@@ -1,29 +1,37 @@
 #pragma once
 
+#include "config.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
 #include <map>
 
+using std::cout;
+using std::endl;
+using std::vector;
+using std::map;
+using std::string;
+
 class CommandHandler
 {
 public:
-	CommandHandler();
+	CommandHandler(const vector<string>& );
 	~CommandHandler();
 
-	void setStringItems(std::vector<std::string>);
 	void run();
-	void test() const;
+
 private:
 
-	void globalHandler(std::vector<std::string> cmd_args);
-	void helpHandler(std::vector<std::string> cmd_args);
-	void versionHandler(std::vector<std::string> cmd_args);
+	static const int NUMBER_OF_COMMAND = 3;
+	static const string validCommandName[CommandHandler::NUMBER_OF_COMMAND];
 
-	//void (*handlers[3])(std::vector<std::string>);
+	string command;	
 
-	//std::map<std::string, void(CommandHandler::*)(std::vector<std::string>)> handlers;
+	typedef void (CommandHandler::*ptr2Handler)();
+	map<string, ptr2Handler> handlers;
 
-	std::vector<std::vector<std::string>> m_command;	
-	std::vector<std::string> m_buffer;
+	void helpHandler();
+	void versionHandler();
+	void runHandler();
 };
