@@ -23,15 +23,19 @@ public:
 
 private:
 
-	static const int NUMBER_OF_COMMAND = 3;
+	static const int NUMBER_OF_COMMAND = 4;
 	static const string validCommandName[CommandHandler::NUMBER_OF_COMMAND];
 
-	string command;	
+	string command;
+	vector<string> arguments;
 
-	typedef void (CommandHandler::*ptr2Handler)();
+	bool hasCommand;
+
+	typedef void (CommandHandler::*ptr2Handler)(vector<string>);
 	map<string, ptr2Handler> handlers;
 
-	void helpHandler();
-	void versionHandler();
-	void runHandler();
+	void helpHandler(vector<string>);
+	void versionHandler(vector<string>);
+	void runHandler(vector<string>);
+	void globalHandler(vector<string>);
 };
