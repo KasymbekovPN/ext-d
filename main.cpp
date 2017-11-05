@@ -1,6 +1,7 @@
 
 #include "config.h"
 #include "commandHandler.h"
+#include "fileHandler.h"
 
 #include <iostream>
 #include <clocale>
@@ -18,6 +19,14 @@ int main(int argc, char** argv){
 
 	CommandHandler cHandler = CommandHandler(cmds);
 	cHandler.run();                                             
+
+	FileHandler f1 = FileHandler("C:/projects/external-description/_build_vs/Debug/test-1.txt");
+	FileHandler f2 = FileHandler("C:/projects/external-description/_build_vs/Debug/test-2.txt");
+	FileHandler f3 = FileHandler("C:/projects/external-description/_build_vs/Debug/test-3.txt");
+
+	f2.clearFile();
+
+	//FileHandler f = FileHandler("test-2.txt");
 
     return 0;
 }
