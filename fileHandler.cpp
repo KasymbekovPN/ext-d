@@ -48,20 +48,48 @@ int FileHandler::getNumLine() const
 	return number_of_line;
 }
 
-bool FileHandler::rewriteLine(int line_idx_, const string & new_line_)
+void FileHandler::rewriteLine(int line_idx_, const string& new_line_)
 {
-
-	bool result = false;
 	int num = getNumLine();
 
-	if (num > 0 && line_idx_ < num ) {		
+	if (num > 0 && line_idx_ < num) {
 
 		vector<string> result = readFile();
 		result.at(line_idx_) = new_line_ + '\n';
 		rewriteFile(result);
 	}
+}
 
-	return result;
+void FileHandler::insertLine(int line_idx_, const string & new_line_)
+{
+	vector<string> buffer = readFile();
+	
+	if (buffer.size() > line_idx_) {
+		buffer.insert(buffer.begin() + line_idx_, new_line_ + '\n');
+	}
+	else {
+		buffer.push_back(new_line_);
+	}
+	
+	rewriteFile(buffer);
+}
+
+void FileHandler::deleteLine(int line_idx_)
+{
+	vector<string> buffer = readFile();
+	if (buffer.size() > line_idx_) {
+		buffer.erase(buffer.begin() + line_idx_);
+	}
+
+	rewriteFile(buffer);
+}
+
+void FileHandler::readFile2Map(char delimiter)
+{
+}
+
+void FileHandler::writeMap2File()
+{
 }
 
 bool FileHandler::fileExist(const string& path_)
@@ -106,7 +134,7 @@ vector<string> FileHandler::readFile()
 			ch = fin_->get();
 		}
 
-		result.push_back(line);
+		result.push_back(line + '\n');
 
 		fin_->close();
 	}

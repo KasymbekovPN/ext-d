@@ -21,7 +21,11 @@ public:
 
 	void clearFile() const;
 	int getNumLine() const;
-	bool rewriteLine(int, const string&);
+	void rewriteLine(int, const string&);
+	void insertLine(int, const string&);
+	void deleteLine(int);
+	void readFile2Map(char);
+	void writeMap2File();
 
 	static bool fileExist(const string& path_);
 	static bool fileExist(const string& path_, ifstream* p_fin_, bool needClose);

@@ -20,7 +20,15 @@ int main(int argc, char** argv){
 	CommandHandler cHandler = CommandHandler(cmds);
 	cHandler.run();                                             
 
+	string s1 = "C:/projects/external-description/_build_vs/Debug/test-1.txt";
+	FileHandler f1(s1);
+	f1.deleteLine(3);
+
 	//string s1 = "C:/projects/external-description/_build_vs/Debug/test-1.txt";
+	//FileHandler f1(s1);
+	//f1.insertLine(61, "new 61");
+
+
 	//string s2 = "C:/projects/external-description/_build_vs/Debug/test-2.txt";
 	//string s3 = "C:/projects/external-description/_build_vs/Debug/test-3.txt";
 
