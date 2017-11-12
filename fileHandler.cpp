@@ -84,14 +84,6 @@ void FileHandler::deleteLine(int line_idx_)
 	rewriteFile(buffer);
 }
 
-void FileHandler::readFile2Map(char delimiter)
-{
-}
-
-void FileHandler::writeMap2File()
-{
-}
-
 bool FileHandler::fileExist(const string& path_)
 {
 	ifstream fin_(path_, std::ios::in | std::ios::_Nocreate);

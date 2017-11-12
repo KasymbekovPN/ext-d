@@ -2,6 +2,9 @@
 #include "config.h"
 #include "commandHandler.h"
 #include "fileHandler.h"
+#include "jsonItem.h"
+#include "jsonNumber.h"
+#include "jsonHandler.h"
 
 #include <iostream>
 #include <clocale>
@@ -12,17 +15,47 @@ int main(int argc, char** argv){
 
 	setlocale(LC_ALL, "Russian");
 
-	vector<string> cmds;
-	for (int i = 1; i < argc; ++i) {
-		cmds.push_back(string(argv[i]));
-	}
+	string s1 = "C:/projects/external-description/_build_vs/Debug/test.json";
+	JsonHandler j(s1);
+	cout << j.exist() << endl;
 
-	CommandHandler cHandler = CommandHandler(cmds);
-	cHandler.run();                                             
+	//vector<JsonNumber*> vj;
 
-	string s1 = "C:/projects/external-description/_build_vs/Debug/test-1.txt";
-	FileHandler f1(s1);
-	f1.deleteLine(3);
+	//vj.push_back(new JsonNumber(12, "first"));
+	//vj.push_back(new JsonNumber(13));
+	//vj.push_back(new JsonNumber());
+
+	//for (auto item : vj) {
+	//	item->test();
+	//}
+
+	//for (auto item : vj) {
+	//	delete item;
+	//}
+
+	//JsonNumber* j = new JsonNumber(91, "o_1");
+	//j->test();
+	//cout << j->get() << endl;
+	//cout << j->getName() << endl;
+	//cout << j->getID() << endl;
+
+	//delete j;
+	
+	system("pause");
+
+	//---
+	//vector<string> cmds;
+	//for (int i = 1; i < argc; ++i) {
+	//	cmds.push_back(string(argv[i]));
+	//}
+
+	//CommandHandler cHandler = CommandHandler(cmds);
+	//cHandler.run();                                             
+	//-----
+
+	//string s1 = "C:/projects/external-description/_build_vs/Debug/test-1.txt";
+	//FileHandler f1(s1);
+	//f1.deleteLine(3);
 
 	//string s1 = "C:/projects/external-description/_build_vs/Debug/test-1.txt";
 	//FileHandler f1(s1);

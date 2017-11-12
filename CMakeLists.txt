@@ -12,4 +12,18 @@ add_executable(ext-d
                 commandHandler.h 
                 commandHandler.cpp 
                 fileHandler.h 
-                fileHandler.cpp)
+                fileHandler.cpp
+                jsonItem.h
+                jsonItem.cpp
+                jsonString.h
+                jsonString.cpp
+                jsonArray.h
+                jsonArray.cpp
+                jsonNumber.h
+                jsonNumber.cpp
+                jsonObject.h
+                jsonObject.cpp
+                jsonSimple.h
+                jsonSimple.cpp
+                jsonHandler.h
+                jsonHandler.cpp)
