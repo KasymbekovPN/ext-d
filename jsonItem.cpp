@@ -38,3 +38,9 @@ int JsonItem::getID() const
 {
 	return m_itemCounter;
 }
+
+void JsonItem::test() const
+{
+	cout << "Class JsonItem" << endl;
+	cout << "Name : " << m_name;
+}

@@ -17,7 +17,7 @@ JsonNumber::~JsonNumber() {
 	cout << ".dtor JsonNumber()" << endl;
 }
 
-void JsonNumber::test()
+void JsonNumber::test() const
 {
 	cout << "Class JsonNumber" << endl;
 	cout << "Name : " << getName() << endl;

@@ -15,7 +15,7 @@ public:
 	JsonNumber(int, const string&);
 	virtual ~JsonNumber();
 
-	virtual void test();
+	virtual void test() const;
 
 	int get() const;
 	void set(int);

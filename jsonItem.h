@@ -20,7 +20,7 @@ public:
 	string getName() const;
 	virtual int getID() const;
 
-	virtual void test() = 0;
+	virtual void test() const;
 
 private:
 
