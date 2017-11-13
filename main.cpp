@@ -2,22 +2,54 @@
 #include "config.h"
 #include "commandHandler.h"
 #include "fileHandler.h"
+#include "jsonHandler.h"
+
 #include "jsonItem.h"
 #include "jsonNumber.h"
-#include "jsonHandler.h"
+#include "jsonString.h"
+#include "jsonString.h"
 
 #include <iostream>
 #include <clocale>
 #include <vector>
 #include <string>
+#include <map>
+
+using std::cout;
+using std::endl;
+using std::string;
+using std::vector;
+using std::map;
 
 int main(int argc, char** argv){
 
 	setlocale(LC_ALL, "Russian");
 
-	string s1 = "C:/projects/external-description/_build_vs/Debug/test.json";
-	JsonHandler j(s1);
-	cout << j.exist() << endl;
+	JsonItem<int> ji(12);
+	cout << ji.get() << endl;
+
+	JsonItem<string> js("123");
+	cout << js.get() << endl;
+
+	JsonItem<SimpleType> jst(SimpleType::False);
+	cout << (int)jst.get() << endl;
+
+	//vector<JsonItem*> v1;
+
+	//v1.push_back(new JsonNumber(1));
+
+	//for (auto item : v1) {
+	//	item->test();
+	//	//cout << (JsonNumber*)item->get();
+	//}
+
+	//for (auto item : v1) {
+	//	delete item;
+	//}
+
+	//string s1 = "C:/projects/external-description/_build_vs/Debug/test.json";
+	//JsonHandler j(s1);
+	//cout << j.exist() << endl;
 
 	//vector<JsonNumber*> vj;
 
