@@ -5,6 +5,7 @@
 #include <iostream>
 #include <ios>
 #include <vector>
+#include <sstream>
 
 using std::string;
 using std::cout;
@@ -12,27 +13,36 @@ using std::endl;
 using std::ifstream;
 using std::ofstream;
 using std::vector;
+using std::stringstream;
 
 class FileHandler
 {
 public:
-	FileHandler(const string& path_);
+	FileHandler(const string&);
 	~FileHandler();
 
-	void clearFile() const;
-	int getNumLine() const;
-	void rewriteLine(int, const string&);
-	void insertLine(int, const string&);
-	void deleteLine(int);
+	const string& getAsString() const;
+	bool isExist() const;
 
-	static bool fileExist(const string& path_);
-	static bool fileExist(const string& path_, ifstream* p_fin_, bool needClose);
+	//void clearFile() const;
+	//int getNumLine() const;
+	//void rewriteLine(int, const string&);
+	//void insertLine(int, const string&);
+	//void deleteLine(int);
+
+	//static bool fileExist(const string& path_);
+	//static bool fileExist(const string& path_, ifstream* p_fin_, bool needClose);
 
 private:
 
-	vector<string> readFile();
-	void rewriteFile(vector<string>) const;
+	stringstream m_ss;
+	string m_file;
+	string m_path;
+	bool m_file_exist;
 
-	string m_filePath;
+	//vector<string> readFile();
+	//void rewriteFile(vector<string>) const;
+
+	//string m_filePath;
 
 };

@@ -1,14 +1,178 @@
 #include "fileHandler.h"
 
-FileHandler::FileHandler(const string& filePath_): m_filePath(filePath_)
+//FileHandler::FileHandler(const string& filePath_): m_filePath(filePath_)
+//{
+//
+//	if (FileHandler::fileExist(m_filePath)) {
+//		return;
+//	}
+//
+//	ofstream fout_(m_filePath);
+//	fout_.close();
+//
+//}
+//
+//FileHandler::~FileHandler()
+//{
+//}
+//
+//void FileHandler::clearFile() const
+//{
+//	ofstream fout_(m_filePath, std::ios_base::out | std::ios_base::trunc);
+//	fout_.close();
+//}
+//
+//int FileHandler::getNumLine() const
+//{
+//	ifstream* fin_ = new ifstream;
+//	bool exist_ = FileHandler::fileExist(m_filePath, fin_, false);
+//	int number_of_line = 0;
+//
+//	if (exist_) {
+//
+//		number_of_line = 1;
+//
+//		char ch = char(fin_->get());
+//		while (ch != EOF) {
+//
+//			if (ch == '\n') {
+//				number_of_line++;
+//			}
+//			ch = char(fin_->get());
+//		}
+//
+//		fin_->close();
+//	}
+//	
+//	delete fin_;
+//	return number_of_line;
+//}
+//
+//void FileHandler::rewriteLine(int line_idx_, const string& new_line_)
+//{
+//	int num = getNumLine();
+//
+//	if (num > 0 && line_idx_ < num) {
+//
+//		vector<string> result = readFile();
+//		result.at(line_idx_) = new_line_ + '\n';
+//		rewriteFile(result);
+//	}
+//}
+//
+//void FileHandler::insertLine(int line_idx_, const string & new_line_)
+//{
+//	vector<string> buffer = readFile();
+//	
+//	if (buffer.size() > line_idx_) {
+//		buffer.insert(buffer.begin() + line_idx_, new_line_ + '\n');
+//	}
+//	else {
+//		buffer.push_back(new_line_);
+//	}
+//	
+//	rewriteFile(buffer);
+//}
+//
+//void FileHandler::deleteLine(int line_idx_)
+//{
+//	vector<string> buffer = readFile();
+//	if (buffer.size() > line_idx_) {
+//		buffer.erase(buffer.begin() + line_idx_);
+//	}
+//
+//	rewriteFile(buffer);
+//}
+//
+//bool FileHandler::fileExist(const string& path_)
+//{
+//	ifstream fin_(path_, std::ios::in | std::ios::_Nocreate);
+//	bool exist_ = !fin_.fail();
+//	fin_.close();
+//
+//	return exist_;
+//}
+//
+//bool FileHandler::fileExist(const string & path_, ifstream* p_fin_, bool needClose)
+//{
+//
+//	p_fin_->open(path_, std::ios::in | std::ios::_Nocreate);
+//	bool exist_ = !p_fin_->fail();
+//
+//	if (!exist_ || needClose) {
+//		p_fin_->close();
+//	}
+//
+//	return exist_;
+//}
+//
+//vector<string> FileHandler::readFile()
+//{
+//	vector<string> result;
+//	ifstream* fin_ = new ifstream;
+//	bool exist = FileHandler::fileExist(m_filePath, fin_, false);
+//
+//	if (exist) {
+//
+//		char ch = fin_->get();
+//		string line = "";
+//		while (ch != EOF){
+//
+//			line += ch;
+//			if (ch == '\n') {
+//				result.push_back(line);
+//				line = "";
+//			}
+//			ch = fin_->get();
+//		}
+//
+//		result.push_back(line + '\n');
+//
+//		fin_->close();
+//	}
+//
+//	delete fin_;
+//	return result;
+//}
+//
+//void FileHandler::rewriteFile(vector<string> lines) const
+//{
+//
+//	ifstream* fin_ = new ifstream;
+//	bool exist = FileHandler::fileExist(m_filePath, fin_, false);
+//
+//	if (exist) {
+//		fin_->close();
+//
+//		ofstream fout_(m_filePath, std::ios::in | std::ios::trunc);
+//		for (auto line : lines) {
+//			fout_ << line;
+//		}
+//		fout_.close();
+//	}
+//
+//	delete fin_;
+//}
+
+FileHandler::FileHandler(const string & path_): m_path(path_)
 {
 
-	if (FileHandler::fileExist(m_filePath)) {
+	ifstream fin(m_path, std::ios::in | std::ios::_Nocreate);
+	m_file_exist = !fin.fail();
+
+	if (!m_file_exist) {
+		fin.close();
 		return;
 	}
 
-	ofstream fout_(m_filePath);
-	fout_.close();
+	char ch = fin.get();
+	while (ch != EOF) {
+		m_ss << ch;
+		ch = fin.get();
+	}
+	fin.close();
+
+	m_file = m_ss.str();
 
 }
 
@@ -16,140 +180,12 @@ FileHandler::~FileHandler()
 {
 }
 
-void FileHandler::clearFile() const
+const string & FileHandler::getAsString() const
 {
-	ofstream fout_(m_filePath, std::ios_base::out | std::ios_base::trunc);
-	fout_.close();
+	return m_file;
 }
 
-int FileHandler::getNumLine() const
+bool FileHandler::isExist() const
 {
-	ifstream* fin_ = new ifstream;
-	bool exist_ = FileHandler::fileExist(m_filePath, fin_, false);
-	int number_of_line = 0;
-
-	if (exist_) {
-
-		number_of_line = 1;
-
-		char ch = char(fin_->get());
-		while (ch != EOF) {
-
-			if (ch == '\n') {
-				number_of_line++;
-			}
-			ch = char(fin_->get());
-		}
-
-		fin_->close();
-	}
-	
-	delete fin_;
-	return number_of_line;
-}
-
-void FileHandler::rewriteLine(int line_idx_, const string& new_line_)
-{
-	int num = getNumLine();
-
-	if (num > 0 && line_idx_ < num) {
-
-		vector<string> result = readFile();
-		result.at(line_idx_) = new_line_ + '\n';
-		rewriteFile(result);
-	}
-}
-
-void FileHandler::insertLine(int line_idx_, const string & new_line_)
-{
-	vector<string> buffer = readFile();
-	
-	if (buffer.size() > line_idx_) {
-		buffer.insert(buffer.begin() + line_idx_, new_line_ + '\n');
-	}
-	else {
-		buffer.push_back(new_line_);
-	}
-	
-	rewriteFile(buffer);
-}
-
-void FileHandler::deleteLine(int line_idx_)
-{
-	vector<string> buffer = readFile();
-	if (buffer.size() > line_idx_) {
-		buffer.erase(buffer.begin() + line_idx_);
-	}
-
-	rewriteFile(buffer);
-}
-
-bool FileHandler::fileExist(const string& path_)
-{
-	ifstream fin_(path_, std::ios::in | std::ios::_Nocreate);
-	bool exist_ = !fin_.fail();
-	fin_.close();
-
-	return exist_;
-}
-
-bool FileHandler::fileExist(const string & path_, ifstream* p_fin_, bool needClose)
-{
-
-	p_fin_->open(path_, std::ios::in | std::ios::_Nocreate);
-	bool exist_ = !p_fin_->fail();
-
-	if (!exist_ || needClose) {
-		p_fin_->close();
-	}
-
-	return exist_;
-}
-
-vector<string> FileHandler::readFile()
-{
-	vector<string> result;
-	ifstream* fin_ = new ifstream;
-	bool exist = FileHandler::fileExist(m_filePath, fin_, false);
-
-	if (exist) {
-
-		char ch = fin_->get();
-		string line = "";
-		while (ch != EOF){
-
-			line += ch;
-			if (ch == '\n') {
-				result.push_back(line);
-				line = "";
-			}
-			ch = fin_->get();
-		}
-
-		result.push_back(line + '\n');
-
-		fin_->close();
-	}
-
-	delete fin_;
-	return result;
-}
-
-void FileHandler::rewriteFile(vector<string> lines) const
-{
-
-	ifstream* fin_ = new ifstream;
-	bool exist = FileHandler::fileExist(m_filePath, fin_, false);
-
-	if (exist) {
-		fin_->close();
-
-		ofstream fout_(m_filePath, std::ios::in | std::ios::trunc);
-		for (auto line : lines) {
-			fout_ << line;
-		}
-		fout_.close();
-	}
-
-	delete fin_;
+	return m_file_exist;
 }
