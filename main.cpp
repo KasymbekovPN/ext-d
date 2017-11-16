@@ -22,7 +22,6 @@ int main(int argc, char** argv){
 
 	string s = "C:/projects/external-description/_build_vs/Debug/config.txt";
 	ConfigHandler ch(s);
-	ch.test1();
 
 	//FileHandler fh(s);
 	//cout << fh.getAsString() << endl;

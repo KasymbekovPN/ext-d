@@ -1,7 +1,8 @@
 #include "target.h"
 
-Target::Target(const string & name_, const string & path_, bool is_exist_): m_name(name_), m_path(path_), is_exist(is_exist_)
+Target::Target(const string & str_)
 {
+	cout << str_ << endl;
 }
 
 string Target::getName() const
