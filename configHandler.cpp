@@ -8,7 +8,6 @@ ConfigHandler::ConfigHandler(const string & path_)
 	const char end = ')';
 	bool rec = false;
 
-
 	string buffer = "";
 
 	char ch = m_fileHandler->get();
@@ -53,6 +52,15 @@ ConfigHandler::ConfigHandler(const string & path_)
 
 		ch = m_fileHandler->get();
 	}
+
+	for (int i = 0; i < m_targets.size() - 1; ++i) {
+		for (int j = i + 1; j < m_targets.size(); ++j) {
+			if (m_targets[i]->getName() == m_targets[j]->getName()) {
+				cout << error3 << endl;
+			}
+		}
+	}
+
 }
 
 ConfigHandler::~ConfigHandler()

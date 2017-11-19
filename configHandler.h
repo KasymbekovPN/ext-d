@@ -25,8 +25,9 @@ private:
 
 	const string cmd_settarget = "SETTARGET";
 
-	const string error1 = "ConfigHandler Error1";
-	const string error2 = "ConfigHandler Error2";
+	const string error1 = "ConfigHandler ERROR1";
+	const string error2 = "ConfigHandler ERROR2";
+	const string error3 = "ConfogHandler ERROR3";
 
 	FileHandler* m_fileHandler;
 	vector<Target*> m_targets;

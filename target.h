@@ -2,10 +2,15 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
+
+#include "fileHandler.h"
 
 using std::string;
 using std::cout;
 using std::endl;
+using std::vector;
+
 
 class Target
 {
@@ -20,5 +25,6 @@ private:
 	string	m_name;
 	string	m_path;
 	bool	is_exist;
-	bool	is_valid;
+
+	const string error1 = "Target ERROR1";
 };
