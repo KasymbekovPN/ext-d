@@ -32,8 +32,8 @@ int main(int argc, char** argv){
 	//int flags = StringHandler::flagAll;
 	//cout << StringHandler::filter(str, flags) << endl;;
 
-	//string s = "C:/projects/external-description/_build_vs/Debug/config.txt";
-	//ConfigHandler ch(s);
+	string s = "C:/projects/external-description/_build_vs/Debug/config.txt";
+	ConfigHandler ch(s);
 	//ch.test();
 
 	//FileHandler fh(s);

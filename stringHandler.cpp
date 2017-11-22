@@ -5,6 +5,9 @@ string StringHandler::filter(const string & line, int flags)
 
 	string result;
 
+	//
+	// todo: сделать менее громоздким
+	//
 	for (char ch : line) {
 		if (ch >= 'A' && ch <= 'Z') {
 			if (flags & flagUpperAlpha) {
@@ -31,11 +34,32 @@ string StringHandler::filter(const string & line, int flags)
 				result += ch;
 			}
 		}
-		else if (ch = '_') {
+		else if (ch == '_') {
 			if (flags & fladLowLine) {
 				result += ch;
 			}
 		}
+		else if (ch == '\\') {
+			if (flags & flagLSlash) {
+				result += ch;
+			}
+		}
+		else if (ch == ':'){
+			if (flagsColon & flags) {
+				result += ch;
+			}
+		}
+		else if (ch >= '0' && ch <= '9') {
+			if (flags & flagsNumber) {
+				result += ch;
+			}
+		}
+		else if (ch == '-') {
+			if (flags & flagsHyphen) {
+				result += ch;
+			}
+		}
+
 	}
 
 	return result;
