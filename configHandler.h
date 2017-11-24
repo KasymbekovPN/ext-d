@@ -28,8 +28,8 @@ private:
 	const string error1 = "ConfigHandler ERROR1";
 	const string error2 = "ConfigHandler ERROR2";
 	const string error3 = "ConfogHandler ERROR3";
+	const string error4 = "ConfogHandler ERROR4";
 
-	FileHandler* m_fileHandler;
 	vector<Target*> m_targets;
 
 	bool isExist;

@@ -40,3 +40,60 @@ char FileHandler::get()
 {
 	return m_ss.get();
 }
+
+vector<vector<string>> FileHandler::getCmdLists()
+{
+
+	vector<vector<string>> result;
+	string buffer;
+
+	if (m_file_exist) {
+		char begin = '(';
+		char end = ')';
+		bool rec = false;
+		char ch = m_ss.get();
+		
+		while (ch != EOF) {
+
+			if (!rec && ch == begin) {
+				rec = true;
+			}
+			else {
+				if (ch == begin) {
+					cout << error1 << endl;
+				}
+				else if (ch == end) {
+					rec = false;
+					vector<string> vBuffer = StringHandler::split(
+						StringHandler::filter(buffer, StringHandler::flagAll),
+						' '
+					);
+					result.push_back(vBuffer);
+					buffer.clear();
+				}
+				else {
+					buffer += ch;
+				}
+			}
+
+			ch = m_ss.get();
+		}
+	}
+	return result;
+}
+
+vector<string> FileHandler::getCmdArgList(const string & cmd_)
+{
+	vector<string> result;
+	auto buffer = getCmdLists();
+
+	for (auto item : buffer) {
+		if (item.size() >= 2) {
+			if (item[0] == cmd_) {
+				std::copy(item.begin() + 1, item.end(), std::inserter(result, result.begin()));
+			}
+		}
+	}
+
+	return result;
+}

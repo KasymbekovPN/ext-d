@@ -16,7 +16,7 @@ using std::vector;
 class Target
 {
 public:
-	Target(const string&);
+	Target(const string&, const string&);
 
 	string getName() const;
 	string getPath() const;
@@ -35,10 +35,10 @@ private:
 
 	const string cmd_set_source_dir = "SET_SOURCE_DIR";
 	const string cmd_set_output_dir = "SET_OUTPUT_DIR";
+	const static int number_of_cmd = 2;
+	const static int cmd_size[number_of_cmd];
 
 	const string error1 = "Target ERROR1";
 	const string error2 = "Target ERROR2";
 	const string error3 = "Target ERROR3";
-	const string error4 = "Target ERROR4";
-	const string error5 = "Target ERROR5";
 };
