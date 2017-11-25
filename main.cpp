@@ -22,7 +22,15 @@ int main(int argc, char** argv){
 	setlocale(LC_ALL, "Russian");
 
 	string s = "C:/projects/external-description/_build_vs/Debug/config.txt";
-	ConfigHandler ch(s);
+	ConfigHandler config_file(s);
+
+	if (!config_file.errorStatus()) {
+
+	}
+	else {
+		cout << "Ошибка конфигурационного файла : " << config_file.errorStatus() << endl;
+	}
+	
 
 	system("pause");
 

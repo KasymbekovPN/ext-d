@@ -18,19 +18,16 @@ public:
 	ConfigHandler(const string&);
 	~ConfigHandler();
 
-	void test() const;
-	void test1() const;
+	int errorStatus() const;
+	void targetRun(const string&) const;
 
 private:
-
 	const string cmd_settarget = "SETTARGET";
 
-	const string error1 = "ConfigHandler ERROR1";
-	const string error2 = "ConfigHandler ERROR2";
-	const string error3 = "ConfogHandler ERROR3";
-	const string error4 = "ConfogHandler ERROR4";
+	const static int error_cnf_file_no_exists	 = 0b01;
+	const static int error_cmd_settarget_invalid = 0b10;
 
 	vector<Target*> m_targets;
-
 	bool isExist;
+	int m_error_status;
 };

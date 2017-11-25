@@ -37,6 +37,7 @@ private:
 	string m_file;
 	string m_path;
 	bool m_file_exist;
+	int m_error_status;
 
-	const string error1 = "FileHandler ERROR1";
+	const static int error_cmd_format = 0b1;
 };

@@ -44,6 +44,8 @@ char FileHandler::get()
 vector<vector<string>> FileHandler::getCmdLists()
 {
 
+	m_error_status = 0;
+
 	vector<vector<string>> result;
 	string buffer;
 
@@ -60,7 +62,7 @@ vector<vector<string>> FileHandler::getCmdLists()
 			}
 			else {
 				if (ch == begin) {
-					cout << error1 << endl;
+					m_error_status |= error_cmd_format;
 				}
 				else if (ch == end) {
 					rec = false;
@@ -79,6 +81,11 @@ vector<vector<string>> FileHandler::getCmdLists()
 			ch = m_ss.get();
 		}
 	}
+
+	if (m_error_status) {
+		result.clear();
+	}
+
 	return result;
 }
 
