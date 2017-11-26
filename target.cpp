@@ -73,3 +73,8 @@ void Target::toConsole() const
 
 	cout << endl;
 }
+
+void Target::run() const
+{
+	cout << "Цель " << m_name << " выполняется." << endl;
+}

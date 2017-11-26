@@ -20,6 +20,8 @@ public:
 
 	int errorStatus() const;
 	void targetRun(const string&) const;
+	void showAllTarget() const;
+	void showTarget(const string&) const;
 
 private:
 	const string cmd_settarget = "SETTARGET";

@@ -53,4 +53,44 @@ int ConfigHandler::errorStatus() const
 
 void ConfigHandler::targetRun(const string & target_name_) const
 {
+	bool target_no_exists = true;
+
+	for (auto target : m_targets) {
+		if (target->getName() == target_name_) {
+			target_no_exists = false;
+			target->run();
+		}
+	}
+
+	if (target_no_exists) {
+		cout << "Цель с именем " << target_name_ << " не существиет" << endl;
+	}
+}
+
+void ConfigHandler::showAllTarget() const
+{
+	if (m_targets.size() == 0) {
+		cout << "Ни одной цели не задано." << endl;
+	}
+	else {
+		for (auto target : m_targets) {
+			target->toConsole();
+		}
+	}
+}
+
+void ConfigHandler::showTarget(const string & target_name_) const
+{
+	bool target_no_exists = true;
+
+	for (auto target : m_targets) {
+		if (target->getName() == target_name_) {
+			target->toConsole();
+			target_no_exists = false;
+		}
+	}
+
+	if (target_no_exists) {
+		cout << "Цель с именем " << target_name_ << " не существиет" << endl;
+	}
 }

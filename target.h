@@ -22,6 +22,7 @@ public:
 	string getPath() const;
 	bool isExist() const;
 	void toConsole() const;
+	void run() const;
 
 private:
 	string	m_name;
