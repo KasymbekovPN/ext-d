@@ -7,6 +7,7 @@
 
 #include "fileHandler.h"
 #include "stringHandler.h"
+#include "fileTree.h"
 
 using std::string;
 using std::cout;
@@ -17,6 +18,7 @@ class Target
 {
 public:
 	Target(const string&, const string&);
+	~Target();
 
 	string getName() const;
 	string getPath() const;
@@ -31,6 +33,8 @@ private:
 	string	m_source_dir;
 	string	m_output_dir;
 	int		m_error_status;
+
+	FileTree* m_fileTree;
 
 	const string cmd_set_source_dir = "SET_SOURCE_DIR";
 	const string cmd_set_output_dir = "SET_OUTPUT_DIR";

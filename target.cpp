@@ -42,6 +42,14 @@ Target::Target(const string & name_, const string& path_)
 			m_error_status |= error_output_dir_no_exists;
 		}
 	}
+
+	m_fileTree = new FileTree(m_source_dir, m_error_status);
+
+}
+
+Target::~Target()
+{
+	delete m_fileTree;
 }
 
 string Target::getName() const
@@ -76,5 +84,27 @@ void Target::toConsole() const
 
 void Target::run() const
 {
-	cout << "Цель " << m_name << " выполняется." << endl;
+
+	m_fileTree->show();
+
+	//cout << "--target.run " << m_name << endl;
+
+	//m_fileTree
+
+	//WIN32_FIND_DATA wfd;
+	//HANDLE const hFind = FindFirstFile((LPCSTR)(m_source_dir + "\\*").c_str(), &wfd);
+
+	//if (INVALID_HANDLE_VALUE != hFind) {
+	//	do {
+	//		string str;
+	//		cout << &wfd.cFileName[0] << " -- ";
+	//		if (FILE_ATTRIBUTE_ARCHIVE == wfd.dwFileAttributes) {
+	//			str = "File";
+	//		}
+	//		else if (FILE_ATTRIBUTE_DIRECTORY == wfd.dwFileAttributes) {
+	//			str = "Directory";
+	//		}
+	//		cout << str << endl;
+	//	} while (NULL != FindNextFile(hFind, &wfd));
+	//}
 }

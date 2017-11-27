@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(ext-d VERSION 0.0.9)
+project(ext-d VERSION 0.0.10)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -18,4 +18,7 @@ add_executable(ext-d
                 stringHandler.h
                 stringHandler.cpp
                 consoleCmdHandler.h
-                consoleCmdHandler.cpp)
+                consoleCmdHandler.cpp
+                fileTree.h
+                fileTree.cpp
+                )
