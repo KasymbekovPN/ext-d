@@ -30,16 +30,5 @@ int main(int argc, char** argv){
 	ConsoleCmdHandler cmdHandler(s, args);
 	cmdHandler.showErrorStatus();
 
-	//ConsoleCmdHandler cmdHandler();
-	//ConfigHandler config_file(s);
-	//if (!config_file.errorStatus()) {
-	//}
-	//else {
-	//	cout << "Ошибка конфигурационного файла : " << config_file.errorStatus() << endl;
-	//}
-	
-
-	//system("pause");
-
     return 0;
 }

@@ -38,11 +38,13 @@ private:
 
 	const string cmd_set_source_dir = "SET_SOURCE_DIR";
 	const string cmd_set_output_dir = "SET_OUTPUT_DIR";
+	const string cmd_set_lang = "SET_LANG";
 	const static int number_of_cmd = 2;
 	const static int cmd_size[number_of_cmd];
 
-	const static int error_output_dir_invalid_param = 0b0001;
-	const static int error_source_dir_invalid_param = 0b0010;
-	const static int error_output_dir_no_exists		= 0b0100;
-	const static int error_source_dir_no_exists		= 0b1000;
+	const static int error_output_dir_invalid_param = 0b00001;
+	const static int error_source_dir_invalid_param = 0b00010;
+	const static int error_output_dir_no_exists		= 0b00100;
+	const static int error_source_dir_no_exists		= 0b01000;
+	const static int error_unknow_lang				= 0b100000;
 };
