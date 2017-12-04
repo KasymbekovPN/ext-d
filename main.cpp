@@ -3,8 +3,9 @@
 #include "fileHandler.h"
 #include "configHandler.h"
 #include "stringHandler.h"
-#include <consoleCmdHandler.h>
+#include "errorStatus.h"
 
+#include <consoleCmdHandler.h>
 #include <iostream>
 #include <clocale>
 #include <vector>
@@ -29,6 +30,8 @@ int main(int argc, char** argv){
 
 	ConsoleCmdHandler cmdHandler(s, args);
 	cmdHandler.showErrorStatus();
+
+	system("pause");
 
     return 0;
 }

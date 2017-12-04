@@ -3,12 +3,14 @@
 ConfigHandler::ConfigHandler(const string & path_)
 {
 
-	m_error_status = 0;
+	//m_error_status = 0;
+	m_error = new ErrorStatus();
 
 	FileHandler file(path_);
 
 	if (!file.isExist()) {
-		m_error_status |= error_cnf_file_no_exists;
+		//m_error_status |= error_cnf_file_no_exists;
+		m_error->set(ErrorStatus::error::configHand_cnfgFileNoExitst, true);
 		return;
 	}
 
@@ -31,7 +33,8 @@ ConfigHandler::ConfigHandler(const string & path_)
 				}
 			}
 			else {
-				m_error_status |= error_cmd_settarget_invalid;
+				//m_error_status |= error_cmd_settarget_invalid;
+				m_error->set(ErrorStatus::error::configHand_cmdSetTargetInvalid, true);
 			}
 
 		}
@@ -44,11 +47,13 @@ ConfigHandler::~ConfigHandler()
 	for (auto item : m_targets) {
 		delete item;
 	}
+
+	delete m_error;
 }
 
-int ConfigHandler::errorStatus() const
+ErrorStatus ConfigHandler::errorStatus() const
 {
-	return m_error_status;
+	return *m_error;
 }
 
 void ConfigHandler::targetRun(const string & target_name_) const
@@ -63,14 +68,16 @@ void ConfigHandler::targetRun(const string & target_name_) const
 	}
 
 	if (target_no_exists) {
-		cout << "Цель с именем " << target_name_ << " не существиет" << endl;
+		//cout << "Цель с именем " << target_name_ << " не существиет" << endl;
+		m_error->set(ErrorStatus::error::configHand_targetRun_targetNoExists, true);
 	}
 }
 
 void ConfigHandler::showAllTarget() const
 {
 	if (m_targets.size() == 0) {
-		cout << "Ни одной цели не задано." << endl;
+		//cout << "Ни одной цели не задано." << endl;
+		m_error->set(ErrorStatus::error::configHand_noTargetSpec, true);
 	}
 	else {
 		for (auto target : m_targets) {
@@ -91,6 +98,7 @@ void ConfigHandler::showTarget(const string & target_name_) const
 	}
 
 	if (target_no_exists) {
-		cout << "Цель с именем " << target_name_ << " не существиет" << endl;
+		//cout << "Цель с именем " << target_name_ << " не существиет" << endl;
+		m_error->set(ErrorStatus::error::configHand_currentTargetNoExists, true);
 	}
 }

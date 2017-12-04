@@ -2,6 +2,7 @@
 
 #include "config.h"
 #include "configHandler.h"
+#include "errorStatus.h"
 
 #include <iostream>
 #include <string>
@@ -30,17 +31,7 @@ private:
 	static const string commandList[ConsoleCmdHandler::NUMBER_OF_COMMAND];
 
 	ConfigHandler* m_config;
-
-	static const int error_config_error =				0b00000001;
-	static const int error_list_cmd_is_empty =			0b00000010;
-	static const int error_invalid_console_cmd =		0b00000100;
-	static const int error_help_hand_invalid_arg =		0b00001000;
-	static const int error_ver_hand_invalid_arg =		0b00010000;
-	static const int error_tar_show_all_invalid_arg =	0b00100000;
-	static const int error_tar_show_invalid_arg =		0b01000000;
-	static const int error_tar_run_invalid_arg =		0b10000000;
-
-	int m_error;
+	ErrorStatus* m_error;
 
 	typedef void (ConsoleCmdHandler::*ptrHandler)(vector<string>);
 	map<string, ptrHandler> cmdHandlers;

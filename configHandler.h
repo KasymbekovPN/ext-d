@@ -1,7 +1,8 @@
 #pragma once
 
 #include "fileHandler.h"
-#include <target.h>
+#include "target.h"
+#include "errorStatus.h"
 
 #include <string>
 #include <vector>
@@ -18,7 +19,7 @@ public:
 	ConfigHandler(const string&);
 	~ConfigHandler();
 
-	int errorStatus() const;
+	ErrorStatus errorStatus() const;
 	void targetRun(const string&) const;
 	void showAllTarget() const;
 	void showTarget(const string&) const;
@@ -26,10 +27,12 @@ public:
 private:
 	const string cmd_settarget = "SETTARGET";
 
-	const static int error_cnf_file_no_exists	 = 0b01;
-	const static int error_cmd_settarget_invalid = 0b10;
+	//const static int error_cnf_file_no_exists	 = 0b01;
+	//const static int error_cmd_settarget_invalid = 0b10;
 
 	vector<Target*> m_targets;
 	bool isExist;
-	int m_error_status;
+
+	//int m_error_status;
+	ErrorStatus* m_error;
 };

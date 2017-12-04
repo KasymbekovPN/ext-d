@@ -90,5 +90,7 @@ void Target::toConsole() const
 
 void Target::run() const
 {
-	m_fileTree->show();
+	if (!m_error_status) {
+		m_fileTree->show();
+	}
 }
