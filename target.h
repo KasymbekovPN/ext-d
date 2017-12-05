@@ -8,6 +8,7 @@
 #include "fileHandler.h"
 #include "stringHandler.h"
 #include "fileTree.h"
+#include "errorStatus.h"
 
 using std::string;
 using std::cout;
@@ -23,8 +24,8 @@ public:
 	string getName() const;
 	string getPath() const;
 	bool isExist() const;
-	void toConsole() const;
-	void run() const;
+	ErrorStatus toConsole() const;
+	ErrorStatus run() const;
 
 private:
 	string	m_name;
@@ -32,7 +33,8 @@ private:
 	bool	is_exist;
 	string	m_source_dir;
 	string	m_output_dir;
-	int		m_error_status;
+	ErrorStatus* m_error_status;
+	//int		m_error_status;
 
 	FileTree* m_fileTree;
 
@@ -42,9 +44,9 @@ private:
 	const static int number_of_cmd = 2;
 	const static int cmd_size[number_of_cmd];
 
-	const static int error_output_dir_invalid_param = 0b00001;
-	const static int error_source_dir_invalid_param = 0b00010;
-	const static int error_output_dir_no_exists		= 0b00100;
-	const static int error_source_dir_no_exists		= 0b01000;
-	const static int error_unknow_lang				= 0b100000;
+	//const static int error_output_dir_invalid_param = 0b00001;
+	//const static int error_source_dir_invalid_param = 0b00010;
+	//const static int error_output_dir_no_exists		= 0b00100;
+	//const static int error_source_dir_no_exists		= 0b01000;
+	//const static int error_unknow_lang				= 0b100000;
 };

@@ -44,6 +44,7 @@ ConfigHandler::ConfigHandler(const string & path_)
 
 ConfigHandler::~ConfigHandler()
 {
+
 	for (auto item : m_targets) {
 		delete item;
 	}
@@ -63,7 +64,8 @@ void ConfigHandler::targetRun(const string & target_name_) const
 	for (auto target : m_targets) {
 		if (target->getName() == target_name_) {
 			target_no_exists = false;
-			target->run();
+			m_error->set(target->run());
+			//target->run();
 		}
 	}
 
@@ -81,7 +83,8 @@ void ConfigHandler::showAllTarget() const
 	}
 	else {
 		for (auto target : m_targets) {
-			target->toConsole();
+			//target->toConsole();
+			m_error->set(target->toConsole());
 		}
 	}
 }
@@ -92,7 +95,8 @@ void ConfigHandler::showTarget(const string & target_name_) const
 
 	for (auto target : m_targets) {
 		if (target->getName() == target_name_) {
-			target->toConsole();
+			//target->toConsole();
+			m_error->set(target->toConsole());
 			target_no_exists = false;
 		}
 	}

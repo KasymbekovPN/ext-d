@@ -29,11 +29,11 @@ ConsoleCmdHandler::ConsoleCmdHandler(const string & config_path_, vector<string>
 	cmdHandlers[commandList[3]] = &ConsoleCmdHandler::targetShowHandler;
 	cmdHandlers[commandList[4]] = &ConsoleCmdHandler::targetRunHandler;
 
-	if (!m_error) {
-		m_error->set(ErrorStatus::error::consoleCmdHand_invalidConsoleCmd, true);
+	if (!m_error->get()) {
+		//m_error->set(ErrorStatus::error::consoleCmdHand_invalidConsoleCmd, true);
 		for (auto iter = cmdHandlers.begin(); iter != cmdHandlers.end(); ++iter) {
 			if (iter->first == command_[0]) {
-				m_error = 0;
+				m_error->clear();
 				vector<string> arg;
 				std::copy(command_.begin() + 1, command_.end(), inserter(arg, arg.begin()));
 				(this->*cmdHandlers[iter->first])(arg);
@@ -50,6 +50,7 @@ ConsoleCmdHandler::~ConsoleCmdHandler()
 
 void ConsoleCmdHandler::helpHandler(vector<string> command_)
 {
+
 	if (command_.size() != 0) {
 		m_error->set(ErrorStatus::error::consoleCmdHand_helpHandInvalidArg, true);
 		return;
@@ -108,10 +109,5 @@ void ConsoleCmdHandler::targetRunHandler(vector<string> command_)
 
 void ConsoleCmdHandler::showErrorStatus() const
 {
-	//
-	// todo: Расшифровать.
-	//
-	if (m_error) {
-		cout << "ConsoleCmdHandler Error Status : " << m_error->get() << endl;
-	}
+	m_error->display();
 }

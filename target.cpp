@@ -5,7 +5,8 @@ const int Target::cmd_size[Target::number_of_cmd] = {2, 2};
 Target::Target(const string & name_, const string& path_)
 {
 
-	m_error_status = 0;
+	//m_error_status = 0;
+	m_error_status = new ErrorStatus();
 
 	m_name = name_;
 	m_path = path_;
@@ -19,7 +20,8 @@ Target::Target(const string & name_, const string& path_)
 		m_output_dir = arg_buffer_out[0];
 	}
 	else {
-		m_error_status |= error_output_dir_invalid_param;
+		//m_error_status |= error_output_dir_invalid_param;
+		m_error_status->set(ErrorStatus::error::target_outputDirInvalidParam, true);
 	}
 
 	FileHandler file_src(m_path);
@@ -28,34 +30,41 @@ Target::Target(const string & name_, const string& path_)
 		m_source_dir = arg_buffer_src[0];
 	}
 	else {
-		m_error_status |= error_source_dir_invalid_param;
+		//m_error_status |= error_source_dir_invalid_param;
+		m_error_status->set(ErrorStatus::error::target_sourceDirInvalidParam, true);
 	}
 
 	FileHandler file_supp_lang(m_path);
 	vector<string> supp_lang = file_supp_lang.getCmdArgList(cmd_set_lang);
 	if (supp_lang.size() != 1) {
-		m_error_status |= error_unknow_lang;
+		//m_error_status |= error_unknow_lang;
+		m_error_status->set(ErrorStatus::error::target_unknowLang, true);
 	}
 
 	if (!m_error_status) {
 		DWORD f = GetFileAttributes(m_source_dir.c_str());
 		if ((f == INVALID_FILE_ATTRIBUTES) || (f & FILE_ATTRIBUTE_DIRECTORY) == 0) {
-			m_error_status |= error_source_dir_no_exists;
+			//m_error_status |= error_source_dir_no_exists;
+			m_error_status->set(ErrorStatus::error::target_sourceDirNoExists, true);
 		}
 
 		f = GetFileAttributes(m_output_dir.c_str());
 		if ((f == INVALID_FILE_ATTRIBUTES) || (f & FILE_ATTRIBUTE_DIRECTORY) == 0) {
-			m_error_status |= error_output_dir_no_exists;
+			//m_error_status |= error_output_dir_no_exists;
+			m_error_status->set(ErrorStatus::error::target_outputDirNoExists, true);
 		}
 	}
 
-	m_fileTree = new FileTree(m_source_dir, m_error_status, supp_lang[0]);
+	m_fileTree = new FileTree(m_source_dir, *m_error_status, supp_lang[0]);
 
 }
 
 Target::~Target()
 {
+
 	delete m_fileTree;
+	delete m_error_status;
+
 }
 
 string Target::getName() const
@@ -73,24 +82,29 @@ bool Target::isExist() const
 	return is_exist;
 }
 
-void Target::toConsole() const
+ErrorStatus Target::toConsole() const
 {
 
 	cout << endl;
 	cout << "Target Name\t\t : " << m_name << endl;
-	cout << "Error Status\t\t : " << m_error_status << endl;
+	cout << "Error Status\t\t : " << m_error_status->get() << endl;
 	
-	if (!m_error_status) {
+	if (!m_error_status->get()) {
 		cout << "Param Source Dir\t : " << m_source_dir << endl;
 		cout << "Param Output Dir\t : " << m_output_dir << endl;
 	}	
 
 	cout << endl;
+
+	return *m_error_status;
 }
 
-void Target::run() const
+ErrorStatus Target::run() const
 {
 	if (!m_error_status) {
-		m_fileTree->show();
+		//m_fileTree->show();
+		m_error_status->set(m_fileTree->show());
 	}
+
+	return *m_error_status;
 }

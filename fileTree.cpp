@@ -1,6 +1,6 @@
 #include "fileTree.h"
 
-FileTree::FileTree(const string & path_, int error_status_, const string& supp_lang_)
+FileTree::FileTree(const string & path_, ErrorStatus error_status_, const string& supp_lang_)
 	: m_path(path_)
 {
 
@@ -9,16 +9,18 @@ FileTree::FileTree(const string & path_, int error_status_, const string& supp_l
 	m_lang_ext[FileTreeLang::c_lang].push_back("h");
 	m_lang_ext[FileTreeLang::c_lang].push_back("c");
 
-	m_error_status = 0;
+	//m_error_status = 0;
+	m_error_status = new ErrorStatus();
 
-	if (error_status_) {
-		m_error_status |= error_arg;
-	}
+	//if (error_status_) {
+	//	m_error_status |= error_arg;
+	//}
 
 	m_lang = (m_ll.find(supp_lang_) != m_ll.end() ? m_ll[supp_lang_] : FileTreeLang::unknow);
 
 	if (FileTreeLang::unknow == m_lang) {
-		m_error_status |= error_unknow_lang;
+		//m_error_status |= error_unknow_lang;
+		m_error_status->set(ErrorStatus::error::fileTree_unknowLang, true);
 	}
 
 	if (!m_error_status) {
@@ -45,7 +47,7 @@ FileTree::FileTree(const string & path_, int error_status_, const string& supp_l
 				else if (FILE_ATTRIBUTE_DIRECTORY == wfd.dwFileAttributes) {
 					if (wfd.cFileName[0] != '.') {
 						string path = m_path + "\\\\" + string(wfd.cFileName);
-						m_directory.push_back(new FileTree(path, 0, supp_lang_));
+						m_directory.push_back(new FileTree(path, *m_error_status, supp_lang_));
 					}
 				}
 			} while (NULL != FindNextFile(hFind, &wfd));
@@ -56,12 +58,15 @@ FileTree::FileTree(const string & path_, int error_status_, const string& supp_l
 
 FileTree::~FileTree()
 {
+
 	for (auto dir : m_directory) {
 		delete dir;
 	}
+
+	delete m_error_status;
 }
 
-void FileTree::show() const
+ErrorStatus FileTree::show() const
 {
 	cout << "Path = " << m_path << endl;
 
@@ -70,7 +75,10 @@ void FileTree::show() const
 	}
 
 	for (auto dir : m_directory) {
-		dir->show();
+		//dir->show();
+		m_error_status->set(dir->show());
 	}
+
+	return *m_error_status;
 }
 

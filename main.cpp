@@ -31,7 +31,5 @@ int main(int argc, char** argv){
 	ConsoleCmdHandler cmdHandler(s, args);
 	cmdHandler.showErrorStatus();
 
-	system("pause");
-
     return 0;
 }
