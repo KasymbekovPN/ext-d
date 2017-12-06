@@ -2,6 +2,7 @@
 
 ErrorStatus::ENM ErrorStatus::errorNamesMap {
 	{ ErrorStatus::error::consoleCmdHand_listCmdIsEmpty, "Ни одна консольная команда не задана." },
+	{ ErrorStatus::error::consoleCmdHand_invalidConsoleCmd, "Невалидная команда."},
 	{ ErrorStatus::error::consoleCmdHand_helpHandInvalidArg, "Невалидный список аргументов --help."},
 	{ ErrorStatus::error::consoleCmdHand_verHandInvalidArg, "Невалидный список аргументов --version."},
 	{ ErrorStatus::error::consoleCmdHand_tarShowAllInvalidArg, "Невалидный список аргументов --target.show.all." },

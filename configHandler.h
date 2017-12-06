@@ -20,19 +20,15 @@ public:
 	~ConfigHandler();
 
 	ErrorStatus errorStatus() const;
-	void targetRun(const string&) const;
-	void showAllTarget() const;
-	void showTarget(const string&) const;
+	ErrorStatus targetRun(const string&) const;
+	ErrorStatus showAllTarget() const;
+	ErrorStatus showTarget(const string&) const;
 
 private:
 	const string cmd_settarget = "SETTARGET";
 
-	//const static int error_cnf_file_no_exists	 = 0b01;
-	//const static int error_cmd_settarget_invalid = 0b10;
-
 	vector<Target*> m_targets;
 	bool isExist;
 
-	//int m_error_status;
 	ErrorStatus* m_error;
 };

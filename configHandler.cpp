@@ -3,13 +3,11 @@
 ConfigHandler::ConfigHandler(const string & path_)
 {
 
-	//m_error_status = 0;
 	m_error = new ErrorStatus();
 
 	FileHandler file(path_);
 
 	if (!file.isExist()) {
-		//m_error_status |= error_cnf_file_no_exists;
 		m_error->set(ErrorStatus::error::configHand_cnfgFileNoExitst, true);
 		return;
 	}
@@ -33,7 +31,6 @@ ConfigHandler::ConfigHandler(const string & path_)
 				}
 			}
 			else {
-				//m_error_status |= error_cmd_settarget_invalid;
 				m_error->set(ErrorStatus::error::configHand_cmdSetTargetInvalid, true);
 			}
 
@@ -57,7 +54,7 @@ ErrorStatus ConfigHandler::errorStatus() const
 	return *m_error;
 }
 
-void ConfigHandler::targetRun(const string & target_name_) const
+ErrorStatus ConfigHandler::targetRun(const string & target_name_) const
 {
 	bool target_no_exists = true;
 
@@ -65,44 +62,41 @@ void ConfigHandler::targetRun(const string & target_name_) const
 		if (target->getName() == target_name_) {
 			target_no_exists = false;
 			m_error->set(target->run());
-			//target->run();
 		}
 	}
 
 	if (target_no_exists) {
-		//cout << "Цель с именем " << target_name_ << " не существиет" << endl;
 		m_error->set(ErrorStatus::error::configHand_targetRun_targetNoExists, true);
 	}
+
+	return *m_error;
 }
 
-void ConfigHandler::showAllTarget() const
+ErrorStatus ConfigHandler::showAllTarget() const
 {
 	if (m_targets.size() == 0) {
-		//cout << "Ни одной цели не задано." << endl;
 		m_error->set(ErrorStatus::error::configHand_noTargetSpec, true);
 	}
 	else {
 		for (auto target : m_targets) {
-			//target->toConsole();
 			m_error->set(target->toConsole());
 		}
 	}
+
+	return *m_error;
 }
 
-void ConfigHandler::showTarget(const string & target_name_) const
+ErrorStatus ConfigHandler::showTarget(const string & target_name_) const
 {
-	bool target_no_exists = true;
+
+	m_error->set(ErrorStatus::error::configHand_currentTargetNoExists, true);
 
 	for (auto target : m_targets) {
 		if (target->getName() == target_name_) {
-			//target->toConsole();
-			m_error->set(target->toConsole());
-			target_no_exists = false;
+			m_error->set(ErrorStatus::error::configHand_currentTargetNoExists, false);
+			m_error->set(target->toConsole());			
 		}
 	}
 
-	if (target_no_exists) {
-		//cout << "Цель с именем " << target_name_ << " не существиет" << endl;
-		m_error->set(ErrorStatus::error::configHand_currentTargetNoExists, true);
-	}
+	return *m_error;
 }

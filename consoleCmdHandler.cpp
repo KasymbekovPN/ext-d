@@ -15,9 +15,6 @@ ConsoleCmdHandler::ConsoleCmdHandler(const string & config_path_, vector<string>
 
 	m_config = new ConfigHandler(config_path_);
 	m_error->set(m_config->errorStatus());
-	//if (m_config->errorStatus()) {
-	//	m_error->set(ErrorStatus::error::consoleCmdHand_configError, true);
-	//}
 
 	if (command_.size() < 1) {
 		m_error->set(ErrorStatus::error::consoleCmdHand_listCmdIsEmpty, true);
@@ -30,7 +27,7 @@ ConsoleCmdHandler::ConsoleCmdHandler(const string & config_path_, vector<string>
 	cmdHandlers[commandList[4]] = &ConsoleCmdHandler::targetRunHandler;
 
 	if (!m_error->get()) {
-		//m_error->set(ErrorStatus::error::consoleCmdHand_invalidConsoleCmd, true);
+		m_error->set(ErrorStatus::error::consoleCmdHand_invalidConsoleCmd, true);
 		for (auto iter = cmdHandlers.begin(); iter != cmdHandlers.end(); ++iter) {
 			if (iter->first == command_[0]) {
 				m_error->clear();
@@ -80,7 +77,7 @@ void ConsoleCmdHandler::targetShowAllHandler(vector<string> command_)
 		return;
 	}
 
-	m_config->showAllTarget();
+	m_error->set(m_config->showAllTarget());
 }
 
 void ConsoleCmdHandler::targetShowHandler(vector<string> command_)
@@ -90,7 +87,7 @@ void ConsoleCmdHandler::targetShowHandler(vector<string> command_)
 		return;
 	}
 
-	m_config->showTarget(command_[0]);
+	m_error->set(m_config->showTarget(command_[0]));
 }
 
 void ConsoleCmdHandler::targetRunHandler(vector<string> command_)
@@ -100,11 +97,7 @@ void ConsoleCmdHandler::targetRunHandler(vector<string> command_)
 		return;
 	}
 
-	//
-	// todo: проверить ошибку цели.
-	//
-
-	m_config->targetRun(command_[0]);
+	m_error->set(m_config->targetRun(command_[0]));
 }
 
 void ConsoleCmdHandler::showErrorStatus() const

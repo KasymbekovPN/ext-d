@@ -14,9 +14,8 @@ class ErrorStatus
 public:
 
 	enum class error {
-		//consoleCmdHand_configError,
 		consoleCmdHand_listCmdIsEmpty,
-		//consoleCmdHand_invalidConsoleCmd,
+		consoleCmdHand_invalidConsoleCmd,
 		consoleCmdHand_helpHandInvalidArg,
 		consoleCmdHand_verHandInvalidArg,
 		consoleCmdHand_tarShowAllInvalidArg,
@@ -35,7 +34,6 @@ public:
 		target_sourceDirNoExists,
 		target_unknowLang,
 		
-		//fileTree_argError,
 		fileTree_unknowLang,
 	};
 

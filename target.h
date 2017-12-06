@@ -34,7 +34,6 @@ private:
 	string	m_source_dir;
 	string	m_output_dir;
 	ErrorStatus* m_error_status;
-	//int		m_error_status;
 
 	FileTree* m_fileTree;
 
@@ -43,10 +42,4 @@ private:
 	const string cmd_set_lang = "SET_LANG";
 	const static int number_of_cmd = 2;
 	const static int cmd_size[number_of_cmd];
-
-	//const static int error_output_dir_invalid_param = 0b00001;
-	//const static int error_source_dir_invalid_param = 0b00010;
-	//const static int error_output_dir_no_exists		= 0b00100;
-	//const static int error_source_dir_no_exists		= 0b01000;
-	//const static int error_unknow_lang				= 0b100000;
 };

@@ -9,21 +9,15 @@ FileTree::FileTree(const string & path_, ErrorStatus error_status_, const string
 	m_lang_ext[FileTreeLang::c_lang].push_back("h");
 	m_lang_ext[FileTreeLang::c_lang].push_back("c");
 
-	//m_error_status = 0;
 	m_error_status = new ErrorStatus();
-
-	//if (error_status_) {
-	//	m_error_status |= error_arg;
-	//}
 
 	m_lang = (m_ll.find(supp_lang_) != m_ll.end() ? m_ll[supp_lang_] : FileTreeLang::unknow);
 
 	if (FileTreeLang::unknow == m_lang) {
-		//m_error_status |= error_unknow_lang;
 		m_error_status->set(ErrorStatus::error::fileTree_unknowLang, true);
 	}
 
-	if (!m_error_status) {
+	if (!m_error_status->get()) {
 
 		WIN32_FIND_DATA wfd;
 		HANDLE const hFind = FindFirstFile((LPCSTR)(m_path + "\\*").c_str(), &wfd);
@@ -58,7 +52,6 @@ FileTree::FileTree(const string & path_, ErrorStatus error_status_, const string
 
 FileTree::~FileTree()
 {
-
 	for (auto dir : m_directory) {
 		delete dir;
 	}
@@ -75,7 +68,6 @@ ErrorStatus FileTree::show() const
 	}
 
 	for (auto dir : m_directory) {
-		//dir->show();
 		m_error_status->set(dir->show());
 	}
 
