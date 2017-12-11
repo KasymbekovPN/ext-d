@@ -11,13 +11,12 @@ const string ConsoleCmdHandler::commandList[ConsoleCmdHandler::NUMBER_OF_COMMAND
 ConsoleCmdHandler::ConsoleCmdHandler(const string & config_path_, vector<string> command_)
 {
 
-	m_error = new ErrorStatus();
+	p_error = std::make_shared<ErrorStatus>();
 
-	m_config = new ConfigHandler(config_path_);
-	m_error->set(m_config->errorStatus());
+	m_config = new ConfigHandler(config_path_, p_error);
 
 	if (command_.size() < 1) {
-		m_error->set(ErrorStatus::error::consoleCmdHand_listCmdIsEmpty, true);
+		p_error->set(ErrorStatus::error::consoleCmdHand_listCmdIsEmpty, true);
 	}
 	
 	cmdHandlers[commandList[0]] = &ConsoleCmdHandler::helpHandler;
@@ -26,11 +25,11 @@ ConsoleCmdHandler::ConsoleCmdHandler(const string & config_path_, vector<string>
 	cmdHandlers[commandList[3]] = &ConsoleCmdHandler::targetShowHandler;
 	cmdHandlers[commandList[4]] = &ConsoleCmdHandler::targetRunHandler;
 
-	if (!m_error->get()) {
-		m_error->set(ErrorStatus::error::consoleCmdHand_invalidConsoleCmd, true);
+	if (!p_error->get()) {
+		p_error->set(ErrorStatus::error::consoleCmdHand_invalidConsoleCmd, true);
 		for (auto iter = cmdHandlers.begin(); iter != cmdHandlers.end(); ++iter) {
 			if (iter->first == command_[0]) {
-				m_error->clear();
+				p_error->clear();
 				vector<string> arg;
 				std::copy(command_.begin() + 1, command_.end(), inserter(arg, arg.begin()));
 				(this->*cmdHandlers[iter->first])(arg);
@@ -42,14 +41,13 @@ ConsoleCmdHandler::ConsoleCmdHandler(const string & config_path_, vector<string>
 ConsoleCmdHandler::~ConsoleCmdHandler()
 {
 	delete m_config;
-	delete m_error;
 }
 
 void ConsoleCmdHandler::helpHandler(vector<string> command_)
 {
 
 	if (command_.size() != 0) {
-		m_error->set(ErrorStatus::error::consoleCmdHand_helpHandInvalidArg, true);
+		p_error->set(ErrorStatus::error::consoleCmdHand_helpHandInvalidArg, true);
 		return;
 	}
 
@@ -63,7 +61,7 @@ void ConsoleCmdHandler::helpHandler(vector<string> command_)
 void ConsoleCmdHandler::versionHandler(vector<string> command_)
 {
 	if (command_.size() != 0) {
-		m_error->set(ErrorStatus::error::consoleCmdHand_verHandInvalidArg, true);
+		p_error->set(ErrorStatus::error::consoleCmdHand_verHandInvalidArg, true);
 		return;
 	}
 
@@ -73,34 +71,35 @@ void ConsoleCmdHandler::versionHandler(vector<string> command_)
 void ConsoleCmdHandler::targetShowAllHandler(vector<string> command_)
 {
 	if (command_.size() != 0) {
-		m_error->set(ErrorStatus::error::consoleCmdHand_tarShowAllInvalidArg, true);
+		p_error->set(ErrorStatus::error::consoleCmdHand_tarShowAllInvalidArg, true);
 		return;
 	}
 
-	m_error->set(m_config->showAllTarget());
+	m_config->showAllTarget();
+
 }
 
 void ConsoleCmdHandler::targetShowHandler(vector<string> command_)
 {
 	if (command_.size() != 1) {
-		m_error->set(ErrorStatus::error::consoleCmdHand_tarShowInvalidArg, true);
+		p_error->set(ErrorStatus::error::consoleCmdHand_tarShowInvalidArg, true);
 		return;
 	}
 
-	m_error->set(m_config->showTarget(command_[0]));
+	m_config->showTarget(command_[0]);
 }
 
 void ConsoleCmdHandler::targetRunHandler(vector<string> command_)
 {
 	if (command_.size() != 1) {
-		m_error->set(ErrorStatus::error::consoleCmdHand_tarRunInvalidArg, true);
+		p_error->set(ErrorStatus::error::consoleCmdHand_tarRunInvalidArg, true);
 		return;
 	}
 
-	m_error->set(m_config->targetRun(command_[0]));
+	m_config->targetRun(command_[0]);
 }
 
 void ConsoleCmdHandler::showErrorStatus() const
 {
-	m_error->display();
+	p_error->display();
 }

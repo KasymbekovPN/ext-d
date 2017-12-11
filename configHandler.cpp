@@ -1,14 +1,14 @@
 #include "configHandler.h"
 
-ConfigHandler::ConfigHandler(const string & path_)
+ConfigHandler::ConfigHandler(const string & path_, shared_ptr<ErrorStatus> p_error_)
 {
 
-	m_error = new ErrorStatus();
+	p_error = p_error_;
 
 	FileHandler file(path_);
 
 	if (!file.isExist()) {
-		m_error->set(ErrorStatus::error::configHand_cnfgFileNoExitst, true);
+		p_error->set(ErrorStatus::error::configHand_cnfgFileNoExitst, true);
 		return;
 	}
 
@@ -27,11 +27,11 @@ ConfigHandler::ConfigHandler(const string & path_)
 				}
 
 				if (need_add) {
-					m_targets.push_back(new Target(cmd_list[1], cmd_list[2]));
+					m_targets.push_back(new Target(cmd_list[1], cmd_list[2], p_error));
 				}
 			}
 			else {
-				m_error->set(ErrorStatus::error::configHand_cmdSetTargetInvalid, true);
+				p_error->set(ErrorStatus::error::configHand_cmdSetTargetInvalid, true);
 			}
 
 		}
@@ -41,62 +41,47 @@ ConfigHandler::ConfigHandler(const string & path_)
 
 ConfigHandler::~ConfigHandler()
 {
-
 	for (auto item : m_targets) {
 		delete item;
 	}
-
-	delete m_error;
 }
 
-ErrorStatus ConfigHandler::errorStatus() const
-{
-	return *m_error;
-}
-
-ErrorStatus ConfigHandler::targetRun(const string & target_name_) const
+void ConfigHandler::targetRun(const string & target_name_) const
 {
 	bool target_no_exists = true;
 
 	for (auto target : m_targets) {
 		if (target->getName() == target_name_) {
 			target_no_exists = false;
-			m_error->set(target->run());
+			target->run();
 		}
 	}
 
 	if (target_no_exists) {
-		m_error->set(ErrorStatus::error::configHand_targetRun_targetNoExists, true);
+		p_error->set(ErrorStatus::error::configHand_targetRun_targetNoExists, true);
 	}
-
-	return *m_error;
 }
 
-ErrorStatus ConfigHandler::showAllTarget() const
+void ConfigHandler::showAllTarget() const
 {
 	if (m_targets.size() == 0) {
-		m_error->set(ErrorStatus::error::configHand_noTargetSpec, true);
+		p_error->set(ErrorStatus::error::configHand_noTargetSpec, true);
 	}
 	else {
 		for (auto target : m_targets) {
-			m_error->set(target->toConsole());
+			target->toConsole();
 		}
 	}
-
-	return *m_error;
 }
 
-ErrorStatus ConfigHandler::showTarget(const string & target_name_) const
+void ConfigHandler::showTarget(const string & target_name_) const
 {
-
-	m_error->set(ErrorStatus::error::configHand_currentTargetNoExists, true);
+	p_error->set(ErrorStatus::error::configHand_currentTargetNoExists, true);
 
 	for (auto target : m_targets) {
 		if (target->getName() == target_name_) {
-			m_error->set(ErrorStatus::error::configHand_currentTargetNoExists, false);
-			m_error->set(target->toConsole());			
+			p_error->set(ErrorStatus::error::configHand_currentTargetNoExists, false);
+			target->toConsole();
 		}
 	}
-
-	return *m_error;
 }

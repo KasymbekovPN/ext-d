@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <Windows.h>
+#include <memory>
 
 #include "fileHandler.h"
 #include "stringHandler.h"
@@ -18,14 +19,14 @@ using std::vector;
 class Target
 {
 public:
-	Target(const string&, const string&);
+	Target(const string&, const string&, std::shared_ptr<ErrorStatus>);
 	~Target();
 
 	string getName() const;
 	string getPath() const;
 	bool isExist() const;
-	ErrorStatus toConsole() const;
-	ErrorStatus run() const;
+	void toConsole() const;
+	void run() const;
 
 private:
 	string	m_name;
@@ -33,7 +34,7 @@ private:
 	bool	is_exist;
 	string	m_source_dir;
 	string	m_output_dir;
-	ErrorStatus* m_error_status;
+	std::shared_ptr<ErrorStatus> p_error;
 
 	FileTree* m_fileTree;
 

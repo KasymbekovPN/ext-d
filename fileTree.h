@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include <cstddef>
 #include <map>
+#include <memory>
 
 #include "errorStatus.h"
 
@@ -25,10 +26,10 @@ public:
 		c_lang
 	};
 
-	FileTree(const string&, ErrorStatus, const string&);
+	FileTree(const string&, std::shared_ptr<ErrorStatus>, const string&);
 	~FileTree();
 
-	ErrorStatus show() const;
+	void show() const;
 
 private:
 
@@ -36,7 +37,7 @@ private:
 	FileTreeLang m_lang;
 	map<string, FileTreeLang> m_ll;
 	map <FileTreeLang, vector<string>> m_lang_ext;
-	ErrorStatus* m_error_status;
+	std::shared_ptr<ErrorStatus> p_error;
 
 	vector<string> m_files;
 	vector<FileTree*> m_directory;

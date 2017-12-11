@@ -7,22 +7,23 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <memory>
 
 using std::vector;
 using std::string;
 using std::cout;
 using std::endl;
+using std::shared_ptr;
 
 class ConfigHandler
 {
 public:
-	ConfigHandler(const string&);
+	ConfigHandler(const string&, shared_ptr<ErrorStatus>);
 	~ConfigHandler();
 
-	ErrorStatus errorStatus() const;
-	ErrorStatus targetRun(const string&) const;
-	ErrorStatus showAllTarget() const;
-	ErrorStatus showTarget(const string&) const;
+	void targetRun(const string&) const;
+	void showAllTarget() const;
+	void showTarget(const string&) const;
 
 private:
 	const string cmd_settarget = "SETTARGET";
@@ -30,5 +31,5 @@ private:
 	vector<Target*> m_targets;
 	bool isExist;
 
-	ErrorStatus* m_error;
+	shared_ptr<ErrorStatus> p_error;
 };

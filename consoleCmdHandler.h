@@ -9,6 +9,7 @@
 #include <map>
 #include <vector>
 #include <iterator>
+#include <memory>
 
 using std::cout;
 using std::endl;
@@ -16,6 +17,7 @@ using std::vector;
 using std::string;
 using std::map;
 using std::inserter;
+using std::shared_ptr;
 
 class ConsoleCmdHandler
 {
@@ -31,7 +33,8 @@ private:
 	static const string commandList[ConsoleCmdHandler::NUMBER_OF_COMMAND];
 
 	ConfigHandler* m_config;
-	ErrorStatus* m_error;
+
+	shared_ptr<ErrorStatus> p_error;
 
 	typedef void (ConsoleCmdHandler::*ptrHandler)(vector<string>);
 	map<string, ptrHandler> cmdHandlers;

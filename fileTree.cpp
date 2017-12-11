@@ -1,6 +1,6 @@
 #include "fileTree.h"
 
-FileTree::FileTree(const string & path_, ErrorStatus error_status_, const string& supp_lang_)
+FileTree::FileTree(const string & path_, std::shared_ptr<ErrorStatus> p_error_, const string& supp_lang_)
 	: m_path(path_)
 {
 
@@ -9,15 +9,15 @@ FileTree::FileTree(const string & path_, ErrorStatus error_status_, const string
 	m_lang_ext[FileTreeLang::c_lang].push_back("h");
 	m_lang_ext[FileTreeLang::c_lang].push_back("c");
 
-	m_error_status = new ErrorStatus();
+	p_error = p_error_;
 
 	m_lang = (m_ll.find(supp_lang_) != m_ll.end() ? m_ll[supp_lang_] : FileTreeLang::unknow);
 
 	if (FileTreeLang::unknow == m_lang) {
-		m_error_status->set(ErrorStatus::error::fileTree_unknowLang, true);
+		p_error->set(ErrorStatus::error::fileTree_unknowLang, true);
 	}
 
-	if (!m_error_status->get()) {
+	if (!p_error->get()) {
 
 		WIN32_FIND_DATA wfd;
 		HANDLE const hFind = FindFirstFile((LPCSTR)(m_path + "\\*").c_str(), &wfd);
@@ -41,7 +41,7 @@ FileTree::FileTree(const string & path_, ErrorStatus error_status_, const string
 				else if (FILE_ATTRIBUTE_DIRECTORY == wfd.dwFileAttributes) {
 					if (wfd.cFileName[0] != '.') {
 						string path = m_path + "\\\\" + string(wfd.cFileName);
-						m_directory.push_back(new FileTree(path, *m_error_status, supp_lang_));
+						m_directory.push_back(new FileTree(path, p_error, supp_lang_));
 					}
 				}
 			} while (NULL != FindNextFile(hFind, &wfd));
@@ -55,11 +55,9 @@ FileTree::~FileTree()
 	for (auto dir : m_directory) {
 		delete dir;
 	}
-
-	delete m_error_status;
 }
 
-ErrorStatus FileTree::show() const
+void FileTree::show() const
 {
 	cout << "Path = " << m_path << endl;
 
@@ -68,9 +66,7 @@ ErrorStatus FileTree::show() const
 	}
 
 	for (auto dir : m_directory) {
-		m_error_status->set(dir->show());
+		dir->show();
 	}
-
-	return *m_error_status;
 }
 
