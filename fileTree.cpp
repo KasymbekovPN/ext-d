@@ -29,11 +29,13 @@ FileTree::FileTree(const string & path_, std::shared_ptr<ErrorStatus> p_error_, 
 				if (FILE_ATTRIBUTE_ARCHIVE == wfd.dwFileAttributes) {
 
 					size_t found = string(wfd.cFileName).find_last_of(".");
-					string ext = string(wfd.cFileName).substr(found + 1);
 
-					for (auto item : m_lang_ext[m_lang]) {
-						if (ext == item) {
-							m_files.push_back(m_path + "\\\\" + string(wfd.cFileName));
+					if (string::npos != found) {
+						string ext = string(wfd.cFileName).substr(found + 1);
+						for (auto item : m_lang_ext[m_lang]) {
+							if (ext == item) {
+								m_files.push_back(m_path + "\\\\" + string(wfd.cFileName));
+							}
 						}
 					}
 
@@ -57,16 +59,17 @@ FileTree::~FileTree()
 	}
 }
 
-void FileTree::show() const
+void FileTree::filePaths(std::shared_ptr<vector<string>> path_out, bool need_clear)
 {
-	cout << "Path = " << m_path << endl;
-
-	for (auto file : m_files) {
-		cout << file << endl;
+	if (need_clear) {
+		path_out->clear();
 	}
 
+	for (auto file : m_files) {
+		path_out->push_back(file);
+	}
 	for (auto dir : m_directory) {
-		dir->show();
+		dir->filePaths(path_out, false);
 	}
 }
 

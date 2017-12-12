@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <map>
 #include <memory>
+#include <iterator>
 
 #include "errorStatus.h"
 
@@ -29,7 +30,7 @@ public:
 	FileTree(const string&, std::shared_ptr<ErrorStatus>, const string&);
 	~FileTree();
 
-	void show() const;
+	void filePaths(std::shared_ptr<vector<string>>, bool);
 
 private:
 

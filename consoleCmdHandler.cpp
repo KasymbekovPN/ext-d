@@ -91,6 +91,7 @@ void ConsoleCmdHandler::targetShowHandler(vector<string> command_)
 
 void ConsoleCmdHandler::targetRunHandler(vector<string> command_)
 {
+
 	if (command_.size() != 1) {
 		p_error->set(ErrorStatus::error::consoleCmdHand_tarRunInvalidArg, true);
 		return;

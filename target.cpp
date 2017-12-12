@@ -91,7 +91,6 @@ void Target::run() const
 {
 	cout << "Target run" << endl;
 
-	if (!p_error->get()) {
-		m_fileTree->show();
-	}
+	std::shared_ptr<vector<string>> res(new vector<string>());
+	m_fileTree->filePaths(res, true);
 }
