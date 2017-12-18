@@ -89,8 +89,35 @@ void Target::toConsole() const
 
 void Target::run() const
 {
-	cout << "Target run" << endl;
 
 	std::shared_ptr<vector<string>> res(new vector<string>());
 	m_fileTree->filePaths(res, true);
+
+	for (auto p_file_name = res->begin(); p_file_name != res->end(); ++p_file_name) {
+
+		string short_name = p_file_name->substr(m_source_dir.size());
+
+		string sfn;
+		for (int i = 0; i < short_name.size(); ++i) {
+			sfn += ('.' == short_name[i] ? '_' : short_name[i]);
+		}
+
+		string out_file_name = m_output_dir + "\\\\source" + sfn + ".html";
+
+		FileHandler file(*p_file_name);
+		vector<string> codeLines = StringHandler::split(file.getAsString(), '\n');
+
+		int line_idx = 0;
+
+		Dom dom(Dom::item::html, true, out_file_name, "", "", "html");
+		dom.set(Dom::item::head, "", "", "head");
+		dom.set({"head"}, Dom::item::title, "", "Τΰιλ " + short_name, "title");
+		dom.set(Dom::item::body, "", "", "body");
+		
+		for (auto line : codeLines) {
+			dom.set({"body"}, Dom::item::p, "", line, "p_code_line_" + std::to_string(line_idx++));
+		}
+
+		dom.make_doc();
+	}
 }

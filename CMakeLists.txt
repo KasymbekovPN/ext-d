@@ -23,4 +23,6 @@ add_executable(ext-d
                 fileTree.cpp
                 errorStatus.h
                 errorStatus.cpp
+                dom.hpp
+                dom.cpp
                 )

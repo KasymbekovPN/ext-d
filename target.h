@@ -10,6 +10,7 @@
 #include "stringHandler.h"
 #include "fileTree.h"
 #include "errorStatus.h"
+#include "dom.hpp"
 
 using std::string;
 using std::cout;

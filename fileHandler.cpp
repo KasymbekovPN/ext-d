@@ -11,15 +11,14 @@ FileHandler::FileHandler(const string & path_): m_path(path_)
 		return;
 	}
 
-	char ch = fin.get();
-	while (ch != EOF) {
+	char ch;
+	while (fin.get(ch)) {
 		m_ss << ch;
-		ch = fin.get();
 	}
-	fin.close();
 
 	m_file = m_ss.str();
 
+	fin.close();
 }
 
 FileHandler::~FileHandler()
@@ -29,6 +28,11 @@ FileHandler::~FileHandler()
 const string & FileHandler::getAsString() const
 {
 	return m_file;
+}
+
+vector<string> FileHandler::getAsLineList() const
+{
+	return vector<string>();
 }
 
 bool FileHandler::isExist() const

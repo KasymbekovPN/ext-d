@@ -4,6 +4,7 @@
 #include "configHandler.h"
 #include "stringHandler.h"
 #include "errorStatus.h"
+#include "dom.hpp"
 
 #include <consoleCmdHandler.h>
 #include <iostream>
@@ -30,12 +31,6 @@ int main(int argc, char** argv){
 
 	ConsoleCmdHandler cmdHandler(s, args);
 	cmdHandler.showErrorStatus();
-
-	//string s1 = "Hello";
-	//size_t f = s1.find_last_of('k');
-	//cout << int(f) << endl;
-	//cout << f << endl;
-	//cout << std::string::npos << endl;
 
     return 0;
 }

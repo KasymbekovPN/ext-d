@@ -25,6 +25,7 @@ public:
 	~FileHandler();
 
 	const string& getAsString() const;
+	vector<string> getAsLineList() const;
 	bool isExist() const;
 	char get();
 
