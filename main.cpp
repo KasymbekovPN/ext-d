@@ -5,6 +5,7 @@
 #include "stringHandler.h"
 #include "errorStatus.h"
 #include "dom.hpp"
+#include "dirHandler.hpp"
 
 #include <consoleCmdHandler.h>
 #include <iostream>

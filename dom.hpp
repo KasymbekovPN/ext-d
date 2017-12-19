@@ -6,6 +6,9 @@
 #include <map>
 #include <iterator>
 #include <fstream>
+#include <filesystem>
+
+#include "stringHandler.h"
 
 using std::cout;
 using std::endl;

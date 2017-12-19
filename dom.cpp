@@ -103,9 +103,21 @@ void Dom::make_doc()
 {
 	cout << "make html doc : " << m_outfile_path << endl;
 
-	//
-	// Проверка директории в которой содержится файл
-	//
+	size_t found = m_outfile_path.find_last_of('\\');
+	if (string::npos != found) {
+
+		string dir_path = m_outfile_path.substr(0, found - 1);
+		vector<string> dirs_names = StringHandler::split(dir_path, '\\');
+
+		string path = dirs_names[0];
+
+		for (auto iter = dirs_names.begin() + 1; iter != dirs_names.end(); iter++) {
+			path += "//" + *iter;
+			if (!std::experimental::filesystem::exists(path)) {
+				std::experimental::filesystem::create_directory(path);
+			}
+		}
+	}
 
 	std::ofstream fout(m_outfile_path);
 	fout << getAsString(0);
