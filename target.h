@@ -5,6 +5,7 @@
 #include <vector>
 #include <Windows.h>
 #include <memory>
+#include <algorithm>
 
 #include "fileHandler.h"
 #include "stringHandler.h"

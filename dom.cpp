@@ -43,7 +43,8 @@ Dom::ItemNames Dom::itemNames{
 	{Dom::item::th, "th"},
 	{Dom::item::tr, "tr"},
 	{Dom::item::td, "td"},
-	{Dom::item::title, "title"}
+	{Dom::item::title, "title"},
+	{Dom::item::style, "style"}
 };
 
 Dom::Dom(item item_, bool root_, const string & outfile_path_, const string& arg_, const string& str_, const string& dom_name_) :
@@ -132,14 +133,16 @@ string Dom::getAsString(int tab_offset) const
 		offset += '\t';
 	}
 
-	string result = offset + "<" + itemNames[m_item] + " " + m_arg + " >\n";
+	string result = offset + "<" + itemNames[m_item] + " " + m_arg + " >";
 	result += "\t" + m_str + "\n";
 
 	for (auto item : items) {
 		result += item->getAsString(tab_offset + 1);
 	}
 
-	result += "</" + itemNames[m_item] + ">\n";
+	if (Dom::item::br != m_item) {
+		result += offset + "</" + itemNames[m_item] + ">\n";
+	}	
 
 	return result;
 }
@@ -161,5 +164,9 @@ void Dom::show(int num_offset) const
 	for (auto iter : items) {
 		iter->show(num_offset + 1);
 	}
-	cout << offset << "</" << itemNames[m_item] << ">" << endl;
+
+	if (Dom::item::br != m_item) {
+		cout << itemNames[m_item] << endl;
+		cout << offset << "</" << itemNames[m_item] << ">" << endl;
+	}	
 }

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(ext-d VERSION 0.0.15)
+project(ext-d VERSION 0.0.16)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -25,6 +25,4 @@ add_executable(ext-d
                 errorStatus.cpp
                 dom.hpp
                 dom.cpp
-                dirHandler.hpp
-                dirHandler.cpp
                 )

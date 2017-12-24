@@ -87,3 +87,26 @@ vector<string> StringHandler::split(const string & line, char delit)
 
 	return result;
 }
+
+vector<string> StringHandler::file2line(const string & file, bool replace_tab)
+{
+	vector<string> result;
+	string buffer;
+
+	for (char ch : file) {
+		if (replace_tab && '\t' == ch) {
+			buffer += "&nbsp;";
+		}
+		else {
+			buffer += ch;
+		}
+		//buffer += (replace_tab && '\t' == ch ? "&nbsp;" : const char(ch));
+
+		if ('\n' == ch) {
+			result.push_back(buffer);
+			buffer.clear();
+		}
+	}
+
+	return result;
+}

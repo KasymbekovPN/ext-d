@@ -24,5 +24,6 @@ public:
 
 	static string filter(const string&, int);
 	static vector<string> split(const string&, char);
+	static vector<string> file2line(const string& file, bool replace_tab);
 
 };
