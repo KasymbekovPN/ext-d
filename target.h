@@ -12,6 +12,7 @@
 #include "fileTree.h"
 #include "errorStatus.h"
 #include "dom.hpp"
+#include "tokenGenerator.hpp"
 
 using std::string;
 using std::cout;
@@ -45,4 +46,7 @@ private:
 	const string cmd_set_lang = "SET_LANG";
 	const static int number_of_cmd = 2;
 	const static int cmd_size[number_of_cmd];
+
+	void make_source_out(std::shared_ptr<vector<string>> res) const;
+	void make_token_generators(std::shared_ptr<vector<string>> res) const;
 };

@@ -93,6 +93,16 @@ void Target::run() const
 	std::shared_ptr<vector<string>> res(new vector<string>());
 	m_fileTree->filePaths(res, true);
 
+	make_token_generators(res);
+
+	//----не-удалять----------
+	//make_source_out(res);
+	//-----------------------
+
+}
+
+void Target::make_source_out(std::shared_ptr<vector<string>> res) const
+{
 	for (auto p_file_name = res->begin(); p_file_name != res->end(); ++p_file_name) {
 
 		string short_name = p_file_name->substr(m_source_dir.size());
@@ -113,16 +123,16 @@ void Target::run() const
 
 		Dom dom(Dom::item::html, true, out_file_name, "", "", "html");
 		dom.set(Dom::item::head, "", "", "head");
-		dom.set({"head"}, Dom::item::title, "", "Файл " + short_name, "title");
+		dom.set({ "head" }, Dom::item::title, "", "Файл " + short_name, "title");
 		dom.set(Dom::item::body, " class = body", "", "body");
 
-		dom.set({"body"}, Dom::item::table, " class = table", "", "table");
+		dom.set({ "body" }, Dom::item::table, " class = table", "", "table");
 
 		cout << short_name << " : " << line_idx << " / " << codeLines.size();
 
 		for (auto line : codeLines) {
 			string tr_name = "tr_" + std::to_string(line_idx);
-			dom.set({"body", "table"}, Dom::item::tr, "", "", tr_name);
+			dom.set({ "body", "table" }, Dom::item::tr, "", "", tr_name);
 			dom.set({ "body", "table", tr_name }, Dom::item::td, " class = num_colon", std::to_string(line_idx + 1), "line_num_" + std::to_string(line_idx + 1));
 
 			int tab_num = 0;
@@ -175,5 +185,30 @@ void Target::run() const
 		dom.set({ "head" }, Dom::item::style, " text = \"text/css\"", style_str, "style");
 
 		dom.make_doc();
+	}
+}
+
+void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
+{
+	vector<TokenGenerator*> tGenerators;
+
+	for (auto p_file_name = res->begin(); p_file_name != res->end(); ++p_file_name) {
+
+		bool add_to_vector = true;
+		for (auto token : tGenerators) {
+
+			if (token->equal(*p_file_name)) {
+				add_to_vector = false;
+				break;
+			}
+		}
+
+		if (add_to_vector) {
+			tGenerators.push_back(new TokenGenerator(*p_file_name));
+		}
+	}
+
+	for (auto t : tGenerators) {
+		t->show();
 	}
 }

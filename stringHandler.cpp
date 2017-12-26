@@ -100,7 +100,6 @@ vector<string> StringHandler::file2line(const string & file, bool replace_tab)
 		else {
 			buffer += ch;
 		}
-		//buffer += (replace_tab && '\t' == ch ? "&nbsp;" : const char(ch));
 
 		if ('\n' == ch) {
 			result.push_back(buffer);
