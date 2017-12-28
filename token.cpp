@@ -5,7 +5,8 @@ Token::TOKEN_TYPE_NAME Token::token_type_name = {
 	{Token::c_lang_token_type::function, "func"},
 	{Token::c_lang_token_type::static_function, "static func"},
 	{Token::c_lang_token_type::extern_var, "extern var"},
-	{Token::c_lang_token_type::static_var, "static var"}
+	{Token::c_lang_token_type::static_var, "static var"},
+	{Token::c_lang_token_type::typedef_enum, "enum"}
 };
 
 Token::Token(const string& token_value_, c_lang_token_type token_type_)

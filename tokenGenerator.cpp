@@ -51,22 +51,55 @@ void TokenGenerator::parse()
 	string buffer;
 	bool flag_macro_define = false;
 	bool flag_macro_no_stop = false;
+	bool flag_line_comment = false;
+	bool flag_block_comment = false;
+	bool flag_typedef = false;
+	bool flag_enum = false;
 
 	for (int i = 0; i < h_string.size(); ++i) {
 
-		if ('#' == h_string[i]) {
-			//
-			// Начало записи токена "#define"
-			//
-			if ("#define" == h_string.substr(i, 7)) {
-				flag_macro_define = true;
-				buffer.clear();
-			}
+		if (!flag_macro_define && !flag_line_comment && !flag_block_comment && "typedef" == h_string.substr(i, 7)) {
+			flag_typedef = true;
+			buffer.clear();
+		}
+		if ("enum" == h_string.substr(i, 4) && flag_typedef) {
+			flag_typedef = false;
+			flag_enum = true;
+		}
+		if (';' == h_string[i] && flag_enum) {
+			flag_enum = false;
+			h_tokens.push_back(new Token(buffer, Token::c_lang_token_type::typedef_enum));
 		}
 
-		// 
-		// todo: Убрать из выгружаемого кода комментарии
 		//
+		// Начало записи токена "#define"
+		//
+		if (!flag_line_comment && !flag_block_comment && !flag_typedef && \
+			!flag_enum && "#define" == h_string.substr(i, 7)) 
+		{
+			flag_macro_define = true;
+			buffer.clear();
+		}
+
+		//
+		// Определение начала и конца участка однострочного коментария
+		//
+		if ("//" == h_string.substr(i, 2)) {
+			flag_line_comment = true;
+		}
+		if (flag_line_comment && '\n' == h_string[i]) {
+			flag_line_comment = false;
+		}
+
+		//
+		// Определение начала и конца участка блочного комментария
+		//
+		if ("/*" == h_string.substr(i, 2)) {
+			flag_block_comment = true;
+		}
+		if (flag_block_comment && "*/" == h_string.substr(i, 2)) {
+			flag_block_comment = false;
+		}
 
 		//
 		// Конец записи токена "#define"
@@ -82,16 +115,16 @@ void TokenGenerator::parse()
 			}
 			
 			if (!flag_macro_no_stop && '\n' == h_string[i]) {
-				//cout << buffer << endl;
 				h_tokens.push_back(new Token(buffer, Token::c_lang_token_type::macro_define));
 				flag_macro_define = false;
 			}
 		}
 
-		if (flag_macro_define) {
+		if (!flag_line_comment && !flag_block_comment && \
+			(flag_macro_define || flag_typedef || flag_enum))
+		{
 			buffer += h_string[i];
 		}
-
 	}
 
 	for (auto p_token : h_tokens) {

@@ -23,6 +23,7 @@ public:
 		static_function,
 		extern_var,
 		static_var,
+		typedef_enum,
 	};
 
 	explicit Token(const string& token_value_, c_lang_token_type token_type_);
