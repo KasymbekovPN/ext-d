@@ -27,4 +27,6 @@ add_executable(ext-d
                 dom.cpp
                 tokenGenerator.hpp
                 tokenGenerator.cpp
+                token.hpp
+                token.cpp
                 )

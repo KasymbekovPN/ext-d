@@ -108,3 +108,8 @@ vector<string> FileHandler::getCmdArgList(const string & cmd_)
 
 	return result;
 }
+
+string FileHandler::getStream()
+{
+	return m_ss.str();
+}

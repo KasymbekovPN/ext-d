@@ -209,6 +209,7 @@ void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 	}
 
 	for (auto t : tGenerators) {
-		t->show();
+		//t->show();
+		t->parse();
 	}
 }

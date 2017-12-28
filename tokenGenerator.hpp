@@ -1,5 +1,8 @@
 #pragma once
 
+#include "fileHandler.h"
+#include "token.hpp"
+
 #include <iostream>
 #include <string>
 
@@ -13,6 +16,7 @@ public:
 	TokenGenerator(const string& path_);
 
 	bool equal(const string& path_);
+	void parse();
 
 	void show();
 

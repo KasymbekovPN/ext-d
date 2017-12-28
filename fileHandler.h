@@ -9,6 +9,7 @@
 #include <vector>
 #include <sstream>
 #include <iterator>
+#include <memory>
 
 using std::string;
 using std::cout;
@@ -31,6 +32,8 @@ public:
 
 	vector<vector<string>> getCmdLists();
 	vector<string> getCmdArgList(const string&);
+
+	string getStream();
 
 private:
 
