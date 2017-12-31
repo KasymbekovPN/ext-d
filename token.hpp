@@ -50,4 +50,5 @@ private:
 	string m_value;
 
 	void macro_define_handler(const string& buffer);
+	void enum_handler(const string& buffer);
 };
