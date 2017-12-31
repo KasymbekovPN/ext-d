@@ -6,6 +6,8 @@
 #include <memory>
 #include <map>
 
+#include "stringHandler.h"
+
 using std::cout;
 using std::endl;
 using std::string;
@@ -28,6 +30,7 @@ public:
 
 	explicit Token(const string& token_value_, c_lang_token_type token_type_);
 
+	string getName() const;
 	string getValue() const;
 	void writeToken() const;
 	void writeTokenDescription() const;
@@ -42,4 +45,9 @@ private:
 
 	typedef map<c_lang_token_type, string> TOKEN_TYPE_NAME;
 	static TOKEN_TYPE_NAME token_type_name;
+
+	string m_name;
+	string m_value;
+
+	void macro_define_handler(const string& buffer);
 };
