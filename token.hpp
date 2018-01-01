@@ -26,6 +26,7 @@ public:
 		extern_var,
 		static_var,
 		typedef_enum,
+		typedef_struct,
 	};
 
 	explicit Token(const string& token_value_, c_lang_token_type token_type_);
@@ -49,6 +50,12 @@ private:
 	string m_name;
 	string m_value;
 
+	//
+	// todo: завязать через map
+	//
 	void macro_define_handler(const string& buffer);
 	void enum_handler(const string& buffer);
+	void struct_handler(const string& buffer);
+
+	vector<string> parse_struct(const string& buffer);
 };

@@ -2,6 +2,11 @@
 
 #include "fileHandler.h"
 #include "token.hpp"
+#include "c_base_token.hpp"
+#include "c_macro_token.hpp"
+#include "c_enum_token.hpp"
+#include "c_struct_token.hpp"
+#include "c_def_var_token.hpp"
 
 #include <iostream>
 #include <string>

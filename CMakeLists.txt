@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(ext-d VERSION 0.1.1)
+project(ext-d VERSION 0.1.3)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -29,4 +29,14 @@ add_executable(ext-d
                 tokenGenerator.cpp
                 token.hpp
                 token.cpp
+                c_base_token.hpp
+                c_base_token.cpp
+                c_def_var_token.hpp
+                c_def_var_token.cpp
+                c_enum_token.hpp
+                c_enum_token.cpp
+                c_macro_token.hpp
+                c_macro_token.cpp
+                c_struct_token.hpp
+                c_struct_token.cpp
                 )
