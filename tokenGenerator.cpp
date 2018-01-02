@@ -39,8 +39,248 @@ bool TokenGenerator::equal(const string & path_)
 void TokenGenerator::parse()
 {
 
-#define TG_PARSE_2
+#define TG_PARSE_3
+//#define TG_PARSE_2
 //#define TG_PARSE_1
+
+#ifdef  TG_PARSE_3
+
+	//FileHandler h_file(m_path + ".h");
+	//string h_string = h_file.getAsString();
+
+	FileHandler c_file(m_path + ".c");
+	string c_string = c_file.getAsString() + "\n";
+
+	unsigned int flags = 0;
+	const unsigned int flag_empty = 0;
+	const unsigned int flag_block_comment			= 0b000000001;
+	const unsigned int flag_line_comment			= 0b000000010;
+	const unsigned int flag_is_comment				= 0b000000011;
+	const unsigned int flag_prepro_except_define	= 0b000000100;
+	const unsigned int flag_prepro_define			= 0b000001000;
+	const unsigned int flag_general_rec				= 0b000010000;
+	const unsigned int flag_func_definition			= 0b000100000;
+	const unsigned int flag_struct_rec				= 0b001000000;
+	const unsigned int flag_general_brace			= 0b010000000;
+	const unsigned int flag_prepro_def_hold			= 0b100000000;
+
+	const unsigned int flag_rec						= 0b011111100;
+
+	int struct_brace_counter = 0;
+	int general_brace_counter = 0;
+	int func_brace_counter = 0;
+
+	string chank;
+
+	for (int i = 0; i < c_string.size(); ++i) {
+
+		//
+		// Начало/конец блочного комментария
+		//
+		if ("/*" == c_string.substr(i, 2)) {
+			flags |= flag_block_comment;
+		}
+		if (flags & flag_block_comment) {
+			if ("*/" == c_string.substr(i-2, 2)) {
+				flags &= ~flag_block_comment;
+			}
+		}
+
+		//
+		// Начало/конец строчного  комментария
+		//
+		if ("//" == c_string.substr(i, 2)) {
+			flags |= flag_line_comment;
+		}
+		if ((flag_line_comment & flags) && '\n' == c_string[i]) {
+			flags &= ~flag_line_comment;
+		}
+		
+
+		if (0 == (flags & flag_is_comment)) {
+
+			if (flag_empty == (flags & flag_rec)) {
+
+				if ('#' == c_string[i]) {
+
+					if ("#define" == c_string.substr(i, 7)) {
+						//
+						// Начало куска "#define"
+						//
+						flags |= flag_prepro_define;
+						chank.clear();
+					}
+					else {
+						//
+						// Начало куска "#?????"
+						//
+						flags |= flag_prepro_except_define;
+						chank.clear();
+					}
+				}
+				else if (' ' != c_string[i] && '\n' != c_string[i] && '\t' != c_string[i]){
+					flags |= flag_general_rec;
+					chank.clear();
+				}
+			}
+
+			//
+			// Переключение с general_rec на general_brace
+			//
+			if (flags & flag_general_rec) {
+				if ('(' == c_string[i]) {
+					flags &= ~flag_general_rec;
+					flags |= flag_general_brace;
+				}
+			}
+
+			if (flags & flag_general_brace) {
+
+				if ('(' == c_string[i]) {
+					general_brace_counter++;
+				}
+				if (')' == c_string[i]) {
+					general_brace_counter--;
+				}
+
+				if (0 == general_brace_counter) {
+
+					if (' ' != c_string[i] && '\t' != c_string[i] && '\n' != c_string[i] && ')' != c_string[i]) {
+
+						if (';' == c_string[i]) {
+							flags &= ~flag_general_brace;
+							//---
+							cout << "---Func-proto---" << endl;
+							cout << chank << endl;
+							cout << "---" << endl;
+							//---
+						}
+						else if ('{' == c_string[i]) {
+							flags &= ~flag_general_brace;
+							flags |= flag_func_definition;
+						}
+						else {
+							flags &= ~flag_general_brace;
+							flags |= flag_general_rec;
+						}
+					}
+				}
+				
+			}
+
+			if (flags & flag_func_definition) {
+
+				if ('{' == c_string[i]) {
+					func_brace_counter++;
+				}
+				if ('}' == c_string[i]) {
+					func_brace_counter--;
+				}
+
+				if (0 == func_brace_counter) {
+					flags &= ~flag_func_definition;
+					//---
+					cout << "---Func-defin---" << endl;
+					cout << chank + "\n}" << endl;
+					cout << "---" << endl;
+					//---
+				}
+
+			}
+
+			//
+			// Переключение с general_rec на struct_rec
+			//
+			if (flags & flag_general_rec) {
+				if ("struct" == c_string.substr(i, 6)) {
+					flags &= ~flag_general_rec;
+					flags |= flag_struct_rec;
+				}
+			}
+
+			//
+			// Окончание куска "struct"
+			//
+			if (flags & flag_struct_rec) {
+				if ('{' == c_string[i]) {
+					struct_brace_counter++;
+				}
+				if ('}' == c_string[i]) {
+					struct_brace_counter--;
+				}
+
+				if (0 == struct_brace_counter && ';' == c_string[i]) {
+					flags &= ~flag_struct_rec;
+					//---
+					cout << "---struct---" << endl;
+					cout << chank << endl;
+					cout << "---" << endl;
+					//---
+				}
+
+			}
+
+			//
+			// Окончание куска "#define"
+			//
+			if (flag_prepro_define & flags) {
+
+				if ('\\' == c_string[i]) {
+					flags |= flag_prepro_def_hold;
+				}
+				else {
+					if ((flags & flag_prepro_def_hold) && (' ' != c_string[i] && '\t' != c_string[i] && '\n' != c_string[i])) {
+						flags &= ~flag_prepro_def_hold;
+					}
+				}
+
+				if (0 == (flags & flag_prepro_def_hold) && '\n' == c_string[i]) {
+					flags &= ~flag_prepro_define;
+					//---
+					cout << "---define---" << endl;
+					cout << chank << endl;
+					cout << "---" << endl;
+					//---
+				}
+			}
+
+			//
+			// Окочание куска "#??????"
+			//
+			if (flags & flag_prepro_except_define) {
+				if ('\n' == c_string[i]) {
+					flags &= ~flag_prepro_except_define;
+				}
+			}
+
+			//
+			// Окончание куска general_rec
+			//
+			if (flags & flag_general_rec) {
+				if (';' == c_string[i]) {
+					flags &= ~flag_general_rec;
+					//---
+					cout << "---general---" << endl;
+					cout << chank << endl;
+					cout << "---" << endl;
+					//---
+				}
+			}
+
+			//
+			// Запись куска
+			//
+			if (flag_rec & flags) {
+				chank += c_string[i];
+			}
+
+		}
+
+	}
+
+	cout << endl;
+
+#endif//TG_PARSE_3
 
 #ifdef  TG_PARSE_2
 
@@ -50,7 +290,6 @@ void TokenGenerator::parse()
 	FileHandler h_file(m_path + ".h");
 	string h_string = h_file.getAsString();
 
-	//vector<Token*> h_tokens;
 	vector<cBaseToken*> h_tokens;
 
 	string buffer;
@@ -92,7 +331,6 @@ void TokenGenerator::parse()
 
 		if (';' == h_string[i] && flag_enum) {
 			flag_enum = false;
-			//h_tokens.push_back(new Token(buffer, Token::c_lang_token_type::typedef_enum));
 			h_tokens.push_back(new cEnumToken(buffer));
 		}
 
@@ -105,6 +343,7 @@ void TokenGenerator::parse()
 				flag_struct = false;
 				flag_struct_end = false;
 				//h_tokens.push_back(new Token(buffer, Token::c_lang_token_type::typedef_struct));
+				h_tokens.push_back(new cStructToken(buffer));
 			}
 		}
 
