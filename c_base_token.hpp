@@ -4,6 +4,8 @@
 #include <string>
 #include <map>
 
+#include "stringHandler.h"
+
 using std::string;
 using std::cout;
 using std::endl;
@@ -18,16 +20,21 @@ public:
 		typedef_enum,
 		def_var,
 		typedef_struct,
+		func_decl,
+		func_def,
 	};
 
-	cBaseToken(TokenType type_);
+	cBaseToken(TokenType type_, const string& raw_);
 
-	virtual void show() const;
+	virtual void show(int offset_) const;
 
 	void setName(const string& name_);
 
 	TokenType getType() const;
 	string getName() const;
+	string getRaw() const;
+
+	static string get_offset_string(int offset_);
 
 private:
 
@@ -36,4 +43,5 @@ private:
 
 	string m_name;
 	TokenType m_type;
+	string m_raw;
 };

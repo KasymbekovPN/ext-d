@@ -17,12 +17,18 @@ class cStructToken: public cBaseToken
 {
 public:
 	cStructToken(const string& buffer);
+	~cStructToken();
 
-	void show() const;
+	void show(int offset_) const;
 
 private:
 
-	string m_volatile;
+	bool m_volatile;
+	bool m_static;
+	bool m_typedef;
+	bool m_array;
+	string m_array_size;
+	
 	vector<cBaseToken*> m_value;
 
 };

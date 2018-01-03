@@ -11,7 +11,7 @@ class cMacroToken : public cBaseToken
 public:
 	cMacroToken(const string& buffer);
 
-	void show() const;
+	void show(int offset_) const;
 
 private:
 

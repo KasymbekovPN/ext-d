@@ -1,6 +1,6 @@
 #include "c_enum_token.hpp"
 
-cEnumToken::cEnumToken(const string& buffer) : cBaseToken(cBaseToken::TokenType::typedef_enum)
+cEnumToken::cEnumToken(const string& buffer) : cBaseToken(cBaseToken::TokenType::typedef_enum, buffer)
 {
 	size_t start = buffer.find('{');
 	size_t stop = buffer.find('}');
@@ -32,10 +32,10 @@ cEnumToken::cEnumToken(const string& buffer) : cBaseToken(cBaseToken::TokenType:
 	}
 }
 
-void cEnumToken::show() const
+void cEnumToken::show(int offset_) const
 {
-	cBaseToken::show();
+	cBaseToken::show(offset_);
 	for (auto item : m_value) {
-		cout << item[0] << " = " << item[1] << endl;
+		cout << cBaseToken::get_offset_string(offset_ + 1) << item[0] << " = " << item[1] << endl;
 	}
 }

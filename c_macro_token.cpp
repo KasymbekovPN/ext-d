@@ -1,6 +1,6 @@
 #include "c_macro_token.hpp"
 
-cMacroToken::cMacroToken(const string & buffer) : cBaseToken(cBaseToken::TokenType::macro)
+cMacroToken::cMacroToken(const string & buffer) : cBaseToken(cBaseToken::TokenType::macro, buffer)
 {
 	bool rec_name = true;
 	bool parenthesis = false;
@@ -46,8 +46,8 @@ cMacroToken::cMacroToken(const string & buffer) : cBaseToken(cBaseToken::TokenTy
 	m_value = StringHandler::filter(m_value, StringHandler::FBE::all, { '\\', '\n', ' ', '\t' });
 }
 
-void cMacroToken::show() const
+void cMacroToken::show(int offset_) const
 {
-	cBaseToken::show();
-	cout << "Token Value: " << endl << m_value << endl;
+	cBaseToken::show(offset_);
+	cout << cBaseToken::get_offset_string(offset_ + 1) << "Token Value: " << endl << m_value << endl;
 }

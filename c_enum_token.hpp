@@ -4,13 +4,11 @@
 #include "stringHandler.h"
 
 #include <string>
-//#include <map>
 #include <iostream>
 #include <vector>
 
 using std::cout;
 using std::endl;
-//using std::map;
 using std::string;
 using std::vector;
 
@@ -19,7 +17,7 @@ class cEnumToken : public cBaseToken
 public:
 	cEnumToken(const string& buffer);
 
-	void show() const;
+	void show(int offset_) const;
 
 private:
 

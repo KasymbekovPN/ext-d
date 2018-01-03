@@ -125,11 +125,6 @@ void Token::enum_handler(const string & buffer)
 void Token::struct_handler(const string & buffer)
 {
 
-//#define SH_1
-#define SH_2
-
-#ifdef  SH_2
-
 	size_t found = buffer.find("struct");
 
 	if (string::npos != found) {
@@ -137,32 +132,6 @@ void Token::struct_handler(const string & buffer)
 		m_name = res[0];
 		m_value = res[1];
 	}
-
-#endif
-
-#ifdef  SH_1
-	size_t start = buffer.find('{');
-	size_t stop = buffer.find('}');
-
-	if (string::npos != start && string::npos != stop && start < stop) {
-		m_value = buffer.substr(start + 1, stop - start - 1);
-		m_name = buffer.substr(stop + 1);
-	}
-
-	m_name = StringHandler::filter(m_name, StringHandler::FBE::begin_and_end, { ' ', '\n', '\t', '\\' });
-
-	auto res = StringHandler::split(m_value, ';');
-	m_value.clear();
-	int i = 0;
-
-	for (auto line : res) {
-		string buffer = StringHandler::filter(line, StringHandler::FBE::begin_and_end, { ' ', '\n', '\t', '\\' });
-		if (!StringHandler::filter(buffer, StringHandler::FBE::all, { ' ', '\n', '\t', '\\' }).empty()) {
-			m_value += buffer + ";";
-		}
-	}
-#endif
-
 }
 
 vector<string> Token::parse_struct(const string & buffer)

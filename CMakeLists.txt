@@ -39,4 +39,8 @@ add_executable(ext-d
                 c_macro_token.cpp
                 c_struct_token.hpp
                 c_struct_token.cpp
+                c_func_decl.hpp
+                c_func_decl.cpp
+                c_func_def.hpp
+                c_func_def.cpp
                 )

@@ -9,6 +9,13 @@ TokenGenerator::TokenGenerator(const string & path_)
 	m_was_source = "c" == path_.substr(found + 1);
 }
 
+TokenGenerator::~TokenGenerator()
+{
+	for (auto item : m_tokens) {
+		delete item;
+	}
+}
+
 bool TokenGenerator::equal(const string & path_)
 {
 	bool res = false;
@@ -39,514 +46,17 @@ bool TokenGenerator::equal(const string & path_)
 void TokenGenerator::parse()
 {
 
-#define TG_PARSE_3
-//#define TG_PARSE_2
-//#define TG_PARSE_1
-
-#ifdef  TG_PARSE_3
-
-	//FileHandler h_file(m_path + ".h");
-	//string h_string = h_file.getAsString();
-
-	FileHandler c_file(m_path + ".c");
-	string c_string = c_file.getAsString() + "\n";
-
-	unsigned int flags = 0;
-	const unsigned int flag_empty = 0;
-	const unsigned int flag_block_comment			= 0b000000001;
-	const unsigned int flag_line_comment			= 0b000000010;
-	const unsigned int flag_is_comment				= 0b000000011;
-	const unsigned int flag_prepro_except_define	= 0b000000100;
-	const unsigned int flag_prepro_define			= 0b000001000;
-	const unsigned int flag_general_rec				= 0b000010000;
-	const unsigned int flag_func_definition			= 0b000100000;
-	const unsigned int flag_struct_rec				= 0b001000000;
-	const unsigned int flag_general_brace			= 0b010000000;
-	const unsigned int flag_prepro_def_hold			= 0b100000000;
-
-	const unsigned int flag_rec						= 0b011111100;
-
-	int struct_brace_counter = 0;
-	int general_brace_counter = 0;
-	int func_brace_counter = 0;
-
-	string chank;
-
-	for (int i = 0; i < c_string.size(); ++i) {
-
-		//
-		// Начало/конец блочного комментария
-		//
-		if ("/*" == c_string.substr(i, 2)) {
-			flags |= flag_block_comment;
-		}
-		if (flags & flag_block_comment) {
-			if ("*/" == c_string.substr(i-2, 2)) {
-				flags &= ~flag_block_comment;
-			}
-		}
-
-		//
-		// Начало/конец строчного  комментария
-		//
-		if ("//" == c_string.substr(i, 2)) {
-			flags |= flag_line_comment;
-		}
-		if ((flag_line_comment & flags) && '\n' == c_string[i]) {
-			flags &= ~flag_line_comment;
-		}
-		
-
-		if (0 == (flags & flag_is_comment)) {
-
-			if (flag_empty == (flags & flag_rec)) {
-
-				if ('#' == c_string[i]) {
-
-					if ("#define" == c_string.substr(i, 7)) {
-						//
-						// Начало куска "#define"
-						//
-						flags |= flag_prepro_define;
-						chank.clear();
-					}
-					else {
-						//
-						// Начало куска "#?????"
-						//
-						flags |= flag_prepro_except_define;
-						chank.clear();
-					}
-				}
-				else if (' ' != c_string[i] && '\n' != c_string[i] && '\t' != c_string[i]){
-					flags |= flag_general_rec;
-					chank.clear();
-				}
-			}
-
-			//
-			// Переключение с general_rec на general_brace
-			//
-			if (flags & flag_general_rec) {
-				if ('(' == c_string[i]) {
-					flags &= ~flag_general_rec;
-					flags |= flag_general_brace;
-				}
-			}
-
-			if (flags & flag_general_brace) {
-
-				if ('(' == c_string[i]) {
-					general_brace_counter++;
-				}
-				if (')' == c_string[i]) {
-					general_brace_counter--;
-				}
-
-				if (0 == general_brace_counter) {
-
-					if (' ' != c_string[i] && '\t' != c_string[i] && '\n' != c_string[i] && ')' != c_string[i]) {
-
-						if (';' == c_string[i]) {
-							flags &= ~flag_general_brace;
-							//---
-							cout << "---Func-proto---" << endl;
-							cout << chank << endl;
-							cout << "---" << endl;
-							//---
-						}
-						else if ('{' == c_string[i]) {
-							flags &= ~flag_general_brace;
-							flags |= flag_func_definition;
-						}
-						else {
-							flags &= ~flag_general_brace;
-							flags |= flag_general_rec;
-						}
-					}
-				}
-				
-			}
-
-			if (flags & flag_func_definition) {
-
-				if ('{' == c_string[i]) {
-					func_brace_counter++;
-				}
-				if ('}' == c_string[i]) {
-					func_brace_counter--;
-				}
-
-				if (0 == func_brace_counter) {
-					flags &= ~flag_func_definition;
-					//---
-					cout << "---Func-defin---" << endl;
-					cout << chank + "\n}" << endl;
-					cout << "---" << endl;
-					//---
-				}
-
-			}
-
-			//
-			// Переключение с general_rec на struct_rec
-			//
-			if (flags & flag_general_rec) {
-				if ("struct" == c_string.substr(i, 6)) {
-					flags &= ~flag_general_rec;
-					flags |= flag_struct_rec;
-				}
-			}
-
-			//
-			// Окончание куска "struct"
-			//
-			if (flags & flag_struct_rec) {
-				if ('{' == c_string[i]) {
-					struct_brace_counter++;
-				}
-				if ('}' == c_string[i]) {
-					struct_brace_counter--;
-				}
-
-				if (0 == struct_brace_counter && ';' == c_string[i]) {
-					flags &= ~flag_struct_rec;
-					//---
-					cout << "---struct---" << endl;
-					cout << chank << endl;
-					cout << "---" << endl;
-					//---
-				}
-
-			}
-
-			//
-			// Окончание куска "#define"
-			//
-			if (flag_prepro_define & flags) {
-
-				if ('\\' == c_string[i]) {
-					flags |= flag_prepro_def_hold;
-				}
-				else {
-					if ((flags & flag_prepro_def_hold) && (' ' != c_string[i] && '\t' != c_string[i] && '\n' != c_string[i])) {
-						flags &= ~flag_prepro_def_hold;
-					}
-				}
-
-				if (0 == (flags & flag_prepro_def_hold) && '\n' == c_string[i]) {
-					flags &= ~flag_prepro_define;
-					//---
-					cout << "---define---" << endl;
-					cout << chank << endl;
-					cout << "---" << endl;
-					//---
-				}
-			}
-
-			//
-			// Окочание куска "#??????"
-			//
-			if (flags & flag_prepro_except_define) {
-				if ('\n' == c_string[i]) {
-					flags &= ~flag_prepro_except_define;
-				}
-			}
-
-			//
-			// Окончание куска general_rec
-			//
-			if (flags & flag_general_rec) {
-				if (';' == c_string[i]) {
-					flags &= ~flag_general_rec;
-					//---
-					cout << "---general---" << endl;
-					cout << chank << endl;
-					cout << "---" << endl;
-					//---
-				}
-			}
-
-			//
-			// Запись куска
-			//
-			if (flag_rec & flags) {
-				chank += c_string[i];
-			}
-
-		}
-
+	if (m_was_header) {
+		parse_file(m_path + ".h");
 	}
 
-	cout << endl;
-
-#endif//TG_PARSE_3
-
-#ifdef  TG_PARSE_2
-
-//
-// Обработка h-файла
-//
-	FileHandler h_file(m_path + ".h");
-	string h_string = h_file.getAsString();
-
-	vector<cBaseToken*> h_tokens;
-
-	string buffer;
-	bool flag_macro_define = false;
-	bool flag_macro_no_stop = false;
-	bool flag_line_comment = false;
-	bool flag_block_comment = false;
-	bool flag_typedef = false;
-	bool flag_enum = false;
-	bool flag_struct = false;
-	bool flag_struct_end = false;
-	int counter_struct_brace = 0;
-
-	for (int i = 0; i < h_string.size(); ++i) {
-
-		if (!flag_macro_define && !flag_line_comment && !flag_block_comment && "typedef" == h_string.substr(i, 7)) {
-			flag_typedef = true;
-			buffer.clear();
-		}
-		if ("enum" == h_string.substr(i, 4) && flag_typedef) {
-			flag_typedef = false;
-			flag_enum = true;
-		}
-
-		if ("struct" == h_string.substr(i, 6) && flag_typedef) {
-			flag_typedef = false;
-			flag_struct = true;
-			flag_struct_end = false;
-		}
-
-		if (flag_struct) {
-			if ('{' == h_string[i]) {
-				counter_struct_brace++;
-			}
-			if ('}' == h_string[i]) {
-				counter_struct_brace--;
-			}
-		}
-
-		if (';' == h_string[i] && flag_enum) {
-			flag_enum = false;
-			h_tokens.push_back(new cEnumToken(buffer));
-		}
-
-		if (flag_struct) {
-			if ('}' == h_string[i] && 0 == counter_struct_brace) {
-				flag_struct_end = true;
-			}
-
-			if (flag_struct_end && ';' == h_string[i]) {
-				flag_struct = false;
-				flag_struct_end = false;
-				//h_tokens.push_back(new Token(buffer, Token::c_lang_token_type::typedef_struct));
-				h_tokens.push_back(new cStructToken(buffer));
-			}
-		}
-
-		//
-		// Начало записи токена "#define"
-		//
-		if (!flag_line_comment && !flag_block_comment && !flag_typedef && \
-			!flag_enum && !flag_struct && "#define" == h_string.substr(i, 7))
-		{
-			flag_macro_define = true;
-			buffer.clear();
-		}
-
-		//
-		// Определение начала и конца участка однострочного коментария
-		//
-		if ("//" == h_string.substr(i, 2)) {
-			flag_line_comment = true;
-		}
-		if (flag_line_comment && '\n' == h_string[i]) {
-			flag_line_comment = false;
-		}
-
-		//
-		// Определение начала и конца участка блочного комментария
-		//
-		if ("/*" == h_string.substr(i, 2)) {
-			flag_block_comment = true;
-		}
-		if (flag_block_comment && "*/" == h_string.substr(i, 2)) {
-			flag_block_comment = false;
-		}
-
-		//
-		// Конец записи токена "#define"
-		//
-		if (flag_macro_define) {
-
-
-			if ('\\' == h_string[i]) {
-				flag_macro_no_stop = true;
-			}
-			else if (flag_macro_no_stop && (' ' != h_string[i] && '\t' != h_string[i] && '\n' != h_string[i])) {
-				flag_macro_no_stop = false;
-			}
-
-			if (!flag_macro_no_stop && '\n' == h_string[i]) {
-				h_tokens.push_back(new cMacroToken(buffer));
-				flag_macro_define = false;
-			}
-		}
-
-		if (!flag_line_comment && !flag_block_comment && \
-			(flag_macro_define || flag_typedef || flag_enum || flag_struct))
-		{
-			buffer += h_string[i];
-		}
+	if (m_was_source) {
+		parse_file(m_path + ".c");
 	}
 
-	for (auto p_token : h_tokens) {
-		p_token->show();
+	for (auto item : m_tokens) {
+		item->show(0);
 	}
-
-	for (auto p_token : h_tokens) {
-		delete p_token;
-	}
-
-#endif//TG_PARSE_2
-
-#ifdef  TG_PARSE_1
-//
-// Обработка h-файла
-//
-	FileHandler h_file(m_path + ".h");
-	string h_string = h_file.getAsString();
-
-	vector<Token*> h_tokens;
-
-	string buffer;
-	bool flag_macro_define = false;
-	bool flag_macro_no_stop = false;
-	bool flag_line_comment = false;
-	bool flag_block_comment = false;
-	bool flag_typedef = false;
-	bool flag_enum = false;
-	bool flag_struct = false;
-	bool flag_struct_end = false;
-	int counter_struct_brace = 0;
-
-	for (int i = 0; i < h_string.size(); ++i) {
-
-		if (!flag_macro_define && !flag_line_comment && !flag_block_comment && "typedef" == h_string.substr(i, 7)) {
-			flag_typedef = true;
-			buffer.clear();
-		}
-		if ("enum" == h_string.substr(i, 4) && flag_typedef) {
-			flag_typedef = false;
-			flag_enum = true;
-		}
-
-		if ("struct" == h_string.substr(i, 6) && flag_typedef) {
-			flag_typedef = false;
-			flag_struct = true;
-			flag_struct_end = false;
-		}
-
-		if (flag_struct) {
-			if ('{' == h_string[i]) {
-				counter_struct_brace++;
-			}
-			if ('}' == h_string[i]) {
-				counter_struct_brace--;
-			}
-		}
-
-		if (';' == h_string[i] && flag_enum) {
-			flag_enum = false;
-			h_tokens.push_back(new Token(buffer, Token::c_lang_token_type::typedef_enum));
-		}
-
-		if (flag_struct) {
-			if ('}' == h_string[i] && 0 == counter_struct_brace) {
-				flag_struct_end = true;
-			}
-
-			if (flag_struct_end && ';' == h_string[i]) {
-				flag_struct = false;
-				flag_struct_end = false;
-				h_tokens.push_back(new Token(buffer, Token::c_lang_token_type::typedef_struct));
-			}
-		}
-
-
-		//if (';' == h_string[i] && flag_struct) {
-		//	flag_struct = false;
-		//	h_tokens.push_back(new Token(buffer, Token::c_lang_token_type::typedef_struct));
-		//}
-
-		//
-		// Начало записи токена "#define"
-		//
-		if (!flag_line_comment && !flag_block_comment && !flag_typedef && \
-			!flag_enum && !flag_struct && "#define" == h_string.substr(i, 7))
-		{
-			flag_macro_define = true;
-			buffer.clear();
-		}
-
-		//
-		// Определение начала и конца участка однострочного коментария
-		//
-		if ("//" == h_string.substr(i, 2)) {
-			flag_line_comment = true;
-		}
-		if (flag_line_comment && '\n' == h_string[i]) {
-			flag_line_comment = false;
-		}
-
-		//
-		// Определение начала и конца участка блочного комментария
-		//
-		if ("/*" == h_string.substr(i, 2)) {
-			flag_block_comment = true;
-		}
-		if (flag_block_comment && "*/" == h_string.substr(i, 2)) {
-			flag_block_comment = false;
-		}
-
-		//
-		// Конец записи токена "#define"
-		//
-		if (flag_macro_define) {
-
-
-			if ('\\' == h_string[i]) {
-				flag_macro_no_stop = true;
-			}
-			else if (flag_macro_no_stop && (' ' != h_string[i] && '\t' != h_string[i] && '\n' != h_string[i])) {
-				flag_macro_no_stop = false;
-			}
-
-			if (!flag_macro_no_stop && '\n' == h_string[i]) {
-				h_tokens.push_back(new Token(buffer, Token::c_lang_token_type::macro_define));
-				flag_macro_define = false;
-			}
-		}
-
-		if (!flag_line_comment && !flag_block_comment && \
-			(flag_macro_define || flag_typedef || flag_enum || flag_struct))
-		{
-			buffer += h_string[i];
-		}
-	}
-
-	for (auto p_token : h_tokens) {
-		p_token->show();
-	}
-
-	for (auto p_token : h_tokens) {
-		delete p_token;
-	}
-#endif//TG_PARSE_1
-
 }
 
 void TokenGenerator::show()
@@ -556,5 +66,218 @@ void TokenGenerator::show()
 	cout << "h : " << m_was_header << endl;
 	cout << "c : " << m_was_source << endl;
 	cout << endl;
+}
+
+void TokenGenerator::parse_file(const string & file_name)
+{
+
+	m_flags = 0;
+	m_general_brace_counter = 0;
+	m_struct_brace_counter = 0;
+	m_func_brace_counter = 0;
+
+	string chank;
+
+	FileHandler file(file_name);
+	string buffer = file.getAsString() + "\n";
+
+
+
+	for (int i = 0; i < buffer.size(); ++i) {
+
+		//
+		// Начало/конец блочного комментария
+		//
+		if ("/*" == buffer.substr(i, 2)) {
+			m_flags |= m_flag_block_comment;
+		}
+		if (m_flags & m_flag_block_comment) {
+			if ("*/" == buffer.substr(i - 2, 2)) {
+				m_flags &= ~m_flag_block_comment;
+			}
+		}
+
+		//
+		// Начало/конец строчного  комментария
+		//
+		if ("//" == buffer.substr(i, 2)) {
+			m_flags |= m_flag_line_comment;
+		}
+		if ((m_flag_line_comment & m_flags) && '\n' == buffer[i]) {
+			m_flags &= ~m_flag_line_comment;
+		}
+
+
+		if (0 == (m_flags & m_flag_is_comment)) {
+
+			if (m_flag_empty == (m_flags & m_flag_rec)) {
+
+				if ('#' == buffer[i]) {
+
+					if ("#define" == buffer.substr(i, 7)) {
+						//
+						// Начало куска "#define"
+						//
+						m_flags |= m_flag_prepro_define;
+						chank.clear();
+					}
+					else {
+						//
+						// Начало куска "#?????"
+						//
+						m_flags |= m_flag_prepro_except_define;
+						chank.clear();
+					}
+				}
+				else if (' ' != buffer[i] && '\n' != buffer[i] && '\t' != buffer[i]) {
+					m_flags |= m_flag_general_rec;
+					chank.clear();
+				}
+			}
+
+			//
+			// Переключение с general_rec на general_brace
+			//
+			if (m_flags & m_flag_general_rec) {
+				if ('(' == buffer[i]) {
+					m_flags &= ~m_flag_general_rec;
+					m_flags |= m_flag_general_brace;
+				}
+			}
+
+			if (m_flags & m_flag_general_brace) {
+
+				if ('(' == buffer[i]) {
+					m_general_brace_counter++;
+				}
+				if (')' == buffer[i]) {
+					m_general_brace_counter--;
+				}
+
+				if (0 == m_general_brace_counter) {
+
+					if (' ' != buffer[i] && '\t' != buffer[i] && '\n' != buffer[i] && ')' != buffer[i]) {
+
+						if (';' == buffer[i]) {
+							m_flags &= ~m_flag_general_brace;
+							m_tokens.push_back(new cFuncDecl(buffer));
+						}
+						else if ('{' == buffer[i]) {
+							m_flags &= ~m_flag_general_brace;
+							m_flags |= m_flag_func_definition;
+						}
+						else {
+							m_flags &= ~m_flag_general_brace;
+							m_flags |= m_flag_general_rec;
+						}
+					}
+				}
+			}
+
+			if (m_flags & m_flag_func_definition) {
+
+				if ('{' == buffer[i]) {
+					m_func_brace_counter++;
+				}
+				if ('}' == buffer[i]) {
+					m_func_brace_counter--;
+				}
+
+				if (0 == m_func_brace_counter) {
+					m_flags &= ~m_flag_func_definition;
+					m_tokens.push_back(new cFuncDef(buffer));
+				}
+
+			}
+
+			//
+			// Переключение с general_rec на struct_rec
+			//
+			if (m_flags & m_flag_general_rec) {
+				if ("struct" == buffer.substr(i, 6)) {
+					m_flags &= ~m_flag_general_rec;
+					m_flags |= m_flag_struct_rec;
+				}
+			}
+
+			//
+			// Окончание куска "struct"
+			//
+			if (m_flags & m_flag_struct_rec) {
+				if ('{' == buffer[i]) {
+					m_struct_brace_counter++;
+				}
+				if ('}' == buffer[i]) {
+					m_struct_brace_counter--;
+				}
+
+				if (0 == m_struct_brace_counter && ';' == buffer[i]) {
+					m_flags &= ~m_flag_struct_rec;
+					m_tokens.push_back(new cStructToken(chank));
+				}
+
+			}
+
+			//
+			// Окончание куска "#define"
+			//
+			if (m_flag_prepro_define & m_flags) {
+
+				if ('\\' == buffer[i]) {
+					m_flags |= m_flag_prepro_def_hold;
+				}
+				else {
+					if ((m_flags & m_flag_prepro_def_hold) && (' ' != buffer[i] && '\t' != buffer[i] && '\n' != buffer[i])) {
+						m_flags &= ~m_flag_prepro_def_hold;
+					}
+				}
+
+				if (0 == (m_flags & m_flag_prepro_def_hold) && '\n' == buffer[i]) {
+					m_flags &= ~m_flag_prepro_define;
+					m_tokens.push_back(new cMacroToken(chank));
+				}
+			}
+
+			//
+			// Окочание куска "#??????"
+			//
+			if (m_flags & m_flag_prepro_except_define) {
+				if ('\n' == buffer[i]) {
+					m_flags &= ~m_flag_prepro_except_define;
+				}
+			}
+
+			//
+			// Окончание куска general_rec
+			//
+			if (m_flags & m_flag_general_rec) {
+				if (';' == buffer[i]) {
+					m_flags &= ~m_flag_general_rec;
+					parse_general(chank);
+				}
+			}
+
+			//
+			// Запись куска
+			//
+			if (m_flag_rec & m_flags) {
+				chank += buffer[i];
+			}
+
+		}
+
+	}
+
+}
+
+void TokenGenerator::parse_general(const string & buffer)
+{
+
+	if (string::npos != buffer.find("enum")) {
+		m_tokens.push_back(new cEnumToken(buffer));
+	}
+	else {
+		m_tokens.push_back(new cDefVar(buffer));
+	}	
 }
 

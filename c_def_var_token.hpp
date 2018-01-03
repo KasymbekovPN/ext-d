@@ -15,7 +15,7 @@ class cDefVar: public  cBaseToken
 public:
 	cDefVar(const string& buffer);
 
-	void show() const;
+	void show(int offset_) const;
 
 private:
 
@@ -23,6 +23,10 @@ private:
 	bool m_const;
 	bool m_extern;
 	bool m_volatile;
+	bool m_array;
+	bool m_function_pointer;
+	string m_pfunc_arg;
+	string m_array_size;
 
 	string m_dataType;
 	string m_initValue;
