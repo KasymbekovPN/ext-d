@@ -23,8 +23,6 @@ public:
 
 private:
 
-	bool m_volatile;
-	bool m_static;
 	bool m_typedef;
 	bool m_array;
 	string m_array_size;

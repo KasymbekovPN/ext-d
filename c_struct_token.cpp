@@ -10,8 +10,8 @@ cStructToken::cStructToken(const string & buffer): cBaseToken(cBaseToken::TokenT
 	string footer = StringHandler::filter(buffer.substr(found_footer + 1), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
 
 	m_typedef = string::npos != header.find("typedef");
-	m_volatile = string::npos != header.find("volatile");
-	m_static = string::npos != header.find("static");
+	setVolatile(string::npos != header.find("volatile"));
+	setStatic(string::npos != header.find("static"));
 
 	size_t found_arr_begin = footer.find_first_of('[');
 	size_t found_arr_end = footer.find_last_of(']');
@@ -74,8 +74,6 @@ void cStructToken::show(int offset_) const
 {
 	cBaseToken::show(offset_);
 	cout << cBaseToken::get_offset_string(offset_) << "is typedef : " << m_typedef << endl;
-	cout << cBaseToken::get_offset_string(offset_) << "is volatile : " << m_volatile << endl;
-	cout << cBaseToken::get_offset_string(offset_) << "is static : " << m_static << endl;
 	cout << cBaseToken::get_offset_string(offset_) << "is array : " << m_array << endl;
 	cout << cBaseToken::get_offset_string(offset_) << "array size : " << m_array_size << endl;
 

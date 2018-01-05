@@ -54,8 +54,11 @@ void TokenGenerator::parse()
 		parse_file(m_path + ".c");
 	}
 
+	int cnt = 0;
+
 	for (auto item : m_tokens) {
 		item->show(0);
+		//cout << cnt++ << ") " << item->getName() << endl;
 	}
 }
 
@@ -81,7 +84,7 @@ void TokenGenerator::parse_file(const string & file_name)
 	FileHandler file(file_name);
 	string buffer = file.getAsString() + "\n";
 
-
+	int block_comment_begin = 0;
 
 	for (int i = 0; i < buffer.size(); ++i) {
 
@@ -90,8 +93,9 @@ void TokenGenerator::parse_file(const string & file_name)
 		//
 		if ("/*" == buffer.substr(i, 2)) {
 			m_flags |= m_flag_block_comment;
+			block_comment_begin = i;
 		}
-		if (m_flags & m_flag_block_comment) {
+		if ((m_flags & m_flag_block_comment) && i >= block_comment_begin + 2) {
 			if ("*/" == buffer.substr(i - 2, 2)) {
 				m_flags &= ~m_flag_block_comment;
 			}
@@ -160,7 +164,12 @@ void TokenGenerator::parse_file(const string & file_name)
 
 						if (';' == buffer[i]) {
 							m_flags &= ~m_flag_general_brace;
-							m_tokens.push_back(new cFuncDecl(buffer));
+							if (string::npos == chank.find("typedef")) {
+								m_tokens.push_back(new cFuncDecl(chank));
+							}
+							else {
+								m_tokens.push_back(new cDefVar(chank));
+							}	
 						}
 						else if ('{' == buffer[i]) {
 							m_flags &= ~m_flag_general_brace;
@@ -185,7 +194,7 @@ void TokenGenerator::parse_file(const string & file_name)
 
 				if (0 == m_func_brace_counter) {
 					m_flags &= ~m_flag_func_definition;
-					m_tokens.push_back(new cFuncDef(buffer));
+					m_tokens.push_back(new cFuncDef(chank));
 				}
 
 			}
@@ -213,9 +222,27 @@ void TokenGenerator::parse_file(const string & file_name)
 
 				if (0 == m_struct_brace_counter && ';' == buffer[i]) {
 					m_flags &= ~m_flag_struct_rec;
-					m_tokens.push_back(new cStructToken(chank));
-				}
 
+					size_t first_struct_found = chank.find("struct");
+					size_t first_brack_found = chank.find_first_of('{');
+
+					if (string::npos != first_struct_found) {
+						string slice;
+						if (string::npos != first_brack_found) {
+							slice = chank.substr(first_struct_found + 6, first_brack_found - first_struct_found - 6);
+						}
+						else {
+							slice = chank.substr(first_struct_found);
+						}
+						slice = StringHandler::filter(slice, StringHandler::FBE::all, {' ', '\t', '\n', '\\'});
+						if (slice.empty()) {
+							m_tokens.push_back(new cStructToken(chank));
+						}
+						else {
+							m_tokens.push_back(new cDefVar(chank));
+						}
+					}
+				}
 			}
 
 			//

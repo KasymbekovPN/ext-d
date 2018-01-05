@@ -49,5 +49,5 @@ cMacroToken::cMacroToken(const string & buffer) : cBaseToken(cBaseToken::TokenTy
 void cMacroToken::show(int offset_) const
 {
 	cBaseToken::show(offset_);
-	cout << cBaseToken::get_offset_string(offset_ + 1) << "Token Value: " << endl << m_value << endl;
+	cout << cBaseToken::get_offset_string(offset_) << "Token Value: " << endl << m_value << endl;
 }

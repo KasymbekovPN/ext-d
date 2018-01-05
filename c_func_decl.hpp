@@ -15,6 +15,6 @@ public:
 
 private:
 
-	string m_value;
-
+	string m_dataType;
+	string m_args;
 };

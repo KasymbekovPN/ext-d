@@ -9,13 +9,18 @@ cBaseToken::TokenTypeNames cBaseToken::tokenTypeNames = {
 	{cBaseToken::TokenType::func_def, "func-def"}
 };
 
-cBaseToken::cBaseToken(TokenType type_, const string& raw_): m_type(type_), m_raw(raw_) {}
+cBaseToken::cBaseToken(TokenType type_, const string& raw_): m_type(type_), m_raw(raw_), m_static(false), 
+	m_const(false), m_extern(false), m_volatile(false) {}
 
 void cBaseToken::show(int offset_) const
 {
 	cout << endl;
 	cout << cBaseToken::get_offset_string(offset_) << "Token Type: " << tokenTypeNames[m_type] << endl;
 	cout << cBaseToken::get_offset_string(offset_) << "Token Name: " << m_name << endl;
+	cout << cBaseToken::get_offset_string(offset_) << "is static : " << (m_static ? "true" : "false") << endl;
+	cout << cBaseToken::get_offset_string(offset_) << "is const : " << (m_const ? "true" : "false") << endl;
+	cout << cBaseToken::get_offset_string(offset_) << "is extern : " << (m_extern ? "true" : "false") << endl;
+	cout << cBaseToken::get_offset_string(offset_) << "is volatile : " << (m_volatile ? "true" : "false") << endl;
 }
 
 void cBaseToken::setName(const string & name_)
@@ -36,6 +41,46 @@ string cBaseToken::getName() const
 string cBaseToken::getRaw() const
 {
 	return m_raw;
+}
+
+void cBaseToken::setStatic(bool value_)
+{
+	m_static = value_;
+}
+
+void cBaseToken::setConst(bool value_)
+{
+	m_const = value_;
+}
+
+void cBaseToken::setVolatile(bool value_)
+{
+	m_volatile = value_;
+}
+
+void cBaseToken::setExtern(bool value_)
+{
+	m_extern = value_;
+}
+
+bool cBaseToken::isStatic() const
+{
+	return m_static;
+}
+
+bool cBaseToken::isConst() const
+{
+	return m_const;
+}
+
+bool cBaseToken::isVolatile() const
+{
+	return m_volatile;
+}
+
+bool cBaseToken::isExtern() const
+{
+	return m_extern;
 }
 
 string cBaseToken::get_offset_string(int offset_)

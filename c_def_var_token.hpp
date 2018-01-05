@@ -19,10 +19,8 @@ public:
 
 private:
 
-	bool m_static;
-	bool m_const;
-	bool m_extern;
-	bool m_volatile;
+	bool m_struct;
+	bool m_typedef;
 	bool m_array;
 	bool m_function_pointer;
 	string m_pfunc_arg;
