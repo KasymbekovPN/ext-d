@@ -91,7 +91,7 @@ void TokenGenerator::parse_file(const string & file_name)
 		//
 		// Начало/конец блочного комментария
 		//
-		if ("/*" == buffer.substr(i, 2)) {
+		if (0 == (m_flags & m_flag_is_comment) && "/*" == buffer.substr(i, 2)) {
 			m_flags |= m_flag_block_comment;
 			block_comment_begin = i;
 		}
@@ -104,7 +104,7 @@ void TokenGenerator::parse_file(const string & file_name)
 		//
 		// Начало/конец строчного  комментария
 		//
-		if ("//" == buffer.substr(i, 2)) {
+		if (0 == (m_flags & m_flag_is_comment) && "//" == buffer.substr(i, 2)) {
 			m_flags |= m_flag_line_comment;
 		}
 		if ((m_flag_line_comment & m_flags) && '\n' == buffer[i]) {

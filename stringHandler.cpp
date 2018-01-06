@@ -142,7 +142,7 @@ vector<string> StringHandler::space(const string & line)
 {
 	string buffer;
 	for (auto ch : line) {
-		if ('\t' == ch) {
+		if ('\t' == ch || '\n' == ch) {
 			buffer += "    ";
 		}
 		else {

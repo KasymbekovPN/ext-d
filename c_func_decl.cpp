@@ -9,6 +9,7 @@ cFuncDecl::cFuncDecl(const string & buffer): cBaseToken(cBaseToken::TokenType::f
 	if (string::npos != brace_begin_found && string::npos != brace_end_found && brace_begin_found < brace_end_found) {
 
 		auto first = StringHandler::space(buffer.substr(0, brace_begin_found));
+
 		size_t first_size = first.size();
 
 		if (2 <= first_size) {

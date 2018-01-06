@@ -52,6 +52,5 @@ void cFuncDef::show(int offset_) const
 	cBaseToken::show(offset_);
 	cout << cBaseToken::get_offset_string(offset_) << "Data Type : " << m_dataType << endl;
 	cout << cBaseToken::get_offset_string(offset_) << "Args : " << (m_args.empty() ? "<none>" : m_args) << endl;
-	//cout << "Value : " << endl << m_value << endl;;
 	cout << "Value : " << endl << StringHandler::filter(m_value, StringHandler::FBE::all, { ' ', '\n', '\t', '\\' }) << endl;
 }
