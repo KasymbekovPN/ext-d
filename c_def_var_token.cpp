@@ -96,7 +96,7 @@ cDefVar::cDefVar(const string& buffer): cBaseToken(cBaseToken::TokenType::def_va
 
 		string header = buffer.substr(0, first_begin_round_brack);
 		string pre_name = buffer.substr(first_begin_round_brack + 1, first_end_round_brack - first_begin_round_brack - 1);
-		string m_pfunc_arg = buffer.substr(second_begin_round_brack +1, second_end_round_brack - second_begin_round_brack - 1);
+		m_pfunc_arg = buffer.substr(second_begin_round_brack +1, second_end_round_brack - second_begin_round_brack - 1);
 
 		//
 		// Получение имени

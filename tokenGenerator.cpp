@@ -223,24 +223,16 @@ void TokenGenerator::parse_file(const string & file_name)
 				if (0 == m_struct_brace_counter && ';' == buffer[i]) {
 					m_flags &= ~m_flag_struct_rec;
 
-					size_t first_struct_found = chank.find("struct");
-					size_t first_brack_found = chank.find_first_of('{');
+					size_t first_equal_sign = chank.find_first_of('=');
+					size_t first_brack = chank.find_first_of('{');
 
-					if (string::npos != first_struct_found) {
-						string slice;
-						if (string::npos != first_brack_found) {
-							slice = chank.substr(first_struct_found + 6, first_brack_found - first_struct_found - 6);
-						}
-						else {
-							slice = chank.substr(first_struct_found);
-						}
-						slice = StringHandler::filter(slice, StringHandler::FBE::all, {' ', '\t', '\n', '\\'});
-						if (slice.empty()) {
-							m_tokens.push_back(new cStructToken(chank));
-						}
-						else {
-							m_tokens.push_back(new cDefVar(chank));
-						}
+					if (string::npos != first_brack && string::npos == first_equal_sign) {
+						m_tokens.push_back(new cStructToken(chank));
+					}
+					else if ((string::npos == first_brack && string::npos == first_equal_sign) ||
+						(string::npos != first_brack && string::npos != first_equal_sign && first_equal_sign < first_brack))
+					{
+						m_tokens.push_back(new cDefVar(chank));
 					}
 				}
 			}

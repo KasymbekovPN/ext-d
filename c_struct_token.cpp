@@ -2,31 +2,57 @@
 
 cStructToken::cStructToken(const string & buffer): cBaseToken(cBaseToken::TokenType::typedef_struct, buffer)
 {
+
+	m_typedef = false;
+	m_array = false;
+
 	size_t found_header = buffer.find_first_of('{');
 	size_t found_footer = buffer.find_last_of('}');
 
-	string header = StringHandler::filter(buffer.substr(0, found_header), StringHandler::FBE::begin_and_end, {' ', '\t', '\n'});
+	string header = StringHandler::filter(buffer.substr(0, found_header), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
 	string inner = StringHandler::filter(buffer.substr(found_header + 1, found_footer - found_header - 1), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
 	string footer = StringHandler::filter(buffer.substr(found_footer + 1), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
 
-	m_typedef = string::npos != header.find("typedef");
-	setVolatile(string::npos != header.find("volatile"));
-	setStatic(string::npos != header.find("static"));
+	setName("");
 
-	size_t found_arr_begin = footer.find_first_of('[');
-	size_t found_arr_end = footer.find_last_of(']');
-	if (string::npos != found_arr_begin && string::npos != found_arr_end && found_arr_end > found_arr_begin) {
-		m_array = true;
-		setName(footer.substr(0, found_arr_begin));
-		m_array_size = StringHandler::filter(
-			footer.substr(found_arr_begin + 1, found_arr_end - found_arr_begin - 1), 
-			StringHandler::FBE::begin_and_end,
-			{' ', '\t', '\n'}
-		);
-	}
-	else {
-		m_array = false;
-		setName(footer);
+	for (auto line : { header, footer }) {
+
+		size_t found_arr_begin = line.find_first_of('[');
+		size_t found_arr_end = line.find_last_of(']');
+
+		if (string::npos != found_arr_begin && string::npos != found_arr_end) {
+			m_array = true;
+			m_array_size = line.substr(found_arr_begin, found_arr_end - found_arr_begin + 1);
+			line = line.substr(0, found_arr_begin);
+		}
+
+		auto spl = StringHandler::space(line);
+		size_t size = spl.size();
+
+		if (1 <= size) {
+			if (getName().empty()) {
+				if ("typedef" != spl[size - 1] && "const" != spl[size - 1] &&
+					"static" != spl[size - 1] && "volatile" != spl[size - 1] && "struct" != spl[size - 1])
+				{
+					setName(spl[size - 1]);
+				}
+			}
+
+			for (int i = 0; i < size - 1; ++i) {
+				if ("typedef" == spl[i]) {
+					m_typedef = true;
+				}
+				else if ("const" == spl[i]) {
+					setConst(true);
+				}
+				else if ("static" == spl[i]) {
+					setStatic(true);
+				}
+				else if ("volatile" == spl[i]) {
+					setVolatile(true);
+				}
+			}
+		}
 	}
 
 	int inner_brace_counter = 0;
@@ -44,13 +70,14 @@ cStructToken::cStructToken(const string & buffer): cBaseToken(cBaseToken::TokenT
 		}
 		else {
 			if (';' == ch && 0 == inner_brace_counter) {
+				inner_struct = false;
 				m_value.push_back(new cStructToken(chank));
 				chank.clear();
 				continue;
 			}
 		}
 
-		if ('{' == ch){
+		if ('{' == ch) {
 			inner_struct = true;
 			inner_brace_counter++;
 		}
