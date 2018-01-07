@@ -13,6 +13,8 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <algorithm>
+#include <iomanip>
 
 using std::cout;
 using std::endl;

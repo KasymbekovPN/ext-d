@@ -10,13 +10,25 @@ cBaseToken::TokenTypeNames cBaseToken::tokenTypeNames = {
 };
 
 cBaseToken::cBaseToken(TokenType type_, const string& raw_): m_type(type_), m_raw(raw_), m_static(false), 
-	m_const(false), m_extern(false), m_volatile(false) {}
+	m_const(false), m_extern(false), m_volatile(false) 
+{
+
+	string cln_raw = StringHandler::filter(raw_, StringHandler::FBE::all, {' ', '\t', '\n', '\\'});
+
+	std::hash<string> str_hash_fn;
+	std::stringstream stream;
+	stream << "0x" << std::setfill('0') << std::setw(2 * sizeof(size_t))
+		<< std::hex << str_hash_fn(cln_raw);
+
+	m_hash = stream.str();
+}
 
 void cBaseToken::show(int offset_) const
 {
 	cout << endl;
 	cout << cBaseToken::get_offset_string(offset_) << "Token Type: " << tokenTypeNames[m_type] << endl;
 	cout << cBaseToken::get_offset_string(offset_) << "Token Name: " << m_name << endl;
+	cout << cBaseToken::get_offset_string(offset_) << "Hash : " << m_hash << endl;
 	cout << cBaseToken::get_offset_string(offset_) << "is static : " << (m_static ? "true" : "false") << endl;
 	cout << cBaseToken::get_offset_string(offset_) << "is const : " << (m_const ? "true" : "false") << endl;
 	cout << cBaseToken::get_offset_string(offset_) << "is extern : " << (m_extern ? "true" : "false") << endl;
@@ -41,6 +53,11 @@ string cBaseToken::getName() const
 string cBaseToken::getRaw() const
 {
 	return m_raw;
+}
+
+string cBaseToken::getHash() const
+{
+	return m_hash;
 }
 
 void cBaseToken::setStatic(bool value_)

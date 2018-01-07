@@ -8,6 +8,7 @@
 #include <fstream>
 #include <filesystem>
 
+#include "config.h"
 #include "stringHandler.h"
 
 using std::cout;
@@ -30,11 +31,11 @@ public:
 	typedef map<item, string> ItemNames;
 	static ItemNames itemNames;
 
-	Dom(item, bool, const string&, const string&, const string&, const string&);
+	Dom(item item_, bool root_, const string & outfile_path_, const string& arg_, const string& str_, const string& dom_name_, int reserve_);
 	~Dom();
 
-	void set(item, const string&, const string&, const string&);
-	void set(vector<string>, item, const string&, const string&, const string&);
+	void set(item, const string&, const string&, const string&, int);
+	void set(vector<string>, item, const string&, const string&, const string&, int);
 	Dom* getItem(const string&);
 	string getName() const;
 	void make_doc();

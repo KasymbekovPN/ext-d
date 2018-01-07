@@ -57,7 +57,12 @@ void TokenGenerator::parse()
 	int cnt = 0;
 
 	for (auto item : m_tokens) {
-		item->show(0);
+		cout << m_path << endl;
+		cout << item->getName() << endl;
+		cout << item->getHash() << endl;
+		cout << endl;
+		//item->show(0);
+		//cout << item->getName() << "\t" << item->getHash() << endl;
 		//cout << cnt++ << ") " << item->getName() << endl;
 	}
 }

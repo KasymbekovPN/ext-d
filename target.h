@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include <memory>
 #include <algorithm>
+#include <chrono>
 
 #include "fileHandler.h"
 #include "stringHandler.h"

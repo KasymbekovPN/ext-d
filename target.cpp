@@ -93,7 +93,9 @@ void Target::run() const
 	std::shared_ptr<vector<string>> res(new vector<string>());
 	m_fileTree->filePaths(res, true);
 
+	//----не-удалять----------
 	make_token_generators(res);
+	//------------------------
 
 	//----не-удалять----------
 	//make_source_out(res);
@@ -121,19 +123,19 @@ void Target::make_source_out(std::shared_ptr<vector<string>> res) const
 		vector<int> tab_offsets_odd;
 		bool is_even = true;
 
-		Dom dom(Dom::item::html, true, out_file_name, "", "", "html");
-		dom.set(Dom::item::head, "", "", "head");
-		dom.set({ "head" }, Dom::item::title, "", "Файл " + short_name, "title");
-		dom.set(Dom::item::body, " class = body", "", "body");
+		Dom dom(Dom::item::html, true, out_file_name, "", "", "html", 0);
+		dom.set(Dom::item::head, "", "", "head", 0);
+		dom.set({ "head" }, Dom::item::title, "", "Файл " + short_name, "title", 0);
+		dom.set(Dom::item::body, " class = body", "", "body", 0);
 
-		dom.set({ "body" }, Dom::item::table, " class = table", "", "table");
+		dom.set({ "body" }, Dom::item::table, " class = table", "", "table", codeLines.size());
 
 		cout << short_name << " : " << line_idx << " / " << codeLines.size();
 
 		for (auto line : codeLines) {
 			string tr_name = "tr_" + std::to_string(line_idx);
-			dom.set({ "body", "table" }, Dom::item::tr, "", "", tr_name);
-			dom.set({ "body", "table", tr_name }, Dom::item::td, " class = num_colon", std::to_string(line_idx + 1), "line_num_" + std::to_string(line_idx + 1));
+			dom.set({ "body", "table" }, Dom::item::tr, "", "", tr_name, 0);
+			dom.set({ "body", "table", tr_name }, Dom::item::td, " class = num_colon", std::to_string(line_idx + 1), "line_num_" + std::to_string(line_idx + 1), 0);
 
 			int tab_num = 0;
 			for (int i = 0; i < line.size(); ++i) {
@@ -157,7 +159,7 @@ void Target::make_source_out(std::shared_ptr<vector<string>> res) const
 			string class_name = "code_line_";
 			class_name += (is_even ? "even_" : "odd_");
 			class_name += std::to_string(tab_num);
-			dom.set({ "body", "table", tr_name }, Dom::item::td, " class = " + class_name, line, "line_code_" + std::to_string(line_idx + 1));
+			dom.set({ "body", "table", tr_name }, Dom::item::td, " class = " + class_name, line, "line_code_" + std::to_string(line_idx + 1), 0);	
 
 			is_even = !is_even;
 
@@ -182,7 +184,7 @@ void Target::make_source_out(std::shared_ptr<vector<string>> res) const
 		style_str += "\n.table {border-spacing: 0px; margin: 0px; width: 100%;}";
 		style_str += "\n.body {padding: 0px; margin: 0px;}";
 		style_str += "\n-->";
-		dom.set({ "head" }, Dom::item::style, " text = \"text/css\"", style_str, "style");
+		dom.set({ "head" }, Dom::item::style, " text = \"text/css\"", style_str, "style", 0);
 
 		dom.make_doc();
 	}

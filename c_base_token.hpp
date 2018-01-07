@@ -3,6 +3,9 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <iomanip>
+#include <algorithm>
+#include <sstream>
 
 #include "stringHandler.h"
 #include "config.h"
@@ -34,6 +37,7 @@ public:
 	TokenType getType() const;
 	string getName() const;
 	string getRaw() const;
+	string getHash() const;
 
 	void setStatic(bool value_);
 	void setConst(bool value_);
@@ -61,4 +65,6 @@ private:
 	bool m_const;
 	bool m_volatile;
 	bool m_extern;
+
+	string m_hash;
 };

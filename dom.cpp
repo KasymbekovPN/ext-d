@@ -47,10 +47,15 @@ Dom::ItemNames Dom::itemNames{
 	{Dom::item::style, "style"}
 };
 
-Dom::Dom(item item_, bool root_, const string & outfile_path_, const string& arg_, const string& str_, const string& dom_name_) :
+Dom::Dom(item item_, bool root_, const string & outfile_path_, const string& arg_, const string& str_, const string& dom_name_, int reserve_) :
 	m_item(item_), m_root(root_), m_outfile_path(outfile_path_), m_arg(arg_), m_str(str_), m_dom_name(dom_name_)
 {
-	items.clear();
+	if (reserve_) {
+		items.reserve(reserve_);
+	}
+	else {
+		items.clear();
+	}	
 }
 
 Dom::~Dom()
@@ -60,15 +65,15 @@ Dom::~Dom()
 	}
 }
 
-void Dom::set(item item_, const string & arg_, const string & str_, const string& dom_name_)
+void Dom::set(item item_, const string & arg_, const string & str_, const string& dom_name_, int reserve_)
 {
-	items.push_back(new Dom(item_, false, "", arg_, str_, dom_name_));
+	items.push_back(new Dom(item_, false, "", arg_, str_, dom_name_, reserve_));
 }
 
-void Dom::set(vector<string> path_, item item_, const string & arg_, const string & str_, const string & dom_name_)
+void Dom::set(vector<string> path_, item item_, const string & arg_, const string & str_, const string & dom_name_, int reserve_)
 {
 	if (path_.size() == 0) {
-		items.push_back(new Dom(item_, false, "", arg_, str_, dom_name_));
+		items.push_back(new Dom(item_, false, "", arg_, str_, dom_name_, reserve_));
 	}
 	else {
 
@@ -77,13 +82,14 @@ void Dom::set(vector<string> path_, item item_, const string & arg_, const strin
 
 				vector<string> buffer;
 				std::copy(path_.begin() + 1, path_.end(), std::inserter(buffer, buffer.begin()));
-				getItem(path_[0])->set(buffer, item_, arg_, str_, dom_name_);
+				getItem(path_[0])->set(buffer, item_, arg_, str_, dom_name_, reserve_);
 
 				break;
 			}
 		}
 	}
 }
+
 
 Dom* Dom::getItem(const string & name_)
 {
