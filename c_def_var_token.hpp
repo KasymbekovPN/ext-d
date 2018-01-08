@@ -17,6 +17,8 @@ public:
 
 	void show(int offset_) const;
 
+	void write(const string & dir_, const string & file_name_);
+
 private:
 
 	bool m_struct;

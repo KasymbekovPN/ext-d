@@ -6,6 +6,8 @@
 #include <iomanip>
 #include <algorithm>
 #include <sstream>
+#include <fstream>
+#include <filesystem>
 
 #include "stringHandler.h"
 #include "config.h"
@@ -17,8 +19,8 @@ using std::map;
 
 class cBaseToken
 {
-public:
 
+protected:
 	enum class TokenType {
 		macro,
 		typedef_enum,
@@ -27,6 +29,8 @@ public:
 		func_decl,
 		func_def,
 	};
+
+public:
 
 	cBaseToken(TokenType type_, const string& raw_);
 
@@ -49,16 +53,20 @@ public:
 	bool isVolatile() const;
 	bool isExtern() const;
 
+	virtual void write(const string& dir_, const string& file_name_);
+	virtual void toRst(string* p_member_, bool root_, const string& patern_name_);
+
 	static string get_offset_string(int offset_);
 
-private:
-
+protected:
 	typedef map<TokenType, string> TokenTypeNames;
 	static TokenTypeNames tokenTypeNames;
 
+	string m_name;
 	TokenType m_type;
 
-	string m_name;	
+private:
+
 	string m_raw;
 
 	bool m_static;

@@ -21,7 +21,7 @@ public:
 	ConfigHandler(const string&, shared_ptr<ErrorStatus>);
 	~ConfigHandler();
 
-	void targetRun(const string&) const;
+	void targetRun(const string&, const string&) const;
 	void showAllTarget() const;
 	void showTarget(const string&) const;
 

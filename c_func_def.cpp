@@ -54,3 +54,32 @@ void cFuncDef::show(int offset_) const
 	cout << cBaseToken::get_offset_string(offset_) << "Args : " << (m_args.empty() ? "<none>" : m_args) << endl;
 	cout << "Value : " << endl << StringHandler::filter(m_value, StringHandler::FBE::all, { ' ', '\n', '\t', '\\' }) << endl;
 }
+
+void cFuncDef::write(const string & dir_, const string & file_name_)
+{
+	cBaseToken::write(dir_, file_name_);
+
+	string fill_name = dir_ + "\\\\" + file_name_;
+
+	if (!std::experimental::filesystem::exists(fill_name)) {
+
+		string args;
+		auto spl = StringHandler::split(m_args, ',');
+		for (auto arg : spl) {
+			if (!arg.empty()) {
+				args += ".. ext-d-func-param:: " + arg + "\n\n";
+			}
+		}
+
+		std::ofstream fout(fill_name);
+		fout << ".. ext-d-state:: false" << endl << endl
+			<< ".. ext-d-version:: " << PROJECT_VERSION << endl << endl
+			<< ".. ext-d-token-type:: " << cBaseToken::tokenTypeNames[m_type] << endl << endl
+			<< ".. ext-d-paragraph::" << endl << endl << endl
+			<< args
+			<< ".. ext-d-func-ret:: " << m_dataType << endl << endl
+			<< ".. ext-d-code-block:: c-lang" << endl << endl
+			<< getRaw() << "\n}" << endl;
+		fout.close();
+	}
+}

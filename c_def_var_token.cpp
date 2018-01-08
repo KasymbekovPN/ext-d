@@ -19,10 +19,10 @@ cDefVar::cDefVar(const string& buffer): cBaseToken(cBaseToken::TokenType::def_va
 		m_initValue = StringHandler::filter(spl[1], StringHandler::FBE::all, {' ', '\t', '\n', '\\'});
 	}
 
-	size_t first_begin_round_brack = buffer.find_first_of('(');
-	size_t first_end_round_brack = buffer.find_first_of(')');
-	size_t second_begin_round_brack = buffer.find_last_of('(');
-	size_t second_end_round_brack = buffer.find_last_of(')');
+	size_t first_begin_round_brack = spl[0].find_first_of('(');
+	size_t first_end_round_brack = spl[0].find_first_of(')');
+	size_t second_begin_round_brack = spl[0].find_last_of('(');
+	size_t second_end_round_brack = spl[0].find_last_of(')');
 
 	//
 	// Не является указателем на функцию.
@@ -169,4 +169,23 @@ void cDefVar::show(int offset_) const
 	cout << cBaseToken::get_offset_string(offset_) << "is function pointer : " << m_function_pointer << endl;
 	cout << cBaseToken::get_offset_string(offset_) << "pfunc arg : " << m_pfunc_arg << endl;
 	cout << cBaseToken::get_offset_string(offset_) << "is struct: " << m_struct << endl;
+}
+
+void cDefVar::write(const string & dir_, const string & file_name_)
+{
+
+	cBaseToken::write(dir_, file_name_);
+
+	string fill_name = dir_ + "\\\\" + file_name_;
+
+	if (!std::experimental::filesystem::exists(fill_name)) {
+		std::ofstream fout(fill_name);
+		fout << ".. ext-d-state:: false" << endl << endl			
+			<< ".. ext-d-version:: " << PROJECT_VERSION << endl << endl			
+			<< ".. ext-d-token-type:: " << cBaseToken::tokenTypeNames[m_type] << endl << endl			
+			<< ".. ext-d-paragraph::" << endl << endl
+			<< ".. ext-d-code-block:: c-lang" << endl << endl
+			<< getRaw() << ";" << endl;
+		fout.close();
+	}
 }

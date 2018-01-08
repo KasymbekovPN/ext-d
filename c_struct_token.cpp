@@ -109,3 +109,40 @@ void cStructToken::show(int offset_) const
 	}
 
 }
+
+void cStructToken::write(const string & dir_, const string & file_name_)
+{
+
+	cBaseToken::write(dir_, file_name_);
+
+	string fill_name = dir_ + "\\\\" + file_name_;
+
+	if (!std::experimental::filesystem::exists(fill_name)) {
+
+		string members;
+		toRst(&members, true, "");
+
+		std::ofstream fout(fill_name);
+		fout << ".. ext-d-state:: false" << endl << endl
+			<< ".. ext-d-version:: " << PROJECT_VERSION << endl << endl
+			<< ".. ext-d-token-type:: " << cBaseToken::tokenTypeNames[m_type] << endl << endl
+			<< ".. ext-d-paragraph::" << endl << endl << endl
+			<< members
+			<< ".. ext-d-code-block:: c-lang" << endl << endl
+			<< getRaw() << endl;
+		fout.close();
+	}
+}
+
+void cStructToken::toRst(string * p_members, bool root_, const string& patern_name_)
+{
+
+	string prefix = (!root_ ? patern_name_ : "") + m_name + ".";
+
+	for (auto item : m_value) {
+		if (TokenType::def_var == item->getType() || TokenType::typedef_struct == item->getType()) {
+			*p_members += ".. ext-d-struct-member:: " + prefix + item->getName() + "\n\n";
+			item->toRst(p_members, false, prefix);
+		}
+	}
+}

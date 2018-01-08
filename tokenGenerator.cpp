@@ -43,7 +43,7 @@ bool TokenGenerator::equal(const string & path_)
 	return res;
 }
 
-void TokenGenerator::parse()
+void TokenGenerator::parse(int offset_, const string& outdir_)
 {
 
 	if (m_was_header) {
@@ -54,17 +54,21 @@ void TokenGenerator::parse()
 		parse_file(m_path + ".c");
 	}
 
-	int cnt = 0;
-
+	size_t token_idx = 0;
+	cout << m_path << ": " << token_idx << "/" << m_tokens.size();
 	for (auto item : m_tokens) {
-		cout << m_path << endl;
-		cout << item->getName() << endl;
-		cout << item->getHash() << endl;
-		cout << endl;
-		//item->show(0);
-		//cout << item->getName() << "\t" << item->getHash() << endl;
-		//cout << cnt++ << ") " << item->getName() << endl;
+		string name;
+		string pre_name = StringHandler::filter(m_path.substr(offset_), StringHandler::FBE::begin, {'\\'});
+		auto spl = StringHandler::split(pre_name, '\\');
+		for (size_t i = 0; i < spl.size(); ++i) {
+			name += spl[i] + "-";
+		}
+		name += item->getName() + "-" + item->getHash() + ".rst";
+		item->write(outdir_, name);
+
+		cout << '\r' << m_path << ": " << ++token_idx << "/" << m_tokens.size();
 	}
+	cout << endl;
 }
 
 void TokenGenerator::show()

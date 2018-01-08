@@ -30,7 +30,7 @@ public:
 	string getPath() const;
 	bool isExist() const;
 	void toConsole() const;
-	void run() const;
+	void run(const string& flag_) const;
 
 private:
 	string	m_name;
@@ -42,6 +42,8 @@ private:
 
 	FileTree* m_fileTree;
 
+	const string tgt_flg_d = "-d";
+	const string tgt_flg_m = "-m";
 	const string cmd_set_source_dir = "SET_SOURCE_DIR";
 	const string cmd_set_output_dir = "SET_OUTPUT_DIR";
 	const string cmd_set_lang = "SET_LANG";

@@ -46,14 +46,14 @@ ConfigHandler::~ConfigHandler()
 	}
 }
 
-void ConfigHandler::targetRun(const string & target_name_) const
+void ConfigHandler::targetRun(const string & target_name_, const string& flag_) const
 {
 	bool target_no_exists = true;
 
 	for (auto target : m_targets) {
 		if (target->getName() == target_name_) {
 			target_no_exists = false;
-			target->run();
+			target->run(flag_);
 		}
 	}
 

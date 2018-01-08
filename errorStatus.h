@@ -33,6 +33,7 @@ public:
 		target_outputDirNoExists,
 		target_sourceDirNoExists,
 		target_unknowLang,
+		target_invalidFlag,
 		
 		fileTree_unknowLang,
 	};

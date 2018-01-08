@@ -87,19 +87,26 @@ void Target::toConsole() const
 	cout << endl;
 }
 
-void Target::run() const
+void Target::run(const string& flag_) const
 {
 
 	std::shared_ptr<vector<string>> res(new vector<string>());
 	m_fileTree->filePaths(res, true);
 
-	//----не-удалять----------
-	make_token_generators(res);
-	//------------------------
-
-	//----не-удалять----------
-	//make_source_out(res);
-	//-----------------------
+	if (tgt_flg_d == flag_) {
+		//----не-удалять----------
+		make_token_generators(res);
+		//------------------------
+	}
+	else if (tgt_flg_m == flag_) {
+		cout << "-m" << endl;
+		//----не-удалять----------
+		//make_source_out(res);
+		//-----------------------
+	}
+	else {
+		p_error->set(ErrorStatus::error::target_invalidFlag, true);
+	}
 
 }
 
@@ -211,6 +218,6 @@ void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 	}
 
 	for (auto t : tGenerators) {
-		t->parse();
+		t->parse(m_source_dir.size(), m_output_dir + "\\\\tokens\\\\descr");
 	}
 }

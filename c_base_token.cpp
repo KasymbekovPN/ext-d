@@ -100,6 +100,23 @@ bool cBaseToken::isExtern() const
 	return m_extern;
 }
 
+void cBaseToken::write(const string & dir_, const string & file_name_)
+{
+	auto dir_names = StringHandler::split(dir_, '\\');
+	
+	string path = dir_names[0];
+	for (auto iter = dir_names.begin() + 1; iter != dir_names.end(); iter++) {
+		path += "\\" + *iter;
+		if (!std::experimental::filesystem::exists(path)) {
+			std::experimental::filesystem::create_directory(path);
+		} 
+	}
+}
+
+void cBaseToken::toRst(string * p_member_, bool root_, const string& patern_name_)
+{
+}
+
 string cBaseToken::get_offset_string(int offset_)
 {
 

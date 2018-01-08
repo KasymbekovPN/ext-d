@@ -18,6 +18,7 @@ ErrorStatus::ENM ErrorStatus::errorNamesMap {
 	{ ErrorStatus::error::target_outputDirNoExists, "Директория SET_OUTPUT_DIR не существует." },
 	{ ErrorStatus::error::target_sourceDirNoExists, "Директория SET_SORCE_DIR не существует." },
 	{ ErrorStatus::error::target_unknowLang, "Target - неизвестный язык." },
+	{ ErrorStatus::error::target_invalidFlag, "Target - невалидный флаг."},
 	{ ErrorStatus::error::fileTree_unknowLang, "FileTree - неизвестный язык." },
 };
 

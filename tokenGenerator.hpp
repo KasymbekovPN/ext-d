@@ -24,14 +24,14 @@ public:
 	~TokenGenerator();
 
 	bool equal(const string& path_);
-	void parse();
+	void parse(int offset_, const string& outdir_);
 
 	void show();
 
 private:
 
 	string m_module_name;
-	string m_path;
+	string m_path; 
 	bool m_was_source;
 	bool m_was_header;
 
