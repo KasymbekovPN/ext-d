@@ -44,10 +44,11 @@ Dom::ItemNames Dom::itemNames{
 	{Dom::item::tr, "tr"},
 	{Dom::item::td, "td"},
 	{Dom::item::title, "title"},
-	{Dom::item::style, "style"}
+	{Dom::item::style, "style"},
+	{Dom::item::code, "code"}
 };
 
-Dom::Dom(item item_, bool root_, const string & outfile_path_, const string& arg_, const string& str_, const string& dom_name_, int reserve_) :
+Dom::Dom(item item_, bool root_, const string & outfile_path_, const string& arg_, const string& str_, const string& dom_name_, size_t reserve_) :
 	m_item(item_), m_root(root_), m_outfile_path(outfile_path_), m_arg(arg_), m_str(str_), m_dom_name(dom_name_)
 {
 	if (reserve_) {
@@ -65,15 +66,16 @@ Dom::~Dom()
 	}
 }
 
-void Dom::set(item item_, const string & arg_, const string & str_, const string& dom_name_, int reserve_)
+void Dom::set(item item_, const string & arg_, const string & str_, const string& dom_name_, size_t reserve_)
 {
 	items.push_back(new Dom(item_, false, "", arg_, str_, dom_name_, reserve_));
 }
 
-void Dom::set(vector<string> path_, item item_, const string & arg_, const string & str_, const string & dom_name_, int reserve_)
+void Dom::set(vector<string> path_, item item_, const string & arg_, const string & str_, const string & dom_name_, size_t reserve_)
 {
 	if (path_.size() == 0) {
-		items.push_back(new Dom(item_, false, "", arg_, str_, dom_name_, reserve_));
+		string ws;
+		items.push_back(new Dom(item_, false, ws, arg_, str_, dom_name_, reserve_));
 	}
 	else {
 
@@ -108,13 +110,13 @@ string Dom::getName() const {
 
 void Dom::make_doc()
 {
-	cout << "make html doc : " << m_outfile_path << endl;
+	std::cout << "make html doc : " << m_outfile_path << endl;
 
 	size_t found = m_outfile_path.find_last_of('\\');
 	if (string::npos != found) {
 
 		string dir_path = m_outfile_path.substr(0, found - 1);
-		vector<string> dirs_names = StringHandler::split(dir_path, '\\');
+		vector<string> dirs_names = StringHandler::split(dir_path, L'\\');
 
 		string path = dirs_names[0];
 
@@ -161,10 +163,10 @@ void Dom::show(int num_offset) const
 		offset += '\t';
 	}
 
-	cout << offset << "<" << itemNames[m_item] << " " << m_arg << " >" << endl;
+	std::cout << offset << "<" << itemNames[m_item] << " " << m_arg << " >" << endl;
 
-	if (m_str != "") {
-		cout << '\t' << offset << m_str << endl;
+	if (!m_str.empty()) {
+		std::cout << '\t' << offset << m_str << endl;
 	}
 	
 	for (auto iter : items) {
@@ -172,7 +174,7 @@ void Dom::show(int num_offset) const
 	}
 
 	if (Dom::item::br != m_item) {
-		cout << itemNames[m_item] << endl;
-		cout << offset << "</" << itemNames[m_item] << ">" << endl;
+		std::cout << itemNames[m_item] << endl;
+		std::cout << offset << "</" << itemNames[m_item] << ">" << endl;
 	}	
 }

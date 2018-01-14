@@ -99,9 +99,10 @@ void Target::run(const string& flag_) const
 		//------------------------
 	}
 	else if (tgt_flg_m == flag_) {
-		cout << "-m" << endl;
+		//cout << "-m" << endl;
 		//----не-удалять----------
-		//make_source_out(res);
+		make_source_out(res);
+		make_source_token_out();
 		//-----------------------
 	}
 	else {
@@ -121,14 +122,14 @@ void Target::make_source_out(std::shared_ptr<vector<string>> res) const
 		}
 
 		string out_file_name = m_output_dir + "\\\\source" + sfn + ".html";
-
 		FileHandler file(*p_file_name);
+
 		vector<string> codeLines = StringHandler::file2line(file.getAsString(), false);
 
 		int line_idx = 0;
 		vector<int> tab_offsets_even;
 		vector<int> tab_offsets_odd;
-		bool is_even = true;
+		bool is_even = true;		
 
 		Dom dom(Dom::item::html, true, out_file_name, "", "", "html", 0);
 		dom.set(Dom::item::head, "", "", "head", 0);
@@ -137,9 +138,10 @@ void Target::make_source_out(std::shared_ptr<vector<string>> res) const
 
 		dom.set({ "body" }, Dom::item::table, " class = table", "", "table", codeLines.size());
 
-		cout << short_name << " : " << line_idx << " / " << codeLines.size();
+		std::cout << short_name << " : " << line_idx << " / " << codeLines.size();
 
 		for (auto line : codeLines) {
+
 			string tr_name = "tr_" + std::to_string(line_idx);
 			dom.set({ "body", "table" }, Dom::item::tr, "", "", tr_name, 0);
 			dom.set({ "body", "table", tr_name }, Dom::item::td, " class = num_colon", std::to_string(line_idx + 1), "line_num_" + std::to_string(line_idx + 1), 0);
@@ -166,12 +168,13 @@ void Target::make_source_out(std::shared_ptr<vector<string>> res) const
 			string class_name = "code_line_";
 			class_name += (is_even ? "even_" : "odd_");
 			class_name += std::to_string(tab_num);
+
 			dom.set({ "body", "table", tr_name }, Dom::item::td, " class = " + class_name, line, "line_code_" + std::to_string(line_idx + 1), 0);	
 
 			is_even = !is_even;
 
 			line_idx++;
-			cout << "\r" << short_name << " : " << line_idx << " / " << codeLines.size();
+			std::cout << '\r' << short_name << " : " << line_idx << " / " << codeLines.size();
 		}
 		cout << endl;
 
@@ -217,7 +220,29 @@ void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 		}
 	}
 
+	string to_file;
 	for (auto t : tGenerators) {
-		t->parse(m_source_dir.size(), m_output_dir + "\\\\tokens\\\\descr");
+		t->parse(m_source_dir.size(), m_output_dir + "\\\\tokens\\\\descr", &to_file);
+	}
+
+	ofstream fTokenList(m_output_dir + "\\\\tokens\\\\descr\\\\_token_list.txt");
+	fTokenList << to_file;
+	fTokenList.close();
+}
+
+void Target::make_source_token_out() const
+{
+	FileHandler fTokenList(m_output_dir + "\\\\tokens\\\\descr\\\\_token_list.txt");
+
+	auto file_names = StringHandler::split(fTokenList.getAsString(), '\n');
+
+	for (auto name : file_names) {
+		std::experimental::filesystem::path name_(m_output_dir + "\\\\tokens\\\\descr\\\\" + name);
+		if (std::experimental::filesystem::exists(name_)) {
+			if (".rst" == name_.extension()) {
+				TokenHandler tHandler(name_.string());
+				tHandler.write(m_output_dir + "\\\\tokens\\\\html");
+			}
+		}
 	}
 }

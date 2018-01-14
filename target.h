@@ -7,6 +7,8 @@
 #include <memory>
 #include <algorithm>
 #include <chrono>
+#include <locale>
+#include <codecvt>
 
 #include "fileHandler.h"
 #include "stringHandler.h"
@@ -14,6 +16,7 @@
 #include "errorStatus.h"
 #include "dom.hpp"
 #include "tokenGenerator.hpp"
+#include "tokenHandler.hpp"
 
 using std::string;
 using std::cout;
@@ -52,4 +55,5 @@ private:
 
 	void make_source_out(std::shared_ptr<vector<string>> res) const;
 	void make_token_generators(std::shared_ptr<vector<string>> res) const;
+	void make_source_token_out() const;
 };

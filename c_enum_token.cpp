@@ -52,13 +52,13 @@ void cEnumToken::write(const string & dir_, const string & file_name_)
 		string members;
 		for (auto item : m_value) {
 			if (1 == item.size() || 2 == item.size()) {
-				members += ".. ext-d-enum-member:: " + item[0] + "\n";
+				members += ".. ext-d-enum-member:: " + item[0];
 				if (2 == item.size()) {
 					if (!item[1].empty()) {
-						members += "\t:value: " + item[1];
+						members += " = " + item[1];
 					}					
 				}
-				members += "\n\n";
+				members += "\n\n\n";
 			}
 		}
 
@@ -66,7 +66,7 @@ void cEnumToken::write(const string & dir_, const string & file_name_)
 		fout << ".. ext-d-state:: false" << endl << endl
 			<< ".. ext-d-version:: " << PROJECT_VERSION << endl << endl
 			<< ".. ext-d-token-type:: " << cBaseToken::tokenTypeNames[m_type] << endl << endl
-			<< ".. ext-d-paragraph::" << endl << endl << endl
+			<< ".. ext-d-paragraph:: Общее" << endl << endl << endl
 			<< members
 			<< ".. ext-d-code-block:: c-lang" << endl << endl
 			<< getRaw() << ";" << endl;

@@ -43,7 +43,82 @@ bool TokenGenerator::equal(const string & path_)
 	return res;
 }
 
-void TokenGenerator::parse(int offset_, const string& outdir_)
+void TokenGenerator::parse(size_t offset_, const string& outdir_)
+{
+
+	ofstream fTokenList(outdir_ + "\\_token_list.txt");
+
+	if (m_was_header) {
+		parse_file(m_path + ".h");
+	}
+
+	if (m_was_source) {
+		parse_file(m_path + ".c");
+	}
+
+	size_t token_idx = 0;
+	cout <<"token make - " << m_path << ": " << token_idx << "/" << m_tokens.size();
+	for (auto item : m_tokens) {
+		string name;
+		string pre_name = StringHandler::filter(m_path.substr(offset_), StringHandler::FBE::begin, {'\\'});
+		auto spl = StringHandler::split(pre_name, '\\');
+		for (size_t i = 0; i < spl.size(); ++i) {
+			name += spl[i] + "-";
+		}
+		name += item->getName() + "-" + item->getHash() + ".rst";
+		item->write(outdir_, name);
+		fTokenList << name << endl;
+
+		cout << '\r' << "token make - " << m_path << ": " << ++token_idx << "/" << m_tokens.size();
+	}
+	cout << endl;
+
+	fTokenList.close();
+}
+
+void TokenGenerator::parse(size_t offset_, const string & outdir_, bool start, bool stop)
+{
+
+	string to_file;
+	if (start) {
+		to_file.clear();
+		cout << "+" << endl;
+	}
+
+	if (m_was_header) {
+		parse_file(m_path + ".h");
+	}
+
+	if (m_was_source) {
+		parse_file(m_path + ".c");
+	}
+
+	size_t token_idx = 0;
+	cout << "token make - " << m_path << ": " << token_idx << "/" << m_tokens.size();
+	for (auto item : m_tokens) {
+		string name;
+		string pre_name = StringHandler::filter(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' });
+		auto spl = StringHandler::split(pre_name, '\\');
+		for (size_t i = 0; i < spl.size(); ++i) {
+			name += spl[i] + "-";
+		}
+		name += item->getName() + "-" + item->getHash() + ".rst";
+		item->write(outdir_, name);
+		to_file += name + '\n';
+
+		cout << '\r' << "token make - " << m_path << ": " << ++token_idx << "/" << m_tokens.size();
+	}
+	cout << endl;
+
+	if (stop) {
+		ofstream fTokenList(outdir_ + "\\_token_list.txt");
+		fTokenList << to_file;
+		fTokenList.close();
+		cout << "++" << endl;
+	}
+}
+
+void TokenGenerator::parse(size_t offset_, const string & outdir_, string * p_name_list_)
 {
 
 	if (m_was_header) {
@@ -55,20 +130,22 @@ void TokenGenerator::parse(int offset_, const string& outdir_)
 	}
 
 	size_t token_idx = 0;
-	cout << m_path << ": " << token_idx << "/" << m_tokens.size();
+	cout << "token make - " << m_path << ": " << token_idx << "/" << m_tokens.size();
 	for (auto item : m_tokens) {
 		string name;
-		string pre_name = StringHandler::filter(m_path.substr(offset_), StringHandler::FBE::begin, {'\\'});
+		string pre_name = StringHandler::filter(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' });
 		auto spl = StringHandler::split(pre_name, '\\');
 		for (size_t i = 0; i < spl.size(); ++i) {
 			name += spl[i] + "-";
 		}
 		name += item->getName() + "-" + item->getHash() + ".rst";
 		item->write(outdir_, name);
+		*p_name_list_ += name + '\n';
 
-		cout << '\r' << m_path << ": " << ++token_idx << "/" << m_tokens.size();
+		cout << '\r' << "token make - " << m_path << ": " << ++token_idx << "/" << m_tokens.size();
 	}
 	cout << endl;
+
 }
 
 void TokenGenerator::show()

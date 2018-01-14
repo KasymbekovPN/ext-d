@@ -64,7 +64,7 @@ void cMacroToken::write(const string & dir_, const string & file_name_)
 		fout << ".. ext-d-state:: false" << endl << endl
 			<< ".. ext-d-version:: " << PROJECT_VERSION << endl << endl
 			<< ".. ext-d-token-type:: " << cBaseToken::tokenTypeNames[m_type] << endl << endl
-			<< ".. ext-d-paragraph::" << endl << endl << endl
+			<< ".. ext-d-paragraph:: Общее" << endl << endl << endl
 			<< ".. ext-d-code-block:: c-lang" << endl << endl
 			<< getRaw() << endl;
 		fout.close();

@@ -15,12 +15,16 @@
 #include <map>
 #include <algorithm>
 #include <iomanip>
+#include <codecvt>
+#include <locale>
 
 using std::cout;
 using std::endl;
 using std::string;
 using std::vector;
 using std::map;
+using std::wcout;
+using std::wstring;
 
 int main(int argc, char** argv){
 

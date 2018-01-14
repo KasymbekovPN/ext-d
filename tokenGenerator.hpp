@@ -24,7 +24,9 @@ public:
 	~TokenGenerator();
 
 	bool equal(const string& path_);
-	void parse(int offset_, const string& outdir_);
+	void parse(size_t offset_, const string& outdir_);
+	void parse(size_t offset_, const string& outdir_, bool start, bool stop);
+	void parse(size_t offset_, const string& outdir_, string* p_name_list_);
 
 	void show();
 

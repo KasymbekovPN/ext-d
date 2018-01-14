@@ -38,5 +38,4 @@ public:
 	static vector<string> split(const string&, char);
 	static vector<string> space(const string& line);
 	static vector<string> file2line(const string& file, bool replace_tab);
-
 };
