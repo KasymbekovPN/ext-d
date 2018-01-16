@@ -10,6 +10,7 @@
 #include <locale>
 #include <codecvt>
 
+#include "config.h"
 #include "fileHandler.h"
 #include "stringHandler.h"
 #include "fileTree.h"
@@ -17,6 +18,7 @@
 #include "dom.hpp"
 #include "tokenGenerator.hpp"
 #include "tokenHandler.hpp"
+#include "rstHandler.hpp"
 
 using std::string;
 using std::cout;
@@ -56,4 +58,8 @@ private:
 	void make_source_out(std::shared_ptr<vector<string>> res) const;
 	void make_token_generators(std::shared_ptr<vector<string>> res) const;
 	void make_source_token_out() const;
+	void make_functional_page() const;
+	void make_tokens_page() const;
+	void make_sources_page() const;
+	void make_main_out() const;
 };

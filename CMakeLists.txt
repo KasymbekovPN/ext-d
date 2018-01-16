@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(ext-d VERSION 0.2.0)
+project(ext-d VERSION 0.2.1)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -43,4 +43,6 @@ add_executable(ext-d
                 c_func_def.cpp
                 tokenHandler.hpp
                 tokenHandler.cpp
+                rstHandler.hpp
+                rstHandler.cpp
                 )

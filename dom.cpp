@@ -45,7 +45,8 @@ Dom::ItemNames Dom::itemNames{
 	{Dom::item::td, "td"},
 	{Dom::item::title, "title"},
 	{Dom::item::style, "style"},
-	{Dom::item::code, "code"}
+	{Dom::item::code, "code"},
+	{Dom::item::nav, "nav"}
 };
 
 Dom::Dom(item item_, bool root_, const string & outfile_path_, const string& arg_, const string& str_, const string& dom_name_, size_t reserve_) :

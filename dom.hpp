@@ -25,7 +25,7 @@ public:
 					  p, h1, h2, h3, h4, h5, h6, br, hr, blockquote, pre, div, span,
 					  em, strong, i, b, u, s, big, tag_small, bling, marquee, 
 					  sub, sup, font, ul, ol, li, dl, dt, dd, img, a, 
-					  table, caption, th, tr, td, title, style, code
+					  table, caption, th, tr, td, title, style, code, nav
 	};
 
 	typedef map<item, string> ItemNames;

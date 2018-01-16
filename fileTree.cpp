@@ -37,6 +37,10 @@ FileTree::FileTree(const string & path_, std::shared_ptr<ErrorStatus> p_error_, 
 								m_files.push_back(m_path + "\\\\" + string(wfd.cFileName));
 							}
 						}
+
+						if ("index.rst" == string(wfd.cFileName)) {
+							m_index_rst = string(wfd.cFileName);
+						}
 					}
 
 				}
@@ -71,5 +75,10 @@ void FileTree::filePaths(std::shared_ptr<vector<string>> path_out, bool need_cle
 	for (auto dir : m_directory) {
 		dir->filePaths(path_out, false);
 	}
+}
+
+string FileTree::getIndexRstName() const
+{
+	return m_index_rst;
 }
 

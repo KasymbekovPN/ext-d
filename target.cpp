@@ -99,10 +99,14 @@ void Target::run(const string& flag_) const
 		//------------------------
 	}
 	else if (tgt_flg_m == flag_) {
-		//cout << "-m" << endl;
 		//----не-удалять----------
 		make_source_out(res);
 		make_source_token_out();
+		//make_functional_out();
+		make_functional_page();
+		make_tokens_page();
+		make_sources_page();
+		make_main_out();
 		//-----------------------
 	}
 	else {
@@ -240,9 +244,57 @@ void Target::make_source_token_out() const
 		std::experimental::filesystem::path name_(m_output_dir + "\\\\tokens\\\\descr\\\\" + name);
 		if (std::experimental::filesystem::exists(name_)) {
 			if (".rst" == name_.extension()) {
-				TokenHandler tHandler(name_.string());
-				tHandler.write(m_output_dir + "\\\\tokens\\\\html");
+				RstHandler rstH(name_.string(), m_output_dir + "\\\\tokens\\\\html");
+				rstH.write2html();
 			}
 		}
 	}
+}
+
+void Target::make_functional_page() const
+{
+
+	string content = "..ext-d-state:: true\n\n";
+	content += ".. ext-d-version:: " + string(PROJECT_VERSION) + "\n\n";
+	content += ".. ext-d-nav:: index | functional | tokens | sources\n\n";
+	content += ".. ext-d-paragraph:: Функционал\n\n";
+	content += "Функционал\n";
+
+	RstHandler rstH("functional.rst", m_output_dir, content);
+	rstH.write2html();
+}
+
+void Target::make_tokens_page() const
+{
+	string content = "..ext-d-state:: true\n\n";
+	content += ".. ext-d-version:: " + string(PROJECT_VERSION) + "\n\n";
+	content += ".. ext-d-nav:: index | functional | tokens | sources\n\n";
+	content += ".. ext-d-paragraph:: Токены\n\n";
+	content += "Токены\n";
+
+	RstHandler rstH("tokens.rst", m_output_dir, content);
+	rstH.write2html();
+}
+
+void Target::make_sources_page() const
+{
+	string content = "..ext-d-state:: true\n\n";
+	content += ".. ext-d-version:: " + string(PROJECT_VERSION) + "\n\n";
+	content += ".. ext-d-nav:: index | functional | tokens | sources\n\n";
+	content += ".. ext-d-paragraph:: Исходный код\n\n";
+	content += "Исходный код\n";
+
+	RstHandler rstH("sources.rst", m_output_dir, content);
+	rstH.write2html();
+}
+
+/*!
+ * Генератор индекс-файла.
+ * 
+*/
+void Target::make_main_out() const
+{
+	string index_name = m_source_dir + "\\\\" + m_fileTree->getIndexRstName();
+	RstHandler rstH(index_name, m_output_dir);
+	rstH.write2html();
 }

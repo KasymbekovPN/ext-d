@@ -30,13 +30,12 @@ int main(int argc, char** argv){
 
 	setlocale(LC_ALL, "Russian");
 
-	string s = "C:/projects/external-description/_build_vs/Debug/config.txt";
 	vector<string> args;
 	for (int i = 1; i < argc; i++) {
 		args.push_back(argv[i]);
 	}
 
-	ConsoleCmdHandler cmdHandler(s, args);
+	ConsoleCmdHandler cmdHandler("config.txt", args);
 	cmdHandler.showErrorStatus();
 
     return 0;
