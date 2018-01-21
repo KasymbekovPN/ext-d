@@ -3,6 +3,8 @@
 #include "fileHandler.h"
 #include "target.h"
 #include "errorStatus.h"
+#include "stringHandler.h"
+#include "jsonObject.hpp"
 
 #include <string>
 #include <vector>
@@ -18,7 +20,7 @@ using std::shared_ptr;
 class ConfigHandler
 {
 public:
-	ConfigHandler(const string&, shared_ptr<ErrorStatus>);
+	ConfigHandler(const string & path_, const string& path_json_, shared_ptr<ErrorStatus> p_error_);
 	~ConfigHandler();
 
 	void targetRun(const string&, const string&) const;

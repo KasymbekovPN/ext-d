@@ -36,6 +36,12 @@ public:
 		target_invalidFlag,
 		
 		fileTree_unknowLang,
+
+		json_objectInvalid,
+		json_invalidSyntax,
+		json_cnfg_num_of_trt_inv,
+		json_cnfg_inv_target_name,
+		json_cnfg_inv_target_path,
 	};
 
 	explicit ErrorStatus();

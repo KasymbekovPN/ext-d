@@ -4,6 +4,7 @@ const int Target::cmd_size[Target::number_of_cmd] = {2, 2};
 
 Target::Target(const string & name_, const string& path_, std::shared_ptr<ErrorStatus> p_error_)
 {
+
 	p_error = p_error_;
 
 	m_name = name_;
@@ -21,6 +22,8 @@ Target::Target(const string & name_, const string& path_, std::shared_ptr<ErrorS
 		p_error->set(ErrorStatus::error::target_outputDirInvalidParam, true);
 	}
 
+	cout << "2" << endl;
+
 	FileHandler file_src(m_path);
 	vector<string> arg_buffer_src = file_src.getCmdArgList(cmd_set_source_dir);
 	if (arg_buffer_src.size() == 1) {
@@ -30,11 +33,15 @@ Target::Target(const string & name_, const string& path_, std::shared_ptr<ErrorS
 		p_error->set(ErrorStatus::error::target_sourceDirInvalidParam, true);
 	}
 
+	cout << "3" << endl;
+
 	FileHandler file_supp_lang(m_path);
 	vector<string> supp_lang = file_supp_lang.getCmdArgList(cmd_set_lang);
 	if (supp_lang.size() != 1) {
 		p_error->set(ErrorStatus::error::target_unknowLang, true);
 	}
+
+	cout << "4" << endl;
 
 	if (!p_error->get()) {
 		DWORD f = GetFileAttributes(m_source_dir.c_str());
@@ -48,6 +55,14 @@ Target::Target(const string & name_, const string& path_, std::shared_ptr<ErrorS
 		}
 	}
 
+	cout << "5" << endl;
+
+	cout << m_source_dir << endl;
+	cout << "6" << endl;
+	cout << m_output_dir << endl;
+	cout << "7" << endl;
+	cout << supp_lang[0] << endl;
+	cout << "8" << endl;
 	m_fileTree = new FileTree(m_source_dir, p_error, supp_lang[0]);
 
 }

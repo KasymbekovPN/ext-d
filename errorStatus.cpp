@@ -20,6 +20,11 @@ ErrorStatus::ENM ErrorStatus::errorNamesMap {
 	{ ErrorStatus::error::target_unknowLang, "Target - неизвестный язык." },
 	{ ErrorStatus::error::target_invalidFlag, "Target - невалидный флаг."},
 	{ ErrorStatus::error::fileTree_unknowLang, "FileTree - неизвестный язык." },
+	{ ErrorStatus::error::json_objectInvalid, "Json - Объект невалиден."},
+	{ ErrorStatus::error::json_invalidSyntax, "Json - невалидный синтаксис."},
+	{ ErrorStatus::error::json_cnfg_num_of_trt_inv, "Json-conf - невалидный параметр : numder-of-targets"},
+	{ ErrorStatus::error::json_cnfg_inv_target_name, "Json-conf - невалидный параметр цели : name"},
+	{ ErrorStatus::error::json_cnfg_inv_target_path, "Json-conf - невалидный параметр цели : path" }
 };
 
 ErrorStatus::ErrorStatus(): value(0){}

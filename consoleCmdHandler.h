@@ -3,6 +3,7 @@
 #include "config.h"
 #include "configHandler.h"
 #include "errorStatus.h"
+#include "jsonObject.hpp"
 
 #include <iostream>
 #include <string>
@@ -22,7 +23,7 @@ using std::shared_ptr;
 class ConsoleCmdHandler
 {
 public:
-	ConsoleCmdHandler(const string&, vector<string>);
+	ConsoleCmdHandler(const string & config_path_, const string& config_path_json_, vector<string> command_);
 	~ConsoleCmdHandler();
 
 	void showErrorStatus() const;

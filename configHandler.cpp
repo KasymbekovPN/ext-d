@@ -1,42 +1,123 @@
 #include "configHandler.h"
 
-ConfigHandler::ConfigHandler(const string & path_, shared_ptr<ErrorStatus> p_error_)
+ConfigHandler::ConfigHandler(const string & path_, const string& path_json_, shared_ptr<ErrorStatus> p_error_)
 {
 
 	p_error = p_error_;
 
-	FileHandler file(path_);
+	//FileHandler file(path_);
+	FileHandler file_json(path_json_);
 
-	if (!file.isExist()) {
+	//if (!file.isExist()) {
+	//	p_error->set(ErrorStatus::error::configHand_cnfgFileNoExitst, true);
+	//	return;
+	//}
+
+	if (!file_json.isExist()) {
 		p_error->set(ErrorStatus::error::configHand_cnfgFileNoExitst, true);
 		return;
 	}
 
-	vector<vector<string>> result = file.getCmdLists();
+	JsonObject json_object(file_json.getAsString(), "root", p_error);
 
-	for (vector<string> cmd_list : result) {
+/*	JsonObject* jo;
+	JsonBase::eType type1;
+	try
+	{
+		jo->get({}, &type1);
+	}
+	catch (const std::exception_ptr& )
+	{
+		cout << "exc" << endl;
+	}*/	
 
-		if (cmd_list[0] == cmd_settarget) {
+	if (0 == p_error->get()) {
+		JsonBase::eType type;
 
-			if (cmd_list.size() == 3) {
-				bool need_add = true;
-				for (auto p_target : m_targets) {
-					if (p_target->getName() == cmd_list[1]) {
-						need_add = false;
-					}
-				}
-
-				if (need_add) {
-					m_targets.push_back(new Target(cmd_list[1], cmd_list[2], p_error));
-				}
-			}
-			else {
-				p_error->set(ErrorStatus::error::configHand_cmdSetTargetInvalid, true);
-			}
-
+		//
+		// Определяем количество целей
+		//
+		auto number_of_targets = json_object.get({ "number-of-targets" }, &type);
+		size_t size = 0;
+		try
+		{
+			size = size_t(std::get<double>(number_of_targets));
+		}
+		catch (const std::bad_variant_access&)
+		{
+			p_error->set(ErrorStatus::error::json_cnfg_num_of_trt_inv, true);
 		}
 
+		vector<pair<string, string>> target_buffer;
+
+		if (0 == p_error->get()) {
+
+			for (size_t i = 0; i < size; ++i) {
+				auto name = json_object.get({ "targets", "targets_" + std::to_string(i), "name"}, &type);
+				auto path = json_object.get({ "targets", "targets_" + std::to_string(i), "path" }, &type);
+
+				try
+				{
+					target_buffer.push_back(pair<string, string>(std::get<string>(name), std::get<string>(path)));
+				}
+				catch (const std::bad_variant_access&)
+				{
+					p_error->set(ErrorStatus::error::json_cnfg_inv_target_name, true);
+				}
+				
+				if (0 != p_error->get()) {
+					break;
+				}
+
+			}
+
+			if (0 == p_error->get()) {
+				for (auto item : target_buffer) {
+					//cout << "--" << endl;
+					//cout << "name : " << i.first << endl;
+					//cout << "path : " << i.second << endl;
+					//cout << "--" << endl;
+					bool need_add = true;
+					for (auto p_target : m_targets) {
+						if (p_target->getName() == item.first) {
+							need_add = false;
+						}
+					}
+
+					if (need_add) {
+						m_targets.push_back(new Target(item.first, item.second, p_error));
+					}
+				}
+			}
+		}
 	}
+
+
+	//vector<vector<string>> result = file.getCmdLists();
+
+	//for (vector<string> cmd_list : result) {
+
+	//	if (cmd_list[0] == cmd_settarget) {
+
+	//		if (cmd_list.size() == 3) {
+	//			bool need_add = true;
+	//			for (auto p_target : m_targets) {
+	//				if (p_target->getName() == cmd_list[1]) {
+	//					need_add = false;
+	//				}
+	//			}
+
+	//			if (need_add) {
+	//				m_targets.push_back(new Target(cmd_list[1], cmd_list[2], p_error));
+	//			}
+	//		}
+	//		else {
+	//			p_error->set(ErrorStatus::error::configHand_cmdSetTargetInvalid, true);
+	//		}
+
+	//	}
+
+	//}
 }
 
 ConfigHandler::~ConfigHandler()

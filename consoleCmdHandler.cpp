@@ -8,12 +8,12 @@ const string ConsoleCmdHandler::commandList[ConsoleCmdHandler::NUMBER_OF_COMMAND
 	"--target.run"
 };
 
-ConsoleCmdHandler::ConsoleCmdHandler(const string & config_path_, vector<string> command_)
+ConsoleCmdHandler::ConsoleCmdHandler(const string & config_path_, const string& config_path_json_, vector<string> command_)
 {
 
 	p_error = std::make_shared<ErrorStatus>();
 
-	m_config = new ConfigHandler(config_path_, p_error);
+	m_config = new ConfigHandler(config_path_, config_path_json_, p_error);
 
 	if (command_.size() < 1) {
 		p_error->set(ErrorStatus::error::consoleCmdHand_listCmdIsEmpty, true);

@@ -6,6 +6,7 @@
 #include "errorStatus.h"
 #include "dom.hpp"
 #include "dirHandler.hpp"
+#include <jsonObject.hpp>
 
 #include <consoleCmdHandler.h>
 #include <iostream>
@@ -35,7 +36,7 @@ int main(int argc, char** argv){
 		args.push_back(argv[i]);
 	}
 
-	ConsoleCmdHandler cmdHandler("config.txt", args);
+	ConsoleCmdHandler cmdHandler("config.txt", "config.json", args);
 	cmdHandler.showErrorStatus();
 
     return 0;

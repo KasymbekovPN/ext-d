@@ -45,4 +45,16 @@ add_executable(ext-d
                 tokenHandler.cpp
                 rstHandler.hpp
                 rstHandler.cpp
+                jsonBase.hpp
+                jsonBase.cpp
+                jsonNumber.hpp
+                jsonNumber.cpp
+                jsonObject.hpp
+                jsonObject.cpp
+                jsonSimple.hpp
+                jsonSimple.cpp
+                jsonString.hpp
+                jsonString.cpp
+                jsonArray.hpp
+                jsonArray.cpp
                 )
