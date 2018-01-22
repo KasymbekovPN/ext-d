@@ -23,7 +23,7 @@ using std::shared_ptr;
 class ConsoleCmdHandler
 {
 public:
-	ConsoleCmdHandler(const string & config_path_, const string& config_path_json_, vector<string> command_);
+	ConsoleCmdHandler(const string& config_path_json_, vector<string> command_);
 	~ConsoleCmdHandler();
 
 	void showErrorStatus() const;

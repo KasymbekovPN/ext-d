@@ -41,7 +41,6 @@ JsonObject::JsonObject(const string & content_, const string& name_, shared_ptr<
 				string name = StringHandler::filter(tmp.substr(0, found_dots), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
 				if ('"' == name[0] && '"' == name[name.size() - 1]){
 					name = name.substr(1, name.size() - 2);
-					//cout << name << endl;
 
 					string value = StringHandler::filter(tmp.substr(found_dots + 1), StringHandler::FBE::begin_and_end, {' ', '\n', '\t'});
 					bool first_is_double_quot_mark = '"' == value[0];
@@ -116,16 +115,6 @@ void JsonObject::show(string offset) const
 
 variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> JsonObject::get(vector<string> path_, eType * type_) const
 {
-
-	//cout << int(m_type) << " : " << m_name << endl;
-	////--
-	//cout << "[";
-	//for (auto i : path_) {
-	//	cout << i << ", ";
-	//}
-	//cout << "]" << endl;
-	////--
-
 	variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> res;
 
 	if (0 == path_.size()) {

@@ -42,6 +42,10 @@ public:
 		json_cnfg_num_of_trt_inv,
 		json_cnfg_inv_target_name,
 		json_cnfg_inv_target_path,
+		json_extdlists_no_exists,
+		json_extdlists_source_dir_inv,
+		json_extdlists_out_dir_inv,
+		json_extdlists_lang_inv,
 	};
 
 	explicit ErrorStatus();

@@ -5,71 +5,70 @@ const int Target::cmd_size[Target::number_of_cmd] = {2, 2};
 Target::Target(const string & name_, const string& path_, std::shared_ptr<ErrorStatus> p_error_)
 {
 
-	p_error = p_error_;
+	m_fileTree = nullptr;
 
+	p_error = p_error_;
 	m_name = name_;
 	m_path = path_;
 
 	FileHandler file(m_path);
-	is_exist = file.isExist();
-
-	FileHandler file_out(m_path);
-	vector<string> arg_buffer_out = file_out.getCmdArgList(cmd_set_output_dir);
-	if (arg_buffer_out.size() == 1) {
-		m_output_dir = arg_buffer_out[0];
-	}
-	else {
-		p_error->set(ErrorStatus::error::target_outputDirInvalidParam, true);
+	if (!file.isExist()) {
+		p_error->set(ErrorStatus::error::json_extdlists_no_exists, true);
+		return;
 	}
 
-	cout << "2" << endl;
+	JsonObject json_object(file.getAsString(), "root", p_error_);
+	JsonBase::eType type;
+	auto source_dir = json_object.get({"source_dir"}, &type);
+	auto out_dir = json_object.get({"out_dir"}, &type);
+	auto lang = json_object.get({"lang"}, &type);
 
-	FileHandler file_src(m_path);
-	vector<string> arg_buffer_src = file_src.getCmdArgList(cmd_set_source_dir);
-	if (arg_buffer_src.size() == 1) {
-		m_source_dir = arg_buffer_src[0];
+	try{
+		m_source_dir = std::get<string>(source_dir);
 	}
-	else {
-		p_error->set(ErrorStatus::error::target_sourceDirInvalidParam, true);
-	}
-
-	cout << "3" << endl;
-
-	FileHandler file_supp_lang(m_path);
-	vector<string> supp_lang = file_supp_lang.getCmdArgList(cmd_set_lang);
-	if (supp_lang.size() != 1) {
-		p_error->set(ErrorStatus::error::target_unknowLang, true);
+	catch (const std::bad_variant_access&){
+		p_error->set(ErrorStatus::error::json_extdlists_source_dir_inv, true);
 	}
 
-	cout << "4" << endl;
+	try
+	{
+		m_output_dir = std::get<string>(out_dir);
+	}
+	catch (const std::bad_variant_access&)
+	{
+		p_error->set(ErrorStatus::error::json_extdlists_out_dir_inv, true);
+	}
 
-	if (!p_error->get()) {
-		DWORD f = GetFileAttributes(m_source_dir.c_str());
-		if ((f == INVALID_FILE_ATTRIBUTES) || (f & FILE_ATTRIBUTE_DIRECTORY) == 0) {
+	string supp_lang;
+	try
+	{
+		supp_lang = std::get<string>(lang);
+	}
+	catch (const std::bad_variant_access&)
+	{
+		p_error->set(ErrorStatus::error::json_extdlists_lang_inv, true);
+	}
+
+	if (0 == p_error->get()) {
+
+		if (!std::experimental::filesystem::exists(m_source_dir)) {
 			p_error->set(ErrorStatus::error::target_sourceDirNoExists, true);
 		}
 
-		f = GetFileAttributes(m_output_dir.c_str());
-		if ((f == INVALID_FILE_ATTRIBUTES) || (f & FILE_ATTRIBUTE_DIRECTORY) == 0) {
+		if (!std::experimental::filesystem::exists(m_output_dir)) {
 			p_error->set(ErrorStatus::error::target_outputDirNoExists, true);
 		}
+
+		m_fileTree = new FileTree(m_source_dir, p_error, supp_lang);
 	}
-
-	cout << "5" << endl;
-
-	cout << m_source_dir << endl;
-	cout << "6" << endl;
-	cout << m_output_dir << endl;
-	cout << "7" << endl;
-	cout << supp_lang[0] << endl;
-	cout << "8" << endl;
-	m_fileTree = new FileTree(m_source_dir, p_error, supp_lang[0]);
-
 }
 
 Target::~Target()
 {
-	delete m_fileTree;
+	if (nullptr != m_fileTree) {
+		delete m_fileTree;
+	}
+	
 }
 
 string Target::getName() const

@@ -17,9 +17,6 @@ void JsonSimple::show(string offset) const
 
 variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> JsonSimple::get(vector<string> path, JsonBase::eType * type_) const
 {
-
-	//cout << int(m_type) << " : " << m_name << endl;
-
 	variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> res;
 	*type_ = m_type;
 	res = m_content;

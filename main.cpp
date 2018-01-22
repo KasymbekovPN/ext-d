@@ -36,7 +36,7 @@ int main(int argc, char** argv){
 		args.push_back(argv[i]);
 	}
 
-	ConsoleCmdHandler cmdHandler("config.txt", "config.json", args);
+	ConsoleCmdHandler cmdHandler("config.json", args);
 	cmdHandler.showErrorStatus();
 
     return 0;

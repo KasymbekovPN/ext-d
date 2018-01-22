@@ -23,15 +23,6 @@ void JsonString::show(string offset) const
 
 variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> JsonString::get(vector<string> path_, JsonBase::eType * type_) const
 {
-	//cout << int(m_type) << " : " << m_name << endl;
-	//--
-	//cout << "[";
-	//for (auto i : path_) {
-	//	cout << i << ", ";
-	//}
-	//cout << "]" << endl;
-	//--
-
 	variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> res;
 	*type_ = m_type;
 	res = m_content;

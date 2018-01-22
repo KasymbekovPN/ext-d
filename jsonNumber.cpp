@@ -25,9 +25,6 @@ void JsonNumber::show(string offset) const
 
 variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> JsonNumber::get(vector<string> path_, eType * type_) const
 {
-
-	//cout << int(m_type) << " : " << m_name << endl;
-
 	variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> res;
 	*type_ = m_type;
 	res = m_content;

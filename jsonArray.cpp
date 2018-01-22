@@ -103,16 +103,6 @@ void JsonArray::show(string offset) const
 
 variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> JsonArray::get(vector<string> path_, eType * type_) const
 {
-
-	//cout << int(m_type) << " : " << m_name << endl;
-	////--
-	//cout << "[";
-	//for (auto i : path_) {
-	//	cout << i << ", ";
-	//}
-	//cout << "]" << endl;
-	////--
-
 	variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> res;
 
 	if (0 == path_.size()) {

@@ -26,8 +26,6 @@ public:
 	JsonObject(const string& content_, const string& name_, shared_ptr<ErrorStatus> error_);
 	~JsonObject();
 
-	//variant<eSimple, int, string> get() const;
-
 	void show(string offset) const;
 
 	variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> get(vector<string> path_, eType * type_) const;

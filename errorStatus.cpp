@@ -15,8 +15,8 @@ ErrorStatus::ENM ErrorStatus::errorNamesMap {
 	{ ErrorStatus::error::configHand_currentTargetNoExists, "»скома€ цель не существует." },
 	{ ErrorStatus::error::target_outputDirInvalidParam, "Ќевалидный параметр SET_OUTPUT_DIR." },
 	{ ErrorStatus::error::target_sourceDirInvalidParam, "Ќевалидный параметр SET_SOURCE_DIR." },
-	{ ErrorStatus::error::target_outputDirNoExists, "ƒиректори€ SET_OUTPUT_DIR не существует." },
-	{ ErrorStatus::error::target_sourceDirNoExists, "ƒиректори€ SET_SORCE_DIR не существует." },
+	{ ErrorStatus::error::target_outputDirNoExists, "ƒиректори€ out_dir не существует." },
+	{ ErrorStatus::error::target_sourceDirNoExists, "ƒиректори€ source_dir не существует." },
 	{ ErrorStatus::error::target_unknowLang, "Target - неизвестный €зык." },
 	{ ErrorStatus::error::target_invalidFlag, "Target - невалидный флаг."},
 	{ ErrorStatus::error::fileTree_unknowLang, "FileTree - неизвестный €зык." },
@@ -24,7 +24,11 @@ ErrorStatus::ENM ErrorStatus::errorNamesMap {
 	{ ErrorStatus::error::json_invalidSyntax, "Json - невалидный синтаксис."},
 	{ ErrorStatus::error::json_cnfg_num_of_trt_inv, "Json-conf - невалидный параметр : numder-of-targets"},
 	{ ErrorStatus::error::json_cnfg_inv_target_name, "Json-conf - невалидный параметр цели : name"},
-	{ ErrorStatus::error::json_cnfg_inv_target_path, "Json-conf - невалидный параметр цели : path" }
+	{ ErrorStatus::error::json_cnfg_inv_target_path, "Json-conf - невалидный параметр цели : path" },
+	{ ErrorStatus::error::json_extdlists_no_exists, "Json-conf - файл описани€ цели не существует."},
+	{ ErrorStatus::error::json_extdlists_source_dir_inv, "ExtDLists - невалидный параметр source_dir"},
+	{ ErrorStatus::error::json_extdlists_out_dir_inv, "ExtDLists - невалидный параметр out_dir" },
+	{ ErrorStatus::error::json_extdlists_lang_inv, "ExtDLists - невалидный параметр lang" }
 };
 
 ErrorStatus::ErrorStatus(): value(0){}

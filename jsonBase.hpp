@@ -47,7 +47,6 @@ protected:
 	eType m_type;
 	string m_name;
 	shared_ptr<ErrorStatus> p_error;
-	//bool m_root;
 
 private:
 

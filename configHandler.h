@@ -20,7 +20,7 @@ using std::shared_ptr;
 class ConfigHandler
 {
 public:
-	ConfigHandler(const string & path_, const string& path_json_, shared_ptr<ErrorStatus> p_error_);
+	ConfigHandler(const string& path_json_, shared_ptr<ErrorStatus> p_error_);
 	~ConfigHandler();
 
 	void targetRun(const string&, const string&) const;

@@ -19,6 +19,7 @@
 #include "tokenGenerator.hpp"
 #include "tokenHandler.hpp"
 #include "rstHandler.hpp"
+#include "jsonObject.hpp"
 
 using std::string;
 using std::cout;

@@ -1,35 +1,17 @@
 #include "configHandler.h"
 
-ConfigHandler::ConfigHandler(const string & path_, const string& path_json_, shared_ptr<ErrorStatus> p_error_)
+ConfigHandler::ConfigHandler(const string& path_json_, shared_ptr<ErrorStatus> p_error_)
 {
 
 	p_error = p_error_;
 
-	//FileHandler file(path_);
 	FileHandler file_json(path_json_);
-
-	//if (!file.isExist()) {
-	//	p_error->set(ErrorStatus::error::configHand_cnfgFileNoExitst, true);
-	//	return;
-	//}
-
 	if (!file_json.isExist()) {
 		p_error->set(ErrorStatus::error::configHand_cnfgFileNoExitst, true);
 		return;
 	}
 
 	JsonObject json_object(file_json.getAsString(), "root", p_error);
-
-/*	JsonObject* jo;
-	JsonBase::eType type1;
-	try
-	{
-		jo->get({}, &type1);
-	}
-	catch (const std::exception_ptr& )
-	{
-		cout << "exc" << endl;
-	}*/	
 
 	if (0 == p_error->get()) {
 		JsonBase::eType type;
@@ -73,10 +55,6 @@ ConfigHandler::ConfigHandler(const string & path_, const string& path_json_, sha
 
 			if (0 == p_error->get()) {
 				for (auto item : target_buffer) {
-					//cout << "--" << endl;
-					//cout << "name : " << i.first << endl;
-					//cout << "path : " << i.second << endl;
-					//cout << "--" << endl;
 					bool need_add = true;
 					for (auto p_target : m_targets) {
 						if (p_target->getName() == item.first) {
@@ -91,33 +69,6 @@ ConfigHandler::ConfigHandler(const string & path_, const string& path_json_, sha
 			}
 		}
 	}
-
-
-	//vector<vector<string>> result = file.getCmdLists();
-
-	//for (vector<string> cmd_list : result) {
-
-	//	if (cmd_list[0] == cmd_settarget) {
-
-	//		if (cmd_list.size() == 3) {
-	//			bool need_add = true;
-	//			for (auto p_target : m_targets) {
-	//				if (p_target->getName() == cmd_list[1]) {
-	//					need_add = false;
-	//				}
-	//			}
-
-	//			if (need_add) {
-	//				m_targets.push_back(new Target(cmd_list[1], cmd_list[2], p_error));
-	//			}
-	//		}
-	//		else {
-	//			p_error->set(ErrorStatus::error::configHand_cmdSetTargetInvalid, true);
-	//		}
-
-	//	}
-
-	//}
 }
 
 ConfigHandler::~ConfigHandler()
