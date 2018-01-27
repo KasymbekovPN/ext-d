@@ -8,7 +8,10 @@
 #include <map>
 #include <memory>
 #include <iterator>
+#include <filesystem>
+#include <sstream>
 
+#include "config.h"
 #include "errorStatus.h"
 
 using std::cout;
@@ -27,7 +30,7 @@ public:
 		c_lang
 	};
 
-	FileTree(const string&, std::shared_ptr<ErrorStatus>, const string&);
+	FileTree(const string&, std::shared_ptr<ErrorStatus>, const string&, vector<string> unhand_files_, vector<string> unhand_dir_);
 	~FileTree();
 
 	void filePaths(std::shared_ptr<vector<string>>, bool);

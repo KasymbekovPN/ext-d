@@ -40,7 +40,15 @@ ConfigHandler::ConfigHandler(const string& path_json_, shared_ptr<ErrorStatus> p
 
 				try
 				{
+#ifdef TASK_002__1
 					target_buffer.push_back(pair<string, string>(std::get<string>(name), std::get<string>(path)));
+#endif
+#ifdef TASK_002__2
+					target_buffer.push_back(pair<string, string>(
+						StringHandler::replace_all(std::get<string>(name), '/', '\\'),
+						StringHandler::replace_all(std::get<string>(path), '/', '\\')
+						));
+#endif
 				}
 				catch (const std::bad_variant_access&)
 				{

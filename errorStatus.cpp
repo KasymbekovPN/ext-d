@@ -20,6 +20,7 @@ ErrorStatus::ENM ErrorStatus::errorNamesMap {
 	{ ErrorStatus::error::target_unknowLang, "Target - неизвестный язык." },
 	{ ErrorStatus::error::target_invalidFlag, "Target - невалидный флаг."},
 	{ ErrorStatus::error::fileTree_unknowLang, "FileTree - неизвестный язык." },
+	{ ErrorStatus::error::fileTree_noExists, "FileTree - не удалось сформировать."},
 	{ ErrorStatus::error::json_objectInvalid, "Json - Объект невалиден."},
 	{ ErrorStatus::error::json_invalidSyntax, "Json - невалидный синтаксис."},
 	{ ErrorStatus::error::json_cnfg_num_of_trt_inv, "Json-conf - невалидный параметр : numder-of-targets"},
@@ -28,7 +29,11 @@ ErrorStatus::ENM ErrorStatus::errorNamesMap {
 	{ ErrorStatus::error::json_extdlists_no_exists, "Json-conf - файл описания цели не существует."},
 	{ ErrorStatus::error::json_extdlists_source_dir_inv, "ExtDLists - невалидный параметр source_dir"},
 	{ ErrorStatus::error::json_extdlists_out_dir_inv, "ExtDLists - невалидный параметр out_dir" },
-	{ ErrorStatus::error::json_extdlists_lang_inv, "ExtDLists - невалидный параметр lang" }
+	{ ErrorStatus::error::json_extdlists_lang_inv, "ExtDLists - невалидный параметр lang" },
+	{ ErrorStatus::error::json_extdlists_inv_num_unhand_files, "ExtDLists - невалидное количество необраб. файлов"},
+	{ ErrorStatus::error::json_extdlists_inv_unhand_files, "ExtDLists - невалидно заданные необраб. файлы"},
+	{ ErrorStatus::error::json_extdlists_inv_num_unhand_dir, "ExtDLists - невалидное количество необраб. директорий"},
+	{ ErrorStatus::error::json_extdlists_inv_unhand_dir, "ExtDLists - невалидно заданые необраб. директории"},
 };
 
 ErrorStatus::ErrorStatus(): value(0){}
@@ -41,10 +46,10 @@ void ErrorStatus::clear()
 void ErrorStatus::set(error error_, bool act_)
 {
 	if (act_) {
-		value |= 1 << unsigned long long(error_);
+		value |= unsigned long long(1) << unsigned long long(error_);
 	}
 	else {
-		value &= ~(1 << unsigned long long(error_));
+		value &= ~(unsigned long long(1) << unsigned long long(error_));
 	}
 }
 
@@ -63,7 +68,7 @@ void ErrorStatus::display() const
 
 	for (auto iter = errorNamesMap.begin(); iter != errorNamesMap.end(); ++iter) {
 
-		if (value & (1 << int(iter->first))) {
+		if (value & (unsigned long long(1) << int(iter->first))) {
 			cout << int(iter->first) << ") " << iter->second << endl;
 		}
 	}

@@ -36,6 +36,7 @@ public:
 		target_invalidFlag,
 		
 		fileTree_unknowLang,
+		fileTree_noExists,
 
 		json_objectInvalid,
 		json_invalidSyntax,
@@ -46,6 +47,10 @@ public:
 		json_extdlists_source_dir_inv,
 		json_extdlists_out_dir_inv,
 		json_extdlists_lang_inv,
+		json_extdlists_inv_num_unhand_files,
+		json_extdlists_inv_unhand_files,
+		json_extdlists_inv_num_unhand_dir,
+		json_extdlists_inv_unhand_dir,
 	};
 
 	explicit ErrorStatus();

@@ -174,3 +174,14 @@ vector<string> StringHandler::file2line(const string & file, bool replace_tab)
 
 	return result;
 }
+
+string StringHandler::replace_all(const string & str_, char orig_, char new_)
+{
+	string res;
+
+	for (auto ch : str_) {
+		res += ch == orig_ ? new_ : ch;
+	}
+
+	return res;
+}

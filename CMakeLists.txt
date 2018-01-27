@@ -1,8 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(ext-d VERSION 0.2.1)
+project(ext-d VERSION 0.2.3)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+if(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
+endif(MSVC)
 
 configure_file(config.h.in config.h)
 
