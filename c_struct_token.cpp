@@ -110,6 +110,12 @@ void cStructToken::show(int offset_) const
 
 }
 
+#ifdef  TASK_0_2_5
+void cStructToken::write(const string & dir_, const string & file_name_, const string & mode_)
+{
+	cout << "struct" << endl;
+}
+#else
 void cStructToken::write(const string & dir_, const string & file_name_)
 {
 
@@ -133,6 +139,7 @@ void cStructToken::write(const string & dir_, const string & file_name_)
 		fout.close();
 	}
 }
+#endif
 
 void cStructToken::toRst(string * p_members, bool root_, const string& patern_name_)
 {

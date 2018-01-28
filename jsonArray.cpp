@@ -124,3 +124,10 @@ variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> JsonArray::get(
 	res = JsonBase::eGetterMsg::is_array;
 	return res;
 }
+
+#ifdef TASK_0_2_5
+string JsonArray::to_string(const string & offset_) const
+{
+	return string();
+}
+#endif // TASK_0_2_5

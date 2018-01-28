@@ -54,7 +54,11 @@ public:
 	bool isVolatile() const;
 	bool isExtern() const;
 
+#ifdef  TASK_0_2_5
+	virtual void write(const string& dir_, const string& file_name_, const string& mode_);
+#else
 	virtual void write(const string& dir_, const string& file_name_);
+#endif	
 	virtual void toRst(string* p_member_, bool root_, const string& patern_name_);
 
 	static string get_offset_string(int offset_);

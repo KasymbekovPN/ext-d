@@ -7,6 +7,7 @@
 #include <variant>
 #include <memory>
 
+#include "config.h"
 #include "fileHandler.h"
 #include "stringHandler.h"
 #include "errorStatus.h"
@@ -39,6 +40,10 @@ public:
 
 	virtual variant<eSimple, double, string, eGetterMsg> get(vector<string> path_, eType* type_) const;
 	virtual void show(string offset) const;
+
+#ifdef  TASK_0_2_5
+	virtual string to_string(const string& offset_) const;
+#endif
 
 	string Name() const;
 

@@ -175,6 +175,12 @@ void cDefVar::show(int offset_) const
 	cout << cBaseToken::get_offset_string(offset_) << "is struct: " << m_struct << endl;
 }
 
+#ifdef  TASK_0_2_5
+void cDefVar::write(const string & dir_, const string & file_name_, const string & mode_)
+{
+	cout << "def-var" << endl;
+}
+#else
 void cDefVar::write(const string & dir_, const string & file_name_)
 {
 
@@ -193,3 +199,4 @@ void cDefVar::write(const string & dir_, const string & file_name_)
 		fout.close();
 	}
 }
+#endif

@@ -44,6 +44,12 @@ void cEnumToken::show(int offset_) const
 	}
 }
 
+#ifdef  TASK_0_2_5
+void cEnumToken::write(const string & dir_, const string & file_name_, const string & mode_)
+{
+	cout << "enum" << endl;
+}
+#else
 void cEnumToken::write(const string & dir_, const string & file_name_)
 {
 
@@ -77,3 +83,4 @@ void cEnumToken::write(const string & dir_, const string & file_name_)
 		fout.close();
 	}
 }
+#endif

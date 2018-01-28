@@ -24,6 +24,11 @@ void JsonBase::show(string offset) const
 	cout << offset << m_name << " : ";
 }
 
+string JsonBase::to_string(const string & offset_) const
+{
+	return string();
+}
+
 string JsonBase::Name() const
 {
 	return m_name;

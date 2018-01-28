@@ -137,3 +137,14 @@ variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> JsonObject::get
 	res = JsonObject::eGetterMsg::not_exist;
 	return res;
 }
+
+#ifdef  TASK_0_2_5
+string JsonObject::to_string(const string & offset_) const
+{
+	return string();
+}
+
+void JsonObject::write(const string & path_, const string & mode_)
+{
+}
+#endif

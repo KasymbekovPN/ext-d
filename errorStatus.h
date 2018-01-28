@@ -51,6 +51,8 @@ public:
 		json_extdlists_inv_unhand_files,
 		json_extdlists_inv_num_unhand_dir,
 		json_extdlists_inv_unhand_dir,
+		json_extdlists_inv_tokens_rel,
+		json_extdlists_inv_tokens_path,
 	};
 
 	explicit ErrorStatus();

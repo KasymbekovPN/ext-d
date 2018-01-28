@@ -104,6 +104,13 @@ bool cBaseToken::isExtern() const
 	return m_extern;
 }
 
+#ifdef  TASK_0_2_5
+
+void cBaseToken::write(const string & dir_, const string & file_name_, const string & mode_)
+{
+	
+}
+#else
 void cBaseToken::write(const string & dir_, const string & file_name_)
 {
 	auto dir_names = StringHandler::split(dir_, '\\');
@@ -116,6 +123,7 @@ void cBaseToken::write(const string & dir_, const string & file_name_)
 		} 
 	}
 }
+#endif
 
 void cBaseToken::toRst(string * p_member_, bool root_, const string& patern_name_)
 {

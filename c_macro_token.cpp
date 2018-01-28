@@ -56,6 +56,41 @@ void cMacroToken::show(int offset_) const
 	cout << cBaseToken::get_offset_string(offset_) << "Token Value: " << endl << m_value << endl;
 }
 
+#ifdef  TASK_0_2_5
+void cMacroToken::write(const string & dir_, const string & file_name_, const string & mode_)
+{
+	cBaseToken::write(dir_, file_name_, mode_);
+	//cout << "macro" << endl;
+
+	//
+	// todo: запись *.ipynb через json_object
+	//
+
+	string fill_name = dir_ + "\\\\" + file_name_;
+	//JsonObject json_object(/*Имя*/);
+
+	//
+	// todo: заполняем json_object
+	//
+	
+
+	//json_object.write(file_name_, "ipynb");
+
+
+
+	//if (!std::experimental::filesystem::exists(fill_name)) {
+	//	std::ofstream fout(fill_name);
+	//	fout << ".. ext-d-state:: false" << endl << endl
+	//		<< ".. ext-d-version:: " << PROJECT_VERSION << endl << endl
+	//		<< ".. ext-d-token-type:: " << cBaseToken::tokenTypeNames[m_type] << endl << endl
+	//		<< ".. ext-d-paragraph:: Общее" << endl << endl << endl
+	//		<< ".. ext-d-code-block:: c-lang" << endl << endl
+	//		<< getRaw() << endl;
+	//	fout.close();
+	//}
+
+}
+#else
 void cMacroToken::write(const string & dir_, const string & file_name_)
 {
 
@@ -74,3 +109,4 @@ void cMacroToken::write(const string & dir_, const string & file_name_)
 		fout.close();
 	}
 }
+#endif

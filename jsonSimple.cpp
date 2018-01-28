@@ -22,3 +22,10 @@ variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> JsonSimple::get
 	res = m_content;
 	return res;
 }
+
+#ifdef  TASK_0_2_5
+string JsonSimple::to_string(const string & offset_) const
+{
+	return string();
+}
+#endif

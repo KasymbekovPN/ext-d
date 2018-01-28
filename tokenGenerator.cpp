@@ -66,7 +66,11 @@ void TokenGenerator::parse(size_t offset_, const string& outdir_)
 			name += spl[i] + "-";
 		}
 		name += item->getName() + "-" + item->getHash() + ".rst";
+#ifdef  TASK_0_2_5
+		item->write(outdir_, name, "ipynb");
+#else
 		item->write(outdir_, name);
+#endif
 		fTokenList << name << endl;
 
 		cout << '\r' << "token make - " << m_path << ": " << ++token_idx << "/" << m_tokens.size();
@@ -103,7 +107,11 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, bool start, b
 			name += spl[i] + "-";
 		}
 		name += item->getName() + "-" + item->getHash() + ".rst";
+#ifdef  TASK_0_2_5
+		item->write(outdir_, name, "ipynb");
+#else
 		item->write(outdir_, name);
+#endif
 		to_file += name + '\n';
 
 		cout << '\r' << "token make - " << m_path << ": " << ++token_idx << "/" << m_tokens.size();
@@ -139,7 +147,11 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, string * p_na
 			name += spl[i] + "-";
 		}
 		name += item->getName() + "-" + item->getHash() + ".rst";
+#ifdef TASK_0_2_5
+		item->write(outdir_, name, "ipynb");
+#else
 		item->write(outdir_, name);
+#endif // TASK_0_2_5		
 		*p_name_list_ += name + '\n';
 
 		cout << '\r' << "token make - " << m_path << ": " << ++token_idx << "/" << m_tokens.size();

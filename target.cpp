@@ -97,7 +97,32 @@ Target::Target(const string & name_, const string& path_, std::shared_ptr<ErrorS
 		}
 	}
 
+	auto o_tokens_relative = json_object.get({"tokens", "relative"}, &type);
+	JsonBase::eSimple tokens_relative;
+	try {
+		tokens_relative = std::get<JsonBase::eSimple>(o_tokens_relative);
+	}
+	catch (std::bad_variant_access&) {
+		p_error->set(ErrorStatus::error::json_extdlists_inv_tokens_rel, true);
+	}
+
+	auto o_tokens_path = json_object.get({"tokens", "path"}, &type);
+	string tokens_path;
+	try {
+		tokens_path = StringHandler::replace_all(std::get<string>(o_tokens_path), '/', '\\');
+	}
+	catch (std::bad_variant_access&) {
+		p_error->set(ErrorStatus::error::json_extdlists_inv_tokens_path, true);
+	}
+
 	if (0 == p_error->get()) {
+
+		if (JsonBase::eSimple::simple_true == tokens_relative) {
+			m_tokens_output = m_output_dir + tokens_path;
+		}
+		else {
+			m_tokens_output = tokens_path;
+		}
 
 		if (!std::experimental::filesystem::exists(m_source_dir)) {
 			p_error->set(ErrorStatus::error::target_sourceDirNoExists, true);
@@ -166,13 +191,13 @@ void Target::run(const string& flag_) const
 	}
 	else if (tgt_flg_m == flag_) {
 		//----не-удалять----------
-		make_source_out(res);
-		make_source_token_out();
-		//make_functional_out();
-		make_functional_page();
-		make_tokens_page();
-		make_sources_page();
-		make_main_out();
+		//make_source_out(res);
+		//make_source_token_out();
+		////make_functional_out();
+		//make_functional_page();
+		//make_tokens_page();
+		//make_sources_page();
+		//make_main_out();
 		//-----------------------
 	}
 	else {
@@ -290,6 +315,16 @@ void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 		}
 	}
 
+#ifdef  TASK_0_2_5
+	string to_file;
+	for (auto t : tGenerators) {
+		t->parse(m_source_dir.size(), m_tokens_output, &to_file);
+	}
+
+	ofstream fTokenList(m_tokens_output + "\\_token_list.txt");
+	fTokenList << to_file;
+	fTokenList.close();
+#else
 	string to_file;
 	for (auto t : tGenerators) {
 		t->parse(m_source_dir.size(), m_output_dir + "\\tokens\\descr", &to_file);
@@ -298,6 +333,7 @@ void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 	ofstream fTokenList(m_output_dir + "\\tokens\\descr\\_token_list.txt");
 	fTokenList << to_file;
 	fTokenList.close();
+#endif
 
 }
 

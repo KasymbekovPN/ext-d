@@ -44,6 +44,7 @@ private:
 	bool	is_exist;
 	string	m_source_dir;
 	string	m_output_dir;
+	string  m_tokens_output;
 	std::shared_ptr<ErrorStatus> p_error;
 
 	FileTree* m_fileTree;

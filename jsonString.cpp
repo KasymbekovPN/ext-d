@@ -23,3 +23,10 @@ variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> JsonString::get
 	res = m_content;
 	return res;
 }
+
+#ifdef  TASK_0_2_5
+string JsonString::to_string(const string & offset_) const
+{
+	return string();
+}
+#endif

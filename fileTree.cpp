@@ -57,7 +57,18 @@ FileTree::FileTree(const string & path_, std::shared_ptr<ErrorStatus> p_error_, 
 				for (auto en_ext: m_lang_ext[m_lang]) {
 
 					if (file_path.extension() == en_ext) {
-						m_files.push_back(file_path.string());
+
+						bool unhandled = false;
+						for (auto uh : unhand_files_) {
+							if (file_path.string() == uh) {
+								unhandled = true;
+								break;
+							}
+						}
+
+						if (!unhandled) {
+							m_files.push_back(file_path.string());
+						}						
 					}
 				}
 			}

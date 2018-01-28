@@ -59,6 +59,12 @@ void cFuncDef::show(int offset_) const
 	cout << "Value : " << endl << StringHandler::filter(m_value, StringHandler::FBE::all, { ' ', '\n', '\t', '\\' }) << endl;
 }
 
+#ifdef  TASK_0_2_5
+void cFuncDef::write(const string & dir_, const string & file_name_, const string & mode_)
+{
+	cout << "func-def" << endl;
+}
+#else
 void cFuncDef::write(const string & dir_, const string & file_name_)
 {
 	cBaseToken::write(dir_, file_name_);
@@ -87,3 +93,4 @@ void cFuncDef::write(const string & dir_, const string & file_name_)
 		fout.close();
 	}
 }
+#endif
