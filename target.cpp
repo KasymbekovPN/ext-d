@@ -22,12 +22,7 @@ Target::Target(const string & name_, const string& path_, std::shared_ptr<ErrorS
 	
 	auto source_dir = json_object.get({"source-dir"}, &type);
 	try {
-#ifdef  TASK_002__1
-		m_source_dir = std::get<string>(source_dir);
-#endif
-#ifdef  TASK_002__2
 		m_source_dir = StringHandler::replace_all(std::get<string>(source_dir), '/', '\\');
-#endif		
 	}
 	catch (const std::bad_variant_access&) {
 		p_error->set(ErrorStatus::error::json_extdlists_source_dir_inv, true);
@@ -36,12 +31,7 @@ Target::Target(const string & name_, const string& path_, std::shared_ptr<ErrorS
 	auto out_dir = json_object.get({"out-dir"}, &type);
 	try
 	{
-#ifdef  TASK_002__2
 		m_output_dir = StringHandler::replace_all(std::get<string>(out_dir), '/', '\\');
-#endif
-#ifdef  TASK_002__1
-		m_output_dir = std::get<string>(out_dir);
-#endif		
 	}
 	catch (const std::bad_variant_access&)
 	{
@@ -52,12 +42,7 @@ Target::Target(const string & name_, const string& path_, std::shared_ptr<ErrorS
 	string supp_lang;
 	try
 	{
-#ifdef TASK_002__1
-		supp_lang = std::get<string>(lang);
-#endif
-#ifdef TASK_002__2
 		supp_lang = StringHandler::replace_all(std::get<string>(lang), '/', '\\');
-#endif		
 	}
 	catch (const std::bad_variant_access&)
 	{
@@ -79,12 +64,7 @@ Target::Target(const string & name_, const string& path_, std::shared_ptr<ErrorS
 	for (size_t i = 0; i < number_unhand_files; ++i) {
 		auto o_unhand_files = json_object.get({"unhandled", "files", "names", "names_" + std::to_string(i)}, &type);
 		try {
-#ifdef TASK_002__1
-			unhand_files.push_back(std::get<string>(o_unhand_files));
-#endif
-#ifdef TASK_002__2
 			unhand_files.push_back(StringHandler::replace_all(std::get<string>(o_unhand_files), '/', '\\'));
-#endif			
 		}
 		catch (std::bad_variant_access&) {
 			unhand_files.clear();
@@ -108,12 +88,7 @@ Target::Target(const string & name_, const string& path_, std::shared_ptr<ErrorS
 	for (size_t i = 0; i < number_unhand_directory; ++i) {
 		auto o_unhand_directory = json_object.get({"unhandled", "directory", "names", "names_" + std::to_string(i)}, &type);
 		try {
-#ifdef  TASK_002__1
-			unhand_dir.push_back(std::get<string>(o_unhand_directory));
-#endif
-#ifdef  TASK_002__2
 			unhand_dir.push_back(StringHandler::replace_all(std::get<string>(o_unhand_directory), '/', '\\'));
-#endif			
 		}
 		catch (std::bad_variant_access&) {
 			unhand_dir.clear();
@@ -183,14 +158,6 @@ void Target::run(const string& flag_) const
 
 	std::shared_ptr<vector<string>> res(new vector<string>());
 	m_fileTree->filePaths(res, true);
-
-	//cout << "+++" << endl;
-
-	//for (auto i = res->begin(); i != res->end(); ++i) {
-	//	cout << *i << endl;
-	//}
-
-	//return;
 
 	if (tgt_flg_d == flag_) {
 		//----не-удалять----------
@@ -323,7 +290,6 @@ void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 		}
 	}
 
-#ifdef TASK_002__2
 	string to_file;
 	for (auto t : tGenerators) {
 		t->parse(m_source_dir.size(), m_output_dir + "\\tokens\\descr", &to_file);
@@ -332,23 +298,12 @@ void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 	ofstream fTokenList(m_output_dir + "\\tokens\\descr\\_token_list.txt");
 	fTokenList << to_file;
 	fTokenList.close();
-#endif // TASK_002_2
 
-#ifdef TASK_002__1
-	string to_file;
-	for (auto t : tGenerators) {
-		t->parse(m_source_dir.size(), m_output_dir + "\\\\tokens\\\\descr", &to_file);
-	}
-
-	ofstream fTokenList(m_output_dir + "\\\\tokens\\\\descr\\\\_token_list.txt");
-	fTokenList << to_file;
-	fTokenList.close();
-#endif // TASK_002_2
 }
 
 void Target::make_source_token_out() const
 {
-#ifdef TASK_001__2
+
 	FileHandler fTokenList(m_output_dir + "\\tokens\\descr\\_token_list.txt");
 
 	auto file_names = StringHandler::split(fTokenList.getAsString(), '\n');
@@ -362,22 +317,6 @@ void Target::make_source_token_out() const
 			}
 		}
 	}
-#endif // TASK_001__2
-#ifdef TASK_001__1
-	FileHandler fTokenList(m_output_dir + "\\\\tokens\\\\descr\\\\_token_list.txt");
-
-	auto file_names = StringHandler::split(fTokenList.getAsString(), '\n');
-
-	for (auto name : file_names) {
-		std::experimental::filesystem::path name_(m_output_dir + "\\\\tokens\\\\descr\\\\" + name);
-		if (std::experimental::filesystem::exists(name_)) {
-			if (".rst" == name_.extension()) {
-				RstHandler rstH(name_.string(), m_output_dir + "\\\\tokens\\\\html");
-				rstH.write2html();
-			}
-		}
-	}
-#endif // TASK_001__1
 }
 
 void Target::make_functional_page() const
@@ -423,14 +362,7 @@ void Target::make_sources_page() const
 */
 void Target::make_main_out() const
 {
-#ifdef  TASK_002__2
 	string index_name = m_source_dir + "\\" + m_fileTree->getIndexRstName();
 	RstHandler rstH(index_name, m_output_dir);
 	rstH.write2html();
-#endif//TASK_002__2
-#ifdef  TASK_002__1
-	string index_name = m_source_dir + "\\\\" + m_fileTree->getIndexRstName();
-	RstHandler rstH(index_name, m_output_dir);
-	rstH.write2html();
-#endif//TASK_002__1
 }

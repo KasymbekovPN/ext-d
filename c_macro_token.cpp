@@ -46,6 +46,10 @@ cMacroToken::cMacroToken(const string & buffer) : cBaseToken(cBaseToken::TokenTy
 	m_value = StringHandler::filter(m_value, StringHandler::FBE::all, { '\\', '\n', ' ', '\t' });
 }
 
+cMacroToken::~cMacroToken()
+{
+}
+
 void cMacroToken::show(int offset_) const
 {
 	cBaseToken::show(offset_);

@@ -32,6 +32,10 @@ cEnumToken::cEnumToken(const string& buffer) : cBaseToken(cBaseToken::TokenType:
 	}
 }
 
+cEnumToken::~cEnumToken()
+{
+}
+
 void cEnumToken::show(int offset_) const
 {
 	cBaseToken::show(offset_);

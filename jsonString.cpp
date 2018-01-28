@@ -3,11 +3,6 @@
 JsonString::JsonString(const string & content_, const string & name_, shared_ptr<ErrorStatus> p_error_)
 	:JsonBase(JsonBase::eType::string, name_, p_error_), m_content(content_)
 {
-	//cout << "-" << endl;
-	//cout << "Type String" << endl;
-	//cout << m_name << endl;
-	//cout << m_content << endl;
-	//cout << "-" << endl;
 }
 
 

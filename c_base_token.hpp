@@ -33,6 +33,7 @@ protected:
 public:
 
 	cBaseToken(TokenType type_, const string& raw_);
+	virtual ~cBaseToken();
 
 	virtual void show(int offset_) const;
 

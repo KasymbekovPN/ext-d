@@ -157,6 +157,10 @@ cDefVar::cDefVar(const string& buffer): cBaseToken(cBaseToken::TokenType::def_va
 	}
 }
 
+cDefVar::~cDefVar()
+{
+}
+
 void cDefVar::show(int offset_) const
 {
 	string initValue = m_initValue.empty() ? "<none>" : m_initValue;

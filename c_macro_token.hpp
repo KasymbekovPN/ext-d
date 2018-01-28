@@ -10,6 +10,7 @@ class cMacroToken : public cBaseToken
 {
 public:
 	cMacroToken(const string& buffer);
+	~cMacroToken();
 
 	void show(int offset_) const;
 

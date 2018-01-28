@@ -10,6 +10,7 @@ class cFuncDecl : public cBaseToken
 {
 public:
 	cFuncDecl(const string& buffer);
+	~cFuncDecl();
 
 	void show(int offset_) const;
 

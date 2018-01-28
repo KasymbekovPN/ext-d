@@ -47,6 +47,10 @@ cFuncDef::cFuncDef(const string & buffer): cBaseToken(cBaseToken::TokenType::fun
 	}
 }
 
+cFuncDef::~cFuncDef()
+{
+}
+
 void cFuncDef::show(int offset_) const
 {
 	cBaseToken::show(offset_);

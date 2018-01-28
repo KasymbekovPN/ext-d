@@ -43,6 +43,10 @@ cFuncDecl::cFuncDecl(const string & buffer): cBaseToken(cBaseToken::TokenType::f
 	}
 }
 
+cFuncDecl::~cFuncDecl()
+{
+}
+
 void cFuncDecl::show(int offset_) const
 {
 	cBaseToken::show(offset_);

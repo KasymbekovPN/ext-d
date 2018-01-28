@@ -23,6 +23,10 @@ cBaseToken::cBaseToken(TokenType type_, const string& raw_): m_type(type_), m_ra
 	m_hash = stream.str();
 }
 
+cBaseToken::~cBaseToken()
+{
+}
+
 void cBaseToken::show(int offset_) const
 {
 	cout << endl;

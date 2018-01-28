@@ -16,6 +16,7 @@ class cEnumToken : public cBaseToken
 {
 public:
 	cEnumToken(const string& buffer);
+	~cEnumToken();
 
 	void show(int offset_) const;
 

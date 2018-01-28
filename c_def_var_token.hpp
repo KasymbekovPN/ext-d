@@ -14,6 +14,7 @@ class cDefVar: public  cBaseToken
 {
 public:
 	cDefVar(const string& buffer);
+	~cDefVar();
 
 	void show(int offset_) const;
 
