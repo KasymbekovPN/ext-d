@@ -36,10 +36,19 @@ public:
 	};
 
 	JsonBase(eType type_, const string& name_, shared_ptr<ErrorStatus> error_);
+#ifdef TASK_0_2_5__1
+	JsonBase();
+#endif // TASK_0_2_5__1
+
+
 	virtual ~JsonBase();
 
 	virtual variant<eSimple, double, string, eGetterMsg> get(vector<string> path_, eType* type_) const;
 	virtual void show(string offset) const;
+
+#ifdef TASK_0_2_5__1
+	virtual void set(vector<string> path_, const string& name_, JsonBase::eType type_, std::variant<string, double, JsonBase::eSimple> arg_);
+#endif
 
 #ifdef  TASK_0_2_5
 	virtual string to_string(const string& offset_) const;

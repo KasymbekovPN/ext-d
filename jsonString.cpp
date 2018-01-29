@@ -5,6 +5,15 @@ JsonString::JsonString(const string & content_, const string & name_, shared_ptr
 {
 }
 
+#ifdef  TASK_0_2_5__1
+JsonString::JsonString(const string & name_, const string & content_)
+{
+	m_name = name_;
+	m_content = content_;
+	m_type = JsonBase::eType::string;
+}
+#endif
+
 
 JsonString::~JsonString()
 {

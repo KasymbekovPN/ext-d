@@ -6,6 +6,12 @@ JsonBase::JsonBase(JsonBase::eType type_, const string& name_, shared_ptr<ErrorS
 {
 }
 
+#ifdef TASK_0_2_5__1
+JsonBase::JsonBase()
+{
+}
+#endif
+
 JsonBase::~JsonBase()
 {
 }
@@ -22,6 +28,10 @@ variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> JsonBase::get(v
 void JsonBase::show(string offset) const
 {
 	cout << offset << m_name << " : ";
+}
+
+void JsonBase::set(vector<string> path_, const string & name_, JsonBase::eType type_, std::variant<string, double, JsonBase::eSimple> arg_)
+{
 }
 
 string JsonBase::to_string(const string & offset_) const

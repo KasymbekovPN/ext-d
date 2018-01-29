@@ -18,6 +18,10 @@ class JsonNumber : public JsonBase
 {
 public:
 	JsonNumber(const string& content_, const string& name_, shared_ptr<ErrorStatus> p_errro_);
+#ifdef TASK_0_2_5__1
+	JsonNumber(const string& name_, double content_);
+#endif
+
 	~JsonNumber();
 
 	void show(string offset) const;

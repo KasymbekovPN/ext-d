@@ -138,7 +138,9 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, string * p_na
 	}
 
 	size_t token_idx = 0;
+#ifndef  TASK_0_2_5__1
 	cout << "token make - " << m_path << ": " << token_idx << "/" << m_tokens.size();
+#endif
 	for (auto item : m_tokens) {
 		string name;
 		string pre_name = StringHandler::filter(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' });
@@ -154,7 +156,9 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, string * p_na
 #endif // TASK_0_2_5		
 		*p_name_list_ += name + '\n';
 
+#ifndef  TASK_0_2_5__1
 		cout << '\r' << "token make - " << m_path << ": " << ++token_idx << "/" << m_tokens.size();
+#endif
 	}
 	cout << endl;
 

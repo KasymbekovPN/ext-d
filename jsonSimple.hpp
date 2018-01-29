@@ -16,6 +16,9 @@ class JsonSimple : public JsonBase
 {
 public:
 	JsonSimple(JsonBase::eSimple content_, const string& name_, shared_ptr<ErrorStatus> p_error_);
+#ifdef  TASK_0_2_5__1
+	JsonSimple(const string& name_, JsonBase::eSimple content_);
+#endif
 	~JsonSimple();
 
 	void show(string offset) const;

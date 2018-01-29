@@ -84,6 +84,15 @@ JsonArray::JsonArray(const string & content_, const string & name_, shared_ptr<E
 	}
 }
 
+#ifdef  TASK_0_2_5__1
+JsonArray::JsonArray(const string & name)
+{
+	m_name = name;
+	m_type = JsonBase::eType::array;
+	m_lists.clear();
+}
+#endif
+
 JsonArray::~JsonArray()
 {
 	for (auto p : m_lists) {
@@ -99,6 +108,63 @@ void JsonArray::show(string offset) const
 		i->show(offset + '\t');
 	}
 	cout << offset << "]\n";
+}
+
+void JsonArray::set(vector<string> path_, const string & name_, JsonBase::eType type_, std::variant<string, double, JsonBase::eSimple> arg_)
+{
+	if (0 == path_.size()) {
+		switch (type_) {
+		case JsonBase::eType::array:
+			m_lists.push_back(new JsonArray(name_));
+			break;
+		case JsonBase::eType::number: {
+			double tmp;
+			try {
+				tmp = std::get<double>(arg_);
+			}
+			catch (std::bad_variant_access&) {
+				tmp = 0;
+			}
+			m_lists.push_back(new JsonNumber(name_, tmp));
+		}  break;
+		case JsonBase::eType::object:
+			m_lists.push_back(new JsonObject(name_));
+			break;
+		case JsonBase::eType::simple: {
+			JsonBase::eSimple tmp;
+			try {
+				tmp = std::get<JsonBase::eSimple>(arg_);
+			}
+			catch (std::bad_variant_access&) {
+				tmp = JsonBase::eSimple::simple_null;
+			}
+			m_lists.push_back(new JsonSimple(name_, tmp));
+		}  break;
+		case JsonBase::eType::string: {
+			string tmp;
+			try {
+				tmp = std::get<string>(arg_);
+			}
+			catch (std::bad_variant_access&) {
+				tmp = "";
+			}
+			m_lists.push_back(new JsonString(name_, tmp));
+		}  break;
+		default:
+			break;
+		}
+	}
+	else {
+
+		for (auto iter : m_lists) {
+			if (iter->Name() == path_[0]) {
+				vector<string> new_path;
+				std::copy(path_.begin() + 1, path_.end(), std::inserter(new_path, new_path.begin()));
+				iter->set(new_path, name_, type_, arg_);
+			}
+		}
+
+	}
 }
 
 variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> JsonArray::get(vector<string> path_, eType * type_) const

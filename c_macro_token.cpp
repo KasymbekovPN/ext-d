@@ -67,6 +67,26 @@ void cMacroToken::write(const string & dir_, const string & file_name_, const st
 	//
 
 	string fill_name = dir_ + "\\\\" + file_name_;
+	JsonObject json_object("root");
+	json_object.set({}, "test1", JsonBase::eType::string, std::variant<string, double, JsonBase::eSimple>("Hello"));
+	json_object.set({}, "test2", JsonBase::eType::array, std::variant<string, double, JsonBase::eSimple>());
+	json_object.set({}, "test3", JsonBase::eType::object, std::variant<string, double, JsonBase::eSimple>());
+	json_object.set({}, "test4", JsonBase::eType::number, std::variant<string, double, JsonBase::eSimple>(10));
+	json_object.set({}, "test5", JsonBase::eType::simple, std::variant <string, double, JsonBase::eSimple>(JsonBase::eSimple::simple_true));
+	json_object.set({}, "test6", JsonBase::eType::string, std::variant <string, double, JsonBase::eSimple>("Hello"));
+
+	json_object.set({"test3"}, "test3_1", JsonBase::eType::string, std::variant<string, double, JsonBase::eSimple>("te"));
+	json_object.set({ "test3" }, "test3_2", JsonBase::eType::number, std::variant<string, double, JsonBase::eSimple>(-11));
+	json_object.set({ "test3" }, "test3_3", JsonBase::eType::object, std::variant<string, double, JsonBase::eSimple>());
+	json_object.set({ "test3", "test3_1" }, "test3_1_1", JsonBase::eType::string, std::variant<string, double, JsonBase::eSimple>("te1"));
+
+	json_object.set({"test2"}, "name_1", JsonBase::eType::string, std::variant<string, double, JsonBase::eSimple>("n1"));
+	json_object.set({ "test2" }, "name_2", JsonBase::eType::string, std::variant<string, double, JsonBase::eSimple>("n2"));
+	json_object.set({ "test2" }, "name_3", JsonBase::eType::string, std::variant<string, double, JsonBase::eSimple>("n3"));
+	json_object.set({ "test2" }, "name_4", JsonBase::eType::string, std::variant<string, double, JsonBase::eSimple>("n4"));
+
+
+	json_object.show("");
 	//JsonObject json_object(/*Èìÿ*/);
 
 	//

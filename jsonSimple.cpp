@@ -5,6 +5,15 @@ JsonSimple::JsonSimple(JsonBase::eSimple content_, const string & name_, shared_
 {
 }
 
+#ifdef  TASK_0_2_5__1
+JsonSimple::JsonSimple(const string & name_, JsonBase::eSimple content_)
+{
+	m_name = name_;
+	m_content = content_;
+	m_type = JsonBase::eType::simple;
+}
+#endif
+
 JsonSimple::~JsonSimple()
 {
 }

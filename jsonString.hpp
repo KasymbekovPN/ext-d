@@ -16,6 +16,9 @@ class JsonString : public JsonBase
 {
 public:
 	JsonString(const string& content_, const string& name_, shared_ptr<ErrorStatus> p_error_);
+#ifdef  TASK_0_2_5__1
+	JsonString(const string& name_, const string& content_);
+#endif
 	~JsonString();
 
 	void show(string offset) const;

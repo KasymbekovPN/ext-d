@@ -13,6 +13,15 @@ JsonNumber::JsonNumber(const string & content_, const string & name_, shared_ptr
 	}
 }
 
+#ifdef  TASK_0_2_5__1
+JsonNumber::JsonNumber(const string & name_, double content_)
+{
+	m_name = name_;
+	m_content = content_;
+	m_type = JsonBase::eType::number;
+}
+#endif
+
 JsonNumber::~JsonNumber()
 {
 }

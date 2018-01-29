@@ -22,9 +22,16 @@ class JsonArray : public JsonBase
 {
 public:
 	JsonArray(const string& content_, const string& name_, shared_ptr<ErrorStatus> p_error_);
+#ifdef  TASK_0_2_5__1
+	JsonArray(const string& name);
+#endif
 	~JsonArray();
 
 	void show(string offset) const;
+
+#ifdef TASK_0_2_5__1
+	virtual void set(vector<string> path_, const string& name_, JsonBase::eType type_, std::variant<string, double, JsonBase::eSimple> arg_) override;
+#endif
 
 	variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> get(vector<string> path_, eType * type_) const;
 

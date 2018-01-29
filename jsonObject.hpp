@@ -24,9 +24,22 @@ class JsonObject : public JsonBase
 {
 public:
 	JsonObject(const string& content_, const string& name_, shared_ptr<ErrorStatus> error_);
+#ifdef TASK_0_2_5__1
+	JsonObject(const string& name_);
+#endif
+
 	~JsonObject();
 
 	void show(string offset) const;
+//#ifdef  TASK_0_2_5__1
+//	void push_back(const string& name, const JsonArray& new_item_);
+//	void push_back(const );
+//#endif
+
+#ifdef TASK_0_2_5__1
+	virtual void set(vector<string> path_, const string& name_, JsonBase::eType type_, std::variant<string, double, JsonBase::eSimple> arg_) override;
+#endif
+
 
 	variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> get(vector<string> path_, eType * type_) const;
 
@@ -34,6 +47,11 @@ public:
 	virtual string to_string(const string& offset_) const override;
 	void write(const string& path_, const string& mode_);
 #endif
+
+//#ifdef  TASK_0_2_5__1
+//	template <class T>
+//	void set(vector<string> path_, const T& new_item_);
+//#endif
 
 private:
 
