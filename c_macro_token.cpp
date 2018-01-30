@@ -86,7 +86,8 @@ void cMacroToken::write(const string & dir_, const string & file_name_, const st
 	json_object.set({ "test2" }, "name_4", JsonBase::eType::string, std::variant<string, double, JsonBase::eSimple>("n4"));
 
 
-	json_object.show("");
+	cout << json_object.to_string("", true, false) << endl;
+	//json_object.show("");
 	//JsonObject json_object(/*Èìÿ*/);
 
 	//

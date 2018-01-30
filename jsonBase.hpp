@@ -51,7 +51,7 @@ public:
 #endif
 
 #ifdef  TASK_0_2_5
-	virtual string to_string(const string& offset_) const;
+	virtual string to_string(const string& offset_, bool without_name, bool end_with_comma_) const;
 #endif
 
 	string Name() const;

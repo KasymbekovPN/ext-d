@@ -44,7 +44,7 @@ public:
 	variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> get(vector<string> path_, eType * type_) const;
 
 #ifdef  TASK_0_2_5
-	virtual string to_string(const string& offset_) const override;
+	virtual string to_string(const string& offset_, bool without_name_, bool end_with_comma_) const override;
 	void write(const string& path_, const string& mode_);
 #endif
 

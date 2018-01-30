@@ -34,10 +34,12 @@ void JsonBase::set(vector<string> path_, const string & name_, JsonBase::eType t
 {
 }
 
-string JsonBase::to_string(const string & offset_) const
+#ifdef  TASK_0_2_5
+string JsonBase::to_string(const string & offset_, bool without_name_, bool end_with_comma_) const
 {
 	return string();
 }
+#endif
 
 string JsonBase::Name() const
 {

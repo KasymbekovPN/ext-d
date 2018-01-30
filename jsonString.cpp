@@ -34,8 +34,15 @@ variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> JsonString::get
 }
 
 #ifdef  TASK_0_2_5
-string JsonString::to_string(const string & offset_) const
+string JsonString::to_string(const string & offset_, bool without_name_, bool end_with_comma_) const
 {
-	return string();
+	string res = offset_;
+	if (false == without_name_) {
+		res += "\"" + m_name + "\" : ";
+	}
+	res += "\"" + m_content + "\"";
+	res += end_with_comma_ ? ",\n" : "\n";
+
+	return res;
 }
 #endif

@@ -33,8 +33,30 @@ variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> JsonSimple::get
 }
 
 #ifdef  TASK_0_2_5
-string JsonSimple::to_string(const string & offset_) const
+string JsonSimple::to_string(const string & offset_, bool without_name_, bool end_with_comma_) const
 {
-	return string();
+	string res = offset_;
+	if (false == without_name_) {
+		res += "\"" + m_name + "\" : ";
+	}
+
+	switch (m_content)
+	{
+	case JsonBase::eSimple::simple_false:
+		res += "false";
+		break;
+	case JsonBase::eSimple::simple_true:
+		res += "true";
+		break;
+	case JsonBase::eSimple::simple_null:
+	default:
+		res += "null";
+		break;
+	}
+
+	res += end_with_comma_ ? ",\n" : "\n";
+
+	return res;
+
 }
 #endif

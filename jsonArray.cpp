@@ -192,8 +192,19 @@ variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> JsonArray::get(
 }
 
 #ifdef TASK_0_2_5
-string JsonArray::to_string(const string & offset_) const
+string JsonArray::to_string(const string & offset_, bool without_name_, bool end_with_comma_) const
 {
-	return string();
+	string res = offset_;
+	if (false == without_name_) {
+		res +="\"" + m_name + "\" : ";
+	}
+	res += "[\n";
+	for (size_t i = 0; i < m_lists.size(); ++i) {
+		res += m_lists[i]->to_string(offset_ + '\t', true, i < m_lists.size() - 1);
+	}
+
+	res += offset_ + (end_with_comma_ ? "],\n" : "]\n");
+
+	return res;
 }
 #endif // TASK_0_2_5
