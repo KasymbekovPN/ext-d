@@ -68,47 +68,32 @@ void cMacroToken::write(const string & dir_, const string & file_name_, const st
 
 	string fill_name = dir_ + "\\\\" + file_name_;
 	JsonObject json_object("root");
-	json_object.set({}, "test1", JsonBase::eType::string, std::variant<string, double, JsonBase::eSimple>("Hello"));
-	json_object.set({}, "test2", JsonBase::eType::array, std::variant<string, double, JsonBase::eSimple>());
-	json_object.set({}, "test3", JsonBase::eType::object, std::variant<string, double, JsonBase::eSimple>());
-	json_object.set({}, "test4", JsonBase::eType::number, std::variant<string, double, JsonBase::eSimple>(10));
-	json_object.set({}, "test5", JsonBase::eType::simple, std::variant <string, double, JsonBase::eSimple>(JsonBase::eSimple::simple_true));
-	json_object.set({}, "test6", JsonBase::eType::string, std::variant <string, double, JsonBase::eSimple>("Hello"));
+	json_object.set({}, "cells", JsonBase::eType::array, variant<string, double, JsonBase::eSimple>());
 
-	json_object.set({"test3"}, "test3_1", JsonBase::eType::string, std::variant<string, double, JsonBase::eSimple>("te"));
-	json_object.set({ "test3" }, "test3_2", JsonBase::eType::number, std::variant<string, double, JsonBase::eSimple>(-11));
-	json_object.set({ "test3" }, "test3_3", JsonBase::eType::object, std::variant<string, double, JsonBase::eSimple>());
-	json_object.set({ "test3", "test3_1" }, "test3_1_1", JsonBase::eType::string, std::variant<string, double, JsonBase::eSimple>("te1"));
+	json_object.set({"cells"}, "cell_0", JsonObject::eType::object, variant<string, double, JsonBase::eSimple>());
+	json_object.set({ "cells", "cell_0" }, "cell_type", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("markdown"));
+	json_object.set({"cells", "cell_0"}, "metadata", JsonBase::eType::object, variant<string, double, JsonBase::eSimple>());
+	json_object.set({ "cells", "cell_0" }, "source", JsonBase::eType::array, variant<string, double, JsonBase::eSimple>());
+	json_object.set({ "cells", "cell_0", "source" }, "source_0", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("### Общее\\n"));
+	json_object.set({ "cells", "cell_0", "source" }, "source_1", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("\\n"));
+	json_object.set({ "cells", "cell_0", "source" }, "source_2", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("Здесь описание"));
 
-	json_object.set({"test2"}, "name_1", JsonBase::eType::string, std::variant<string, double, JsonBase::eSimple>("n1"));
-	json_object.set({ "test2" }, "name_2", JsonBase::eType::string, std::variant<string, double, JsonBase::eSimple>("n2"));
-	json_object.set({ "test2" }, "name_3", JsonBase::eType::string, std::variant<string, double, JsonBase::eSimple>("n3"));
-	json_object.set({ "test2" }, "name_4", JsonBase::eType::string, std::variant<string, double, JsonBase::eSimple>("n4"));
+	json_object.set({ "cells" }, "cell_1", JsonObject::eType::object, variant<string, double, JsonBase::eSimple>());
+	json_object.set({ "cells", "cell_1" }, "cell_type", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("markdown"));
+	json_object.set({ "cells", "cell_1" }, "metadata", JsonBase::eType::object, variant<string, double, JsonBase::eSimple>());
+	json_object.set({ "cells", "cell_1" }, "source", JsonBase::eType::array, variant<string, double, JsonBase::eSimple>());
+	json_object.set({ "cells", "cell_1", "source" }, "source_0", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("```c\\n"));
+	json_object.set({ "cells", "cell_1", "source" }, "source_1", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("#define TEST 1000\\n"));
+	json_object.set({ "cells", "cell_1", "source" }, "source_2", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("\\n"));
+	json_object.set({ "cells", "cell_1", "source" }, "source_3", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("int main(){\\n"));
+	json_object.set({ "cells", "cell_1", "source" }, "source_4", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("\\n"));
+	json_object.set({ "cells", "cell_1", "source" }, "source_5", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("    // ....\\n"));
+	json_object.set({ "cells", "cell_1", "source" }, "source_6", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("\\n"));
+	json_object.set({ "cells", "cell_1", "source" }, "source_7", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("    return 0;\\n"));
+	json_object.set({ "cells", "cell_1", "source" }, "source_8", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("}\\n"));
+	json_object.set({ "cells", "cell_1", "source" }, "source_9", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("```"));
 
-
-	cout << json_object.to_string("", true, false) << endl;
-	//json_object.show("");
-	//JsonObject json_object(/*Имя*/);
-
-	//
-	// todo: заполняем json_object
-	//
-	
-
-	//json_object.write(file_name_, "ipynb");
-
-
-
-	//if (!std::experimental::filesystem::exists(fill_name)) {
-	//	std::ofstream fout(fill_name);
-	//	fout << ".. ext-d-state:: false" << endl << endl
-	//		<< ".. ext-d-version:: " << PROJECT_VERSION << endl << endl
-	//		<< ".. ext-d-token-type:: " << cBaseToken::tokenTypeNames[m_type] << endl << endl
-	//		<< ".. ext-d-paragraph:: Общее" << endl << endl << endl
-	//		<< ".. ext-d-code-block:: c-lang" << endl << endl
-	//		<< getRaw() << endl;
-	//	fout.close();
-	//}
+	json_object.write("C:/projects/external-description/_build_vs/Release/test.ipynb", "ipynb");
 
 }
 #else

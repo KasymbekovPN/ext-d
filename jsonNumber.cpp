@@ -47,7 +47,22 @@ string JsonNumber::to_string(const string & offset_, bool without_name_, bool en
 	if (false == without_name_) {
 		res += "\"" + m_name + "\" : ";
 	}
-	res += StringHandler::replace_all(std::to_string(m_content), ',', '.') + (end_with_comma_ ? ",\n" : "\n");
+
+	string number = std::to_string(m_content);
+	size_t find = number.find(',');
+
+	if (string::npos != find) {
+		if (0 == m_content - int(m_content)) {
+			number = number.substr(0, find);
+		}
+		else {
+			string::reverse_iterator it = number.rbegin();
+			for (; it != number.rend() && ('0' == *it); ++it);
+			number.erase(it.base(), number.end());
+		}
+	}
+
+	res += StringHandler::replace_all(number, ',', '.') + (end_with_comma_ ? ",\n" : "\n");
 
 	return res;
 }

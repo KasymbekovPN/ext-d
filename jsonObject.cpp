@@ -209,7 +209,7 @@ string JsonObject::to_string(const string & offset_, bool without_name_, bool en
 {
 	string res = offset_;
 	if (false == without_name_) {
-		res += "\"" + m_name + "\' : ";
+		res += "\"" + m_name + "\" : ";
 	}
 	res += "{\n";
 	for (size_t i = 0; i < m_lists.size(); ++i) {
@@ -225,5 +225,27 @@ string JsonObject::to_string(const string & offset_, bool without_name_, bool en
 
 void JsonObject::write(const string & path_, const string & mode_)
 {
+	if ("ipynb" == mode_) {
+		JsonObject tmp_json_object = *this;
+		tmp_json_object.set({}, "metadata", JsonBase::eType::object, variant<string, double, JsonBase::eSimple>());
+		tmp_json_object.set({"metadata"}, "kernelspec", JsonBase::eType::object, variant<string, double, JsonBase::eSimple>());
+		tmp_json_object.set({ "metadata", "kernelspec" }, "display_name", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("Python 3"));
+		tmp_json_object.set({ "metadata", "kernelspec" }, "language", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("python"));
+		tmp_json_object.set({ "metadata", "kernelspec" }, "name", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("python3"));
+		tmp_json_object.set({ "metadata" }, "language_info", JsonBase::eType::object, variant<string, double, JsonBase::eSimple>());
+		tmp_json_object.set({ "metadata", "language_info"}, "codemirror_mode", JsonBase::eType::object, variant<string, double, JsonBase::eSimple>());
+		tmp_json_object.set({ "metadata", "language_info","codemirror_mode" }, "name", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("ipython"));
+		tmp_json_object.set({ "metadata", "language_info","codemirror_mode" }, "version", JsonBase::eType::number, variant<string, double, JsonBase::eSimple>(3));
+		tmp_json_object.set({ "metadata", "language_info" }, "file_extension", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>(".py"));
+		tmp_json_object.set({ "metadata", "language_info" }, "mimetype", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("text/x-python"));
+		tmp_json_object.set({ "metadata", "language_info" }, "name", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("python"));
+		tmp_json_object.set({ "metadata", "language_info" }, "nbconvert_exporter", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("python"));
+		tmp_json_object.set({ "metadata", "language_info" }, "pygments_lexer", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("ipython3"));
+		tmp_json_object.set({ "metadata", "language_info" }, "version", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("3.6.3"));
+		tmp_json_object.set({}, "nbformat", JsonBase::eType::number, variant<string, double, JsonBase::eSimple>(4));
+		tmp_json_object.set({}, "nbformat_mirror", JsonBase::eType::number, variant<string, double, JsonBase::eSimple>(2));
+
+		cout << tmp_json_object.to_string("", true, false) << endl;
+	}
 }
 #endif
