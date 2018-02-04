@@ -1,5 +1,7 @@
 #pragma once
 
+#include "config.h"
+
 #include <string>
 #include <vector>
 #include <iostream>
@@ -8,6 +10,7 @@ using std::string;
 using std::vector;
 using std::cout;
 using std::endl;
+using std::wstring;
 
 class StringHandler
 {
@@ -33,10 +36,85 @@ public:
 	static const int flagsHyphen	= 0b1000000000;
 	static const int flagAll		= 0b1111111111;
 
-	static string filter(const string&, int);
+
+	static string filt(const string&, int);
+#ifndef  TASK_0_2_5__4
 	static string filter(const string&, FBE, vector<char>);
+#endif
 	static vector<string> split(const string&, char);
 	static vector<string> space(const string& line);
 	static vector<string> file2line(const string& file, bool replace_tab);
+#ifndef  TASK_0_2_5__4
 	static string replace_all(const string& str_, char orig_, char new_);
+#endif
+
+	template <class T, class C> 
+	static T filter(const T& line, FBE, vector<C>);
+
+	template <class T, class C>
+	static T replace_all(const T& str_, C orig_, C new_);
 };
+
+template<class T, class C>
+inline T StringHandler::filter(const T & line, FBE mode, vector<C> ignore)
+{
+
+	if (FBE::all == mode) {
+
+		T result;
+		
+		for (auto ch : line) {
+			int flag = 0;
+			for (auto ign_ch : ignore) {
+				flag += int(ign_ch == ch);
+			}
+
+			if (0 == flag) {
+				result += ch;
+			}
+		}
+
+		return result;
+	}
+
+	bool was_start = false;
+	size_t start = 0;
+	size_t stop = line.size();
+
+	int i = 0;
+	for (; i < line.size(); ++i) {
+
+		int flag = 0;
+		for (auto ign_ch : ignore) {
+			flag += int(ign_ch == line[i]);
+		}
+
+		if (0 == flag) {
+
+			if (FBE::begin == mode || FBE::begin_and_end == mode) {
+				if (!was_start) {
+					was_start = true;
+					start = i;
+				}
+			}
+
+			if (FBE::end == mode || FBE::begin_and_end == mode) {
+				stop = i;
+			}
+		}
+	}
+
+	return line.substr(start, stop - start + 1);
+}
+
+template<class T, class C>
+inline T StringHandler::replace_all(const T & str_, C orig_, C new_)
+{
+	T res;
+
+	for (C ch : str_) {
+		res += ch == orig_ ? new_ : ch;
+	}
+
+	return res;
+}

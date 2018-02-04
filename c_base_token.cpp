@@ -13,7 +13,7 @@ cBaseToken::cBaseToken(TokenType type_, const string& raw_): m_type(type_), m_ra
 	m_const(false), m_extern(false), m_volatile(false) 
 {
 
-	string cln_raw = StringHandler::filter(raw_, StringHandler::FBE::all, {' ', '\t', '\n', '\\'});
+	string cln_raw = StringHandler::filter<string, char>(raw_, StringHandler::FBE::all, {' ', '\t', '\n', '\\'});
 
 	std::hash<string> str_hash_fn;
 	std::stringstream stream;
@@ -41,7 +41,7 @@ void cBaseToken::show(int offset_) const
 
 void cBaseToken::setName(const string & name_)
 {
-	m_name = StringHandler::filter(name_, StringHandler::FBE::begin_and_end, {' ', '\t', '\n'});
+	m_name = StringHandler::filter<string, char>(name_, StringHandler::FBE::begin_and_end, {' ', '\t', '\n'});
 }
 
 cBaseToken::TokenType cBaseToken::getType() const

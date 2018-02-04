@@ -10,6 +10,7 @@
 #include <sstream>
 #include <iterator>
 #include <memory>
+#include <codecvt>
 
 using std::string;
 using std::cout;
@@ -18,6 +19,7 @@ using std::ifstream;
 using std::ofstream;
 using std::vector;
 using std::stringstream;
+using std::wstring;
 
 class FileHandler
 {
@@ -26,6 +28,9 @@ public:
 	~FileHandler();
 
 	const string& getAsString() const;
+#ifdef  TASK_0_2_5__4
+	/*const wstring& getAsWString() const;*/
+#endif
 	vector<string> getAsLineList() const;
 	bool isExist() const;
 	char get();
@@ -39,6 +44,9 @@ private:
 
 	stringstream m_ss;
 	string m_file;
+#ifdef  TASK_0_2_5__4
+	//wstring m_wfile;
+#endif
 	string m_path;
 	bool m_file_exist;
 	int m_error_status;

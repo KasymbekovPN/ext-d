@@ -14,9 +14,15 @@ cFuncDef::cFuncDef(const string & buffer): cBaseToken(cBaseToken::TokenType::fun
 		if (2 <= first_size) {
 
 			setName(first[first_size - 1]);
+#ifdef  TASK_0_2_5__4
+			m_dataType = StringHandler::filter<string, char>(
+				first[first_size - 2], StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' }
+			);
+#else
 			m_dataType = StringHandler::filter(
 				first[first_size - 2], StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' }
 			);
+#endif
 
 			for (int i = 0; i < first_size - 2; ++i) {
 				if ("static" == first[i]) {
@@ -34,7 +40,11 @@ cFuncDef::cFuncDef(const string & buffer): cBaseToken(cBaseToken::TokenType::fun
 		auto second = StringHandler::split(buffer.substr(brace_begin_found + 1, brace_end_found - brace_begin_found - 1), ',');
 		m_args.clear();
 		for (int i = 0; i < second.size(); ++i) {
+#ifdef  TASK_0_2_5__4
+			m_args += StringHandler::filter<string, char>(second[i], StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
+#else
 			m_args += StringHandler::filter(second[i], StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
+#endif
 			if (i < second.size() - 1) {
 				m_args += ',';
 			}
@@ -56,7 +66,11 @@ void cFuncDef::show(int offset_) const
 	cBaseToken::show(offset_);
 	cout << cBaseToken::get_offset_string(offset_) << "Data Type : " << m_dataType << endl;
 	cout << cBaseToken::get_offset_string(offset_) << "Args : " << (m_args.empty() ? "<none>" : m_args) << endl;
+#ifdef  TASK_0_2_5__4
+	cout << "Value : " << endl << StringHandler::filter<string, char>(m_value, StringHandler::FBE::all, { ' ', '\n', '\t', '\\' }) << endl;
+#else
 	cout << "Value : " << endl << StringHandler::filter(m_value, StringHandler::FBE::all, { ' ', '\n', '\t', '\\' }) << endl;
+#endif
 }
 
 #ifdef  TASK_0_2_5

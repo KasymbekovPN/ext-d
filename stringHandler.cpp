@@ -1,6 +1,6 @@
 #include "stringHandler.h"
 
-string StringHandler::filter(const string & line, int flags)
+string StringHandler::filt(const string & line, int flags)
 {
 
 	string result;
@@ -65,6 +65,7 @@ string StringHandler::filter(const string & line, int flags)
 	return result;
 }
 
+#ifndef  TASK_0_2_5__4
 string StringHandler::filter(const string & line, FBE mode, vector<char> ignore)
 {
 
@@ -114,6 +115,7 @@ string StringHandler::filter(const string & line, FBE mode, vector<char> ignore)
 
 	return line.substr(start, stop - start + 1);
 }
+#endif
 
 vector<string> StringHandler::split(const string & line, char delit)
 {
@@ -175,6 +177,7 @@ vector<string> StringHandler::file2line(const string & file, bool replace_tab)
 	return result;
 }
 
+#ifndef  TASK_0_2_5__4
 string StringHandler::replace_all(const string & str_, char orig_, char new_)
 {
 	string res;
@@ -185,3 +188,4 @@ string StringHandler::replace_all(const string & str_, char orig_, char new_)
 
 	return res;
 }
+#endif

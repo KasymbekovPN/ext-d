@@ -9,9 +9,15 @@ cStructToken::cStructToken(const string & buffer): cBaseToken(cBaseToken::TokenT
 	size_t found_header = buffer.find_first_of('{');
 	size_t found_footer = buffer.find_last_of('}');
 
+#ifdef  TASK_0_2_5__4
+	string header = StringHandler::filter<string, char>(buffer.substr(0, found_header), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
+	string inner = StringHandler::filter<string, char>(buffer.substr(found_header + 1, found_footer - found_header - 1), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
+	string footer = StringHandler::filter<string, char>(buffer.substr(found_footer + 1), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
+#else
 	string header = StringHandler::filter(buffer.substr(0, found_header), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
 	string inner = StringHandler::filter(buffer.substr(found_header + 1, found_footer - found_header - 1), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
 	string footer = StringHandler::filter(buffer.substr(found_footer + 1), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
+#endif
 
 	setName("");
 

@@ -16,7 +16,7 @@ cDefVar::cDefVar(const string& buffer): cBaseToken(cBaseToken::TokenType::def_va
 	// 
 	auto spl = StringHandler::split(buffer, '=');
 	if (1 < spl.size()) {
-		m_initValue = StringHandler::filter(spl[1], StringHandler::FBE::all, {' ', '\t', '\n', '\\'});
+		m_initValue = StringHandler::filter<string, char>(spl[1], StringHandler::FBE::all, {' ', '\t', '\n', '\\'});
 	}
 
 	size_t first_begin_round_brack = spl[0].find_first_of('(');
@@ -46,7 +46,7 @@ cDefVar::cDefVar(const string& buffer): cBaseToken(cBaseToken::TokenType::def_va
 		}
 
 		var_is_pointer = string::npos != header.find('*');
-		header = StringHandler::filter(header, StringHandler::FBE::all, {'*'});
+		header = StringHandler::filter<string, char>(header, StringHandler::FBE::all, {'*'});
 
 		auto head_spl = StringHandler::space(header);
 
@@ -103,19 +103,19 @@ cDefVar::cDefVar(const string& buffer): cBaseToken(cBaseToken::TokenType::def_va
 		//
 		size_t sqr_found = pre_name.find('[');
 		if (string::npos != sqr_found) {
-			setName(StringHandler::filter(pre_name.substr(0, sqr_found), StringHandler::FBE::all, {'*', ' ', '\t', '\n', '\\'}));
+			setName(StringHandler::filter<string, char>(pre_name.substr(0, sqr_found), StringHandler::FBE::all, {'*', ' ', '\t', '\n', '\\'}));
 			m_array = true;
-			m_array_size = StringHandler::filter(
+			m_array_size = StringHandler::filter<string, char>(
 				pre_name.substr(sqr_found), StringHandler::FBE::begin_and_end, {' ', '\t', '\n', '\\'}
 			);
 		}
 		else {
-			setName(StringHandler::filter(pre_name, StringHandler::FBE::all, { '*', ' ', '\t', '\n', '\\' }));
+			setName(StringHandler::filter<string, char>(pre_name, StringHandler::FBE::all, { '*', ' ', '\t', '\n', '\\' }));
 		}
 
 		if (string::npos != header.find('*')) {
 			ret_is_pointer = true;
-			header = StringHandler::filter(header, StringHandler::FBE::all, {'*'});
+			header = StringHandler::filter<string, char>(header, StringHandler::FBE::all, {'*'});
 		}
 
 		auto head_spl = StringHandler::space(header);

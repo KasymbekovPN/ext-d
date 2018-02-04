@@ -6,7 +6,11 @@ cEnumToken::cEnumToken(const string& buffer) : cBaseToken(cBaseToken::TokenType:
 	size_t stop = buffer.find('}');
 
 	if (string::npos != start && string::npos != stop && start < stop) {		
+#ifdef  TASK_0_2_5__4
+		setName(StringHandler::filter<string, char>(buffer.substr(stop + 1), StringHandler::FBE::begin_and_end, { ' ', '\n', '\t', '\\' }));
+#else
 		setName(StringHandler::filter(buffer.substr(stop + 1), StringHandler::FBE::begin_and_end, { ' ', '\n', '\t', '\\' }));
+#endif
 
 		string tmp = buffer.substr(start + 1, stop - start - 1);
 		vector<string> tmps = StringHandler::split(tmp, ',');
@@ -15,17 +19,28 @@ cEnumToken::cEnumToken(const string& buffer) : cBaseToken(cBaseToken::TokenType:
 
 		for (auto line : tmps) {
 
+#ifdef TASK_0_2_5__4
+			if (StringHandler::filter<string, char>(line, StringHandler::FBE::all, { ' ', '\t', '\n', '\\' }).empty()) {
+				continue;
+		}
+#else
 			if (StringHandler::filter(line, StringHandler::FBE::all, { ' ', '\t', '\n', '\\' }).empty()) {
 				continue;
 			}
+#endif
 
 			vector<string> chank = StringHandler::split(line, '=');
 			if (2 > chank.size()) {
 				chank.push_back("");
 			}
 
+#ifdef  TASK_0_2_5__4
+			string enumItemName = StringHandler::filter<string, char>(chank[0], StringHandler::FBE::all, { ' ', '\n', '\t', '\\' });
+			string enumItemValue = StringHandler::filter<string, char>(chank[1], StringHandler::FBE::all, { ' ', '\n', '\t', '\\' });
+#else
 			string enumItemName  = StringHandler::filter(chank[0], StringHandler::FBE::all, { ' ', '\n', '\t', '\\' });
 			string enumItemValue = StringHandler::filter(chank[1], StringHandler::FBE::all, { ' ', '\n', '\t', '\\' });
+#endif
 
 			m_value.push_back({enumItemName, enumItemValue});
 		}

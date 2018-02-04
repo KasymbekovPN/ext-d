@@ -2,6 +2,178 @@
 
 const int Target::cmd_size[Target::number_of_cmd] = {2, 2};
 
+#ifdef  TASK_0_2_5__4
+Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<ErrorStatus> p_error_)
+{
+
+	//string ws2s(const std::wstring& wstr)
+	//{
+	//	using convert_typeX = std::codecvt_utf8<wchar_t>;
+	//	std::wstring_convert<convert_typeX, wchar_t> converterX;
+	//	return converterX.to_bytes(wstr);
+	//}
+
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+	//string name = converter.to_bytes(name_);
+	//string path = converter.to_bytes(path_);
+
+	//Target(name, path, p_error_);
+
+
+	m_fileTree = nullptr;
+
+	p_error = p_error_;
+	m_name = name_;
+	//m_path = path_;
+	m_path = converter.to_bytes(path_);
+
+	FileHandler file(m_path);
+	if (!file.isExist()) {
+		p_error->set(ErrorStatus::error::json_extdlists_no_exists, true);
+		return;
+	}
+
+	string tmp = file.getAsString();
+	//std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	wstring wtmp = converter.from_bytes(tmp);
+
+	JsonObject json_object(wtmp, L"root", p_error_);
+	JsonBase::eType type;
+
+	auto source_dir = json_object.get({ L"source-dir" }, &type);
+	try {
+		m_source_dir = converter.to_bytes(
+			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(source_dir), L'/', L'\\')
+		);
+		//m_source_dir = StringHandler::replace_all(std::get<string>(source_dir), '/', '\\');
+	}
+	catch (const std::bad_variant_access&) {
+		p_error->set(ErrorStatus::error::json_extdlists_source_dir_inv, true);
+	}
+
+	auto out_dir = json_object.get({ L"out-dir" }, &type);
+	try
+	{
+		m_output_dir = converter.to_bytes(
+			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(out_dir), L'/', L'\\')
+		);
+		//m_output_dir = StringHandler::replace_all(std::get<string>(out_dir), '/', '\\');
+	}
+	catch (const std::bad_variant_access&)
+	{
+		p_error->set(ErrorStatus::error::json_extdlists_out_dir_inv, true);
+	}
+
+	auto lang = json_object.get({ L"lang" }, &type);
+	string supp_lang;
+	try
+	{
+		supp_lang = converter.to_bytes(
+			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(lang), '/', '\\')
+		);
+		//supp_lang = StringHandler::replace_all(std::get<string>(lang), '/', '\\');
+	}
+	catch (const std::bad_variant_access&)
+	{
+		p_error->set(ErrorStatus::error::json_extdlists_lang_inv, true);
+	}
+
+	auto o_number_unhand_files = json_object.get({ L"unhandled", L"files", L"number" }, &type);
+	size_t number_unhand_files = 0;
+	try {
+		double tmp = std::get<double>(o_number_unhand_files);
+		number_unhand_files = tmp < 0 ? 0 : size_t(tmp);
+	}
+	catch (std::bad_variant_access&) {
+		number_unhand_files = 0;
+		p_error->set(ErrorStatus::error::json_extdlists_inv_num_unhand_files, true);
+	}
+
+	vector<string> unhand_files;
+	for (size_t i = 0; i < number_unhand_files; ++i) {
+		auto o_unhand_files = json_object.get({ L"unhandled", L"files", L"names", L"names_" + std::to_wstring(i) }, &type);
+		try {
+			unhand_files.push_back(converter.to_bytes(
+				StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_unhand_files), L'/', L'\\')
+			));
+			//unhand_files.push_back(StringHandler::replace_all(std::get<string>(o_unhand_files), '/', '\\'));
+		}
+		catch (std::bad_variant_access&) {
+			unhand_files.clear();
+			p_error->set(ErrorStatus::error::json_extdlists_inv_unhand_files, true);
+			break;
+		}
+	}
+
+	auto o_number_unhand_dir = json_object.get({ L"unhandled", L"directory", L"number" }, &type);
+	size_t number_unhand_directory = 0;
+	try {
+		double tmp = std::get<double>(o_number_unhand_dir);
+		number_unhand_directory = tmp < 0 ? 0 : size_t(tmp);
+	}
+	catch (std::bad_variant_access&) {
+		number_unhand_directory = 0;
+		p_error->set(ErrorStatus::error::json_extdlists_inv_num_unhand_dir, true);
+	}
+
+	vector<string> unhand_dir;
+	for (size_t i = 0; i < number_unhand_directory; ++i) {
+		auto o_unhand_directory = json_object.get({ L"unhandled", L"directory", L"names", L"names_" + std::to_wstring(i) }, &type);
+		try {
+			unhand_dir.push_back(converter.to_bytes(
+				StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_unhand_directory), L'/', L'\\')
+			));
+			//unhand_dir.push_back(StringHandler::replace_all(std::get<string>(o_unhand_directory), '/', '\\'));
+		}
+		catch (std::bad_variant_access&) {
+			unhand_dir.clear();
+			p_error->set(ErrorStatus::error::json_extdlists_inv_unhand_dir, true);
+			break;
+		}
+	}
+
+	auto o_tokens_relative = json_object.get({ L"tokens", L"relative" }, &type);
+	JsonBase::eSimple tokens_relative;
+	try {
+		tokens_relative = std::get<JsonBase::eSimple>(o_tokens_relative);
+	}
+	catch (std::bad_variant_access&) {
+		p_error->set(ErrorStatus::error::json_extdlists_inv_tokens_rel, true);
+	}
+
+	auto o_tokens_path = json_object.get({ L"tokens", L"path" }, &type);
+	string tokens_path;
+	try {
+		tokens_path = converter.to_bytes(
+			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_tokens_path), L'/', L'\\')
+		);
+		//tokens_path = StringHandler::replace_all(std::get<string>(o_tokens_path), '/', '\\');
+	}
+	catch (std::bad_variant_access&) {
+		p_error->set(ErrorStatus::error::json_extdlists_inv_tokens_path, true);
+	}
+
+	if (0 == p_error->get()) {
+
+		if (JsonBase::eSimple::simple_true == tokens_relative) {
+			m_tokens_output = m_output_dir + tokens_path;
+		}
+		else {
+			m_tokens_output = tokens_path;
+		}
+
+		if (!std::experimental::filesystem::exists(m_source_dir)) {
+			p_error->set(ErrorStatus::error::target_sourceDirNoExists, true);
+		}
+
+		if (!std::experimental::filesystem::exists(m_output_dir)) {
+			p_error->set(ErrorStatus::error::target_outputDirNoExists, true);
+		}
+
+		m_fileTree = new FileTree(m_source_dir, p_error, supp_lang, unhand_files, unhand_dir);
+	}
+}
+#else
 Target::Target(const string & name_, const string& path_, std::shared_ptr<ErrorStatus> p_error_)
 {
 
@@ -135,6 +307,7 @@ Target::Target(const string & name_, const string& path_, std::shared_ptr<ErrorS
 		m_fileTree = new FileTree(m_source_dir, p_error, supp_lang, unhand_files, unhand_dir);
 	}
 }
+#endif
 
 Target::~Target()
 {
@@ -143,9 +316,24 @@ Target::~Target()
 	}
 }
 
+wstring Target::getWName() const
+{
+	//using convert_typeX = std::codecvt_utf8<wchar_t>;
+	//std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+	//return converterX.from_bytes(str);
+
+	//std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+	//return converter.from_bytes(m_name);
+
+	return m_name;
+}
+
 string Target::getName() const
 {
-	return m_name;
+
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+	return converter.to_bytes(m_name);
 }
 
 string Target::getPath() const
@@ -161,6 +349,18 @@ bool Target::isExist() const
 void Target::toConsole() const
 {
 
+#ifdef  TASK_0_2_5__4
+	std::wcout << endl;
+	std::wcout << L"Target Name\t\t : " << m_name << endl;
+	std::wcout << L"Error Status\t\t : " << p_error->get() << endl;
+
+	if (!p_error->get()) {
+		cout << L"Param Source Dir\t : " << m_source_dir << endl;
+		cout << "Param Output Dir\t : " << m_output_dir << endl;
+	}
+
+	cout << endl;
+#else
 	cout << endl;
 	cout << "Target Name\t\t : " << m_name << endl;
 	cout << "Error Status\t\t : " << p_error->get() << endl;
@@ -171,6 +371,7 @@ void Target::toConsole() const
 	}
 
 	cout << endl;
+#endif
 }
 
 void Target::run(const string& flag_) const
@@ -203,7 +404,6 @@ void Target::run(const string& flag_) const
 	else {
 		p_error->set(ErrorStatus::error::target_invalidFlag, true);
 	}
-
 }
 
 void Target::make_source_out(std::shared_ptr<vector<string>> res) const
@@ -303,7 +503,6 @@ void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 
 		bool add_to_vector = true;
 		for (auto token : tGenerators) {
-
 			if (token->equal(*p_file_name)) {
 				add_to_vector = false;
 				break;
@@ -320,7 +519,6 @@ void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 	for (auto t : tGenerators) {
 		t->parse(m_source_dir.size(), m_tokens_output, &to_file);
 	}
-
 	ofstream fTokenList(m_tokens_output + "\\_token_list.txt");
 	fTokenList << to_file;
 	fTokenList.close();

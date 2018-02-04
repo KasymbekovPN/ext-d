@@ -60,7 +60,11 @@ void TokenGenerator::parse(size_t offset_, const string& outdir_)
 	cout <<"token make - " << m_path << ": " << token_idx << "/" << m_tokens.size();
 	for (auto item : m_tokens) {
 		string name;
+#ifdef  TASK_0_2_5__4
+		string pre_name = StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' });
+#else
 		string pre_name = StringHandler::filter(m_path.substr(offset_), StringHandler::FBE::begin, {'\\'});
+#endif
 		auto spl = StringHandler::split(pre_name, '\\');
 		for (size_t i = 0; i < spl.size(); ++i) {
 			name += spl[i] + "-";
@@ -101,7 +105,11 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, bool start, b
 	cout << "token make - " << m_path << ": " << token_idx << "/" << m_tokens.size();
 	for (auto item : m_tokens) {
 		string name;
+#ifdef  TASK_0_2_5__4
+		string pre_name = StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' });
+#else
 		string pre_name = StringHandler::filter(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' });
+#endif
 		auto spl = StringHandler::split(pre_name, '\\');
 		for (size_t i = 0; i < spl.size(); ++i) {
 			name += spl[i] + "-";
@@ -141,9 +149,15 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, string * p_na
 #ifndef  TASK_0_2_5__1
 	cout << "token make - " << m_path << ": " << token_idx << "/" << m_tokens.size();
 #endif
+
 	for (auto item : m_tokens) {
 		string name;
+#ifdef  TASK_0_2_5__4
+		string pre_name = StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' });
+#else
 		string pre_name = StringHandler::filter(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' });
+#endif
+
 		auto spl = StringHandler::split(pre_name, '\\');
 		for (size_t i = 0; i < spl.size(); ++i) {
 			name += spl[i] + "-";
@@ -161,7 +175,6 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, string * p_na
 #endif
 	}
 	cout << endl;
-
 }
 
 void TokenGenerator::show()
