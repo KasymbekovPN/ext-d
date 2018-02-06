@@ -42,6 +42,9 @@ public:
 	TokenType getType() const;
 	string getName() const;
 	string getRaw() const;
+#ifdef  TASK_0_2_5__6
+	vector<string> get_raw_Lines(bool line_feed_) const;
+#endif
 	string getHash() const;
 
 	void setStatic(bool value_);

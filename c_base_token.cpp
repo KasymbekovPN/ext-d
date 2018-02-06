@@ -59,6 +59,22 @@ string cBaseToken::getRaw() const
 	return m_raw;
 }
 
+vector<string> cBaseToken::get_raw_Lines(bool line_feed_) const
+{
+
+	auto tmp = StringHandler::split(StringHandler::tab2space<string, char>(m_raw, 4), '\n');
+	if (false == line_feed_) {
+		return tmp;
+	}
+
+	vector<string> res;
+	for (auto item : tmp) {
+		res.push_back(item + '\n');
+	}
+
+	return res;
+}
+
 string cBaseToken::getHash() const
 {
 	return m_hash;

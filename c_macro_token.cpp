@@ -69,13 +69,14 @@ void cMacroToken::show(int offset_) const
 void cMacroToken::write(const string & dir_, const string & file_name_, const string & mode_)
 {
 	cBaseToken::write(dir_, file_name_, mode_);
-	//cout << "macro" << endl;
 
-	//
-	// todo: запись *.ipynb через json_object
-	//
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
 
+#ifdef  TASK_0_2_5__5
+	string fill_name = dir_ + "\\" + file_name_;
+#else
 	string fill_name = dir_ + "\\\\" + file_name_;
+#endif	
 #ifdef  TASK_0_2_5__4
 
 	JsonObject json_object(L"root");
@@ -87,21 +88,19 @@ void cMacroToken::write(const string & dir_, const string & file_name_, const st
 	json_object.set({ L"cells", L"cell_0" }, L"source", JsonBase::eType::array, variant<wstring, double, JsonBase::eSimple>());
 	json_object.set({ L"cells", L"cell_0", L"source" }, L"source_0", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"### Общее\\n"));
 	json_object.set({ L"cells", L"cell_0", L"source" }, L"source_1", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"\\n"));
-	json_object.set({ L"cells", L"cell_0", L"source" }, L"source_2", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"Здесь описание"));
 
 	json_object.set({ L"cells" }, L"cell_1", JsonObject::eType::object, variant<wstring, double, JsonBase::eSimple>());
 	json_object.set({ L"cells", L"cell_1" }, L"cell_type", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"markdown"));
 	json_object.set({ L"cells", L"cell_1" }, L"metadata", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
 	json_object.set({ L"cells", L"cell_1" }, L"source", JsonBase::eType::array, variant<wstring, double, JsonBase::eSimple>());
 	json_object.set({ L"cells", L"cell_1", L"source" }, L"source_0", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"```c\\n"));
-	json_object.set({ L"cells", L"cell_1", L"source" }, L"source_1", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"#define TEST 1000\\n"));
-	json_object.set({ L"cells", L"cell_1", L"source" }, L"source_2", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"\\n"));
-	json_object.set({ L"cells", L"cell_1", L"source" }, L"source_3", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"int main(){\\n"));
-	json_object.set({ L"cells", L"cell_1", L"source" }, L"source_4", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"\\n"));
-	json_object.set({ L"cells", L"cell_1", L"source" }, L"source_5", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"    // ....\\n"));
-	json_object.set({ L"cells", L"cell_1", L"source" }, L"source_6", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"\\n"));
-	json_object.set({ L"cells", L"cell_1", L"source" }, L"source_7", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"    return 0;\\n"));
-	json_object.set({ L"cells", L"cell_1", L"source" }, L"source_8", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"}\\n"));
+
+	auto code_lines = get_raw_Lines(false);
+	for (size_t i = 0; i < code_lines.size(); ++i) {
+		json_object.set({ L"cells", L"cell_1", L"source" }, L"source_" + std::to_wstring(i), 
+			JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(converter.from_bytes(code_lines[i] + "\\n")));
+	}	
+
 	json_object.set({ L"cells", L"cell_1", L"source" }, L"source_9", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"```"));
 #else
 	JsonObject json_object("root");
@@ -131,11 +130,12 @@ void cMacroToken::write(const string & dir_, const string & file_name_, const st
 	json_object.set({ "cells", "cell_1", "source" }, "source_9", JsonBase::eType::string, variant<string, double, JsonBase::eSimple>("```"));
 #endif
 
-	cout << 1 << endl;
-
+#ifdef  TASK_0_2_5__5
+	json_object.write(fill_name, "ipynb");
+#else
+	cout << fill_name << endl;
 	json_object.write("C:/projects/external-description/_build_vs/Release/test.ipynb", "ipynb");
-
-	cout << 2 << endl;
+#endif
 }
 
 #else

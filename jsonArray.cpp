@@ -396,7 +396,11 @@ wstring JsonArray::to_string(const wstring & offset_, bool without_name_, bool e
 	}
 	res += L"[\n";
 	for (size_t i = 0; i < m_lists.size(); ++i) {
+#ifdef  TASK_0_2_5__6
+		res += m_lists[i]->to_string(offset_ + L' ', true, i < m_lists.size() - 1);
+#else
 		res += m_lists[i]->to_string(offset_ + L'\t', true, i < m_lists.size() - 1);
+#endif		
 	}
 
 	res += offset_ + (end_with_comma_ ? L"],\n" : L"]\n");

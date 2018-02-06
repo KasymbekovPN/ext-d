@@ -162,12 +162,18 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, string * p_na
 		for (size_t i = 0; i < spl.size(); ++i) {
 			name += spl[i] + "-";
 		}
+#ifdef  TASK_0_2_5__5
+		name += item->getName() + "-" + item->getHash() + ".ipynb";
+		item->write(outdir_, name, "ipynb");
+#else
 		name += item->getName() + "-" + item->getHash() + ".rst";
+		item->write(outdir_, name, "ipynb");
 #ifdef TASK_0_2_5
 		item->write(outdir_, name, "ipynb");
 #else
 		item->write(outdir_, name);
 #endif // TASK_0_2_5		
+#endif
 		*p_name_list_ += name + '\n';
 
 #ifndef  TASK_0_2_5__1

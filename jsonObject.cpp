@@ -430,7 +430,11 @@ wstring JsonObject::to_string(const wstring & offset_, bool without_name_, bool 
 	}
 	res += L"{\n";
 	for (size_t i = 0; i < m_lists.size(); ++i) {
+#ifdef  TASK_0_2_5__6
+		res += m_lists[i]->to_string(offset_ + L' ', false, i < m_lists.size() - 1);
+#else
 		res += m_lists[i]->to_string(offset_ + L'\t', false, i < m_lists.size() - 1);
+#endif		
 		//res += m_lists[i]->to_string(offset_ + '\t', false);
 		//res += i < m_lists.size() ? ",\n" : "\n";
 	}
@@ -481,9 +485,19 @@ void JsonObject::write(const string & path_, const string & mode_)
 		set({ L"metadata", L"language_info" }, L"pygments_lexer", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"ipython3"));
 		set({ L"metadata", L"language_info" }, L"version", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"3.6.3"));
 		set({}, L"nbformat", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(4));
-		set({}, L"nbformat_mirror", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(2));
+		set({}, L"nbformat_minor", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(2));
 
-		std::wcout << to_string(L"", true, false) << endl;
+		//std::wcout << to_string(L"", true, false) << endl;
+
+		//cout << path_ << endl;
+		size_t found = path_.find_last_of("\\");
+		if (string::npos != found) {
+			//cout << path_.substr(0, found) << endl;
+			string dir_path = path_.substr(0, found);
+			if (false == std::experimental::filesystem::exists(dir_path)) {
+				std::experimental::filesystem::create_directory(dir_path);
+			}
+		}
 
 		const std::locale utf8_locale = std::locale(std::locale(),
 			new std::codecvt_utf8<wchar_t>());

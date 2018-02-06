@@ -53,6 +53,9 @@ public:
 
 	template <class T, class C>
 	static T replace_all(const T& str_, C orig_, C new_);
+
+	template <class T, class C>
+	static T tab2space(const T& str_, size_t size_);
 };
 
 template<class T, class C>
@@ -117,4 +120,24 @@ inline T StringHandler::replace_all(const T & str_, C orig_, C new_)
 	}
 
 	return res;
+}
+
+template<class T, class C>
+inline T StringHandler::tab2space(const T & str_, size_t size_)
+{
+	T result;
+
+	C marker = C('\t');
+	for (C ch : str_) {
+		if (ch == marker) {
+			for (size_t i = 0; i < size_; ++i) {
+				result += ' ';
+			}
+		}
+		else {
+			result += ch;
+		}
+	}
+
+	return result;
 }
