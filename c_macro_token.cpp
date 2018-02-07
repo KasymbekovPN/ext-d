@@ -101,7 +101,7 @@ void cMacroToken::write(const string & dir_, const string & file_name_, const st
 			JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(converter.from_bytes(code_lines[i] + "\\n")));
 	}	
 
-	json_object.set({ L"cells", L"cell_1", L"source" }, L"source_9", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"```"));
+	json_object.set({ L"cells", L"cell_1", L"source" }, L"source_" + std::to_wstring(code_lines.size()), JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"```"));
 #else
 	JsonObject json_object("root");
 	json_object.set({}, "cells", JsonBase::eType::array, variant<string, double, JsonBase::eSimple>());

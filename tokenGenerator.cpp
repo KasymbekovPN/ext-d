@@ -164,6 +164,9 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, string * p_na
 		}
 #ifdef  TASK_0_2_5__5
 		name += item->getName() + "-" + item->getHash() + ".ipynb";
+
+		cout << name << endl;
+
 		item->write(outdir_, name, "ipynb");
 #else
 		name += item->getName() + "-" + item->getHash() + ".rst";
