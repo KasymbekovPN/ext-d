@@ -114,7 +114,6 @@ void cEnumToken::write(const string & dir_, const string & file_name_, const str
 	// Ячейка "Код"
 	//
 	idx++;
-	cout << idx << endl;
 	json_object.set({ L"cells" }, L"cell_" + std::to_wstring(idx), JsonObject::eType::object, variant<wstring, double, JsonBase::eSimple>());
 	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"cell_type", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"markdown"));
 	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"metadata", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
@@ -131,7 +130,6 @@ void cEnumToken::write(const string & dir_, const string & file_name_, const str
 
 	json_object.write(fill_name, "ipynb");
 
-	cout << fill_name << endl;
 }
 #else
 void cEnumToken::write(const string & dir_, const string & file_name_)

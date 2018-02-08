@@ -2,6 +2,7 @@
 
 #include "c_base_token.hpp"
 #include "stringHandler.h"
+#include "jsonObject.hpp"
 
 #include <iostream>
 #include <string>

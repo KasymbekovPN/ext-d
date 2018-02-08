@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <iterator>
 
 using std::vector;
 using std::string;
@@ -27,6 +28,12 @@ public:
 	void write(const string & dir_, const string & file_name_);
 #endif	
 
+#ifdef TASK_0_2_5__6
+	virtual vector<string> parse_members(bool root_, const string& patern_name_) override;
+#endif
+
+protected:
+
 private:
 
 	bool m_typedef;
@@ -36,5 +43,6 @@ private:
 	vector<cBaseToken*> m_value;
 
 	void toRst(string* p_members, bool root_, const string& patern_name_);
+
 
 };

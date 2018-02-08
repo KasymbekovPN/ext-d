@@ -155,3 +155,8 @@ string cBaseToken::get_offset_string(int offset_)
 
 	return res;
 }
+
+vector<string> cBaseToken::parse_members(bool root_, const string & patern_name_)
+{
+	return vector<string>();
+}

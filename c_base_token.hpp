@@ -64,6 +64,10 @@ public:
 #endif	
 	virtual void toRst(string* p_member_, bool root_, const string& patern_name_);
 
+#ifdef TASK_0_2_5__6
+	virtual vector<string> parse_members(bool root_, const string& patern_name_);
+#endif
+
 	static string get_offset_string(int offset_);
 
 protected:
