@@ -2,9 +2,12 @@
 
 #include "stringHandler.h"
 #include "c_base_token.hpp"
+#include "jsonObject.hpp"
 
 #include <iostream>
 #include <string>
+#include <Windows.h>
+#include <wchar.h>
 
 class cFuncDef: public cBaseToken
 {

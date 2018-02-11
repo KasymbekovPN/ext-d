@@ -41,11 +41,19 @@ public:
 #ifndef  TASK_0_2_5__4
 	static string filter(const string&, FBE, vector<char>);
 #endif
+
+#ifndef  TASK_0_2_5__8
 	static vector<string> split(const string&, char);
+#endif
+	
 	static vector<string> space(const string& line);
 	static vector<string> file2line(const string& file, bool replace_tab);
 #ifndef  TASK_0_2_5__4
 	static string replace_all(const string& str_, char orig_, char new_);
+#endif
+
+#ifdef  TASK_0_2_5__8
+	static wstring escape_wchar(const wstring& line_, wchar_t ch_);
 #endif
 
 	template <class T, class C> 
@@ -56,6 +64,14 @@ public:
 
 	template <class T, class C>
 	static T tab2space(const T& str_, size_t size_);
+
+#ifdef  TASK_0_2_5__8
+	template <class T, class C>
+	static vector<T> split(const T& line_, C delit);
+
+	//template <class T, class C>
+	//static T espace_char(const T& line_, C ch_, C add_);
+#endif
 };
 
 template<class T, class C>
@@ -138,6 +154,29 @@ inline T StringHandler::tab2space(const T & str_, size_t size_)
 			result += ch;
 		}
 	}
+
+	return result;
+}
+
+template<class T, class C>
+inline vector<T> StringHandler::split(const T & line_, C delit)
+{
+	T buffer;
+	vector<T> result;
+
+	for (C ch : line_) {
+		if (ch == delit) {
+			if (buffer.size() > 0) {
+				result.push_back(buffer);
+				buffer.clear();
+			}
+		}
+		else {
+			buffer += ch;
+		}
+	}
+
+	if (buffer.size() > 0) { result.push_back(buffer); }
 
 	return result;
 }

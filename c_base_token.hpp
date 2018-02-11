@@ -8,6 +8,7 @@
 #include <sstream>
 #include <fstream>
 #include <filesystem>
+#include <Windows.h>
 
 #include "stringHandler.h"
 #include "config.h"
@@ -44,6 +45,9 @@ public:
 	string getRaw() const;
 #ifdef  TASK_0_2_5__6
 	vector<string> get_raw_Lines(bool line_feed_) const;
+#endif
+#ifdef  TASK_0_2_5__8
+	vector<wstring> get_raw_WLines(bool line_feed_) const;
 #endif
 	string getHash() const;
 

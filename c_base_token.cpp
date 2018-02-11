@@ -75,6 +75,141 @@ vector<string> cBaseToken::get_raw_Lines(bool line_feed_) const
 	return res;
 }
 
+#ifdef  TASK_0_2_5__8
+vector<wstring> cBaseToken::get_raw_WLines(bool line_feed_) const
+{
+
+#ifdef TASK_0_2_5__9
+
+	vector<wstring> res;
+	vector<string> raw_lines = get_raw_Lines(line_feed_);
+	for (auto raw_line : raw_lines) {
+
+		//cout << "+++ " << raw_line << endl;
+
+		wchar_t warray[4096];
+		MultiByteToWideChar(CP_ACP, 0, raw_line.c_str(), raw_line.size(), warray, raw_line.size());
+		//cout << "~~~ ";
+		//for (size_t i = 0; i < raw_line.size(); ++i) {
+		//	std::wcout << warray[i];
+		//}
+		//cout << endl;
+		//wstring ws(warray);
+		wstring ws(warray, 0, raw_line.size());
+		//ws += L'\\n';
+		//ws += L'\0';
+
+		//std::wcout << "--- " << ws << endl;
+
+		res.push_back(ws);
+	}
+
+	//cout << "-" << endl;
+	//for (auto i : res) {
+	//	std::wcout << i << endl;
+	//}
+
+	//------
+	//wchar_t warray[90000];
+	//MultiByteToWideChar(CP_ACP, 0, m_raw.c_str(), m_raw.size(), warray, m_raw.size());
+	//wstring ws(warray);
+	//auto tmp = StringHandler::split<wstring, wchar_t>(StringHandler::tab2space<wstring, wchar_t>(ws, 4), L'\n');
+	//if (false == line_feed_) {
+	//	return tmp;
+	//}
+	//vector<wstring> res;
+	//for (auto item : tmp) {
+	//	res.push_back(item + L'\n');
+	//}
+	return res;
+
+#else
+
+
+	//vector<wstring> res;
+
+	////cout << 1 << endl;
+
+	wchar_t warray[90000];
+
+	//cout << 2 << endl;
+
+	MultiByteToWideChar(CP_ACP, 0, m_raw.c_str(), m_raw.size(), warray, m_raw.size());
+
+	//cout << 3 << endl;
+
+	wstring ws(warray);
+
+	//cout << 4 << endl;
+
+	//std::wcout << ws << endl;
+
+	//cout << 5 << endl;
+
+	auto tmp = StringHandler::split<wstring, wchar_t>(StringHandler::tab2space<wstring, wchar_t>(ws, 4), L'\n');
+
+	//cout << 6 << endl;
+
+	if (false == line_feed_) {
+		//std::wcout << warray << endl;
+		//cout << 6.5 << endl;
+		return tmp;
+	}
+
+	//cout << 7 << endl;
+
+	vector<wstring> res;
+	for (auto item : tmp) {
+		res.push_back(item + L'\n');
+	}
+
+	//cout << 8 << endl;
+
+	return res;
+
+
+
+
+
+	//res.push_back(wstring(warray));
+
+
+
+
+	//for (auto item : spl) {
+
+	//	cout << item << endl;
+
+	//	wchar_t warray[4096];
+	//	MultiByteToWideChar(CP_ACP, 0, item.c_str(), item.size(), warray, item.size());
+	//	res.push_back(wstring(warray));
+	//}
+
+	//cout << "-" << endl;
+
+	//for (auto i : res) {
+	//	std::wcout << i << endl;
+	//}
+
+	//cout << "-" << endl;
+	//cout << "in size : " << spl.size() << endl;
+	//std::wcout << "out size : " << res.size() << endl;
+ 
+
+	//return res;
+
+	//wchar_t warray[4096];
+	//string tmp = getRaw();
+	//size_t size = tmp.length();
+
+	//MultiByteToWideChar(CP_ACP, 0, tmp.c_str(), size, warray, size);
+	//return vector<wstring>();
+
+#endif
+
+}
+#endif
+
 string cBaseToken::getHash() const
 {
 	return m_hash;

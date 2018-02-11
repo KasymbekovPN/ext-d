@@ -67,7 +67,6 @@ void cFuncDecl::show(int offset_) const
 #ifdef  TASK_0_2_5
 void cFuncDecl::write(const string & dir_, const string & file_name_, const string & mode_)
 {
-	cout << "func-decl" << endl;
 }
 #else
 void cFuncDecl::write(const string & dir_, const string & file_name_)

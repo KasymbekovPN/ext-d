@@ -117,6 +117,7 @@ string StringHandler::filter(const string & line, FBE mode, vector<char> ignore)
 }
 #endif
 
+#ifndef  TASK_0_2_5__8
 vector<string> StringHandler::split(const string & line, char delit)
 {
 
@@ -139,6 +140,7 @@ vector<string> StringHandler::split(const string & line, char delit)
 
 	return result;
 }
+#endif
 
 vector<string> StringHandler::space(const string & line)
 {
@@ -184,6 +186,24 @@ string StringHandler::replace_all(const string & str_, char orig_, char new_)
 
 	for (auto ch : str_) {
 		res += ch == orig_ ? new_ : ch;
+	}
+
+	return res;
+}
+#endif
+
+#ifdef  TASK_0_2_5__8
+wstring StringHandler::escape_wchar(const wstring & line_, wchar_t ch_)
+{
+	wstring res;
+	for (auto i : line_) {
+		if (ch_ == i) {
+			res += L'\\';
+			res += i;
+		}
+		else {
+			res += i;
+		}
 	}
 
 	return res;

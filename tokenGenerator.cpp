@@ -146,8 +146,16 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, string * p_na
 	}
 
 	size_t token_idx = 0;
-#ifndef  TASK_0_2_5__1
+
+#ifdef  TASK_0_2_5__7
+	cout << "Tokens are generated: " << StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' }) 
+		<< ": " << token_idx << "/" << m_tokens.size();
+#else
+	//#ifndef  TASK_0_2_5__1
+	//string pre_name1 = StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' });
+	//cout << pre_name1 << endl;
 	cout << "token make - " << m_path << ": " << token_idx << "/" << m_tokens.size();
+	//#endif
 #endif
 
 	for (auto item : m_tokens) {
@@ -162,11 +170,19 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, string * p_na
 		for (size_t i = 0; i < spl.size(); ++i) {
 			name += spl[i] + "-";
 		}
+
+		//cout << 2 << endl;
+
 #ifdef  TASK_0_2_5__5
 		name += item->getName() + "-" + item->getHash() + ".ipynb";
+		//cout << 2.1 << endl;
+
+		//cout << name << endl;
 
 		//cout << name << endl;
 		item->write(outdir_, name, "ipynb");
+
+		//cout << 2.2 << endl;
 #else
 		name += item->getName() + "-" + item->getHash() + ".rst";
 		item->write(outdir_, name, "ipynb");
@@ -178,9 +194,19 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, string * p_na
 #endif
 		*p_name_list_ += name + '\n';
 
-#ifndef  TASK_0_2_5__1
+#ifdef  TASK_0_2_5__7
+		//cout << 3 << endl;
+
+		cout << "\rTokens are generated: " << StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' })
+			<< ": " << ++token_idx << "/" << m_tokens.size();
+#else
+		//#ifndef  TASK_0_2_5__1
 		cout << '\r' << "token make - " << m_path << ": " << ++token_idx << "/" << m_tokens.size();
+		//#endif
 #endif
+
+		//cout << 4 << endl;
+
 	}
 	cout << endl;
 }
@@ -409,7 +435,6 @@ void TokenGenerator::parse_file(const string & file_name)
 		}
 
 	}
-
 }
 
 void TokenGenerator::parse_general(const string & buffer)

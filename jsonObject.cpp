@@ -499,6 +499,19 @@ void JsonObject::write(const string & path_, const string & mode_)
 			}
 		}
 
+#ifdef  TASK_0_2_5__8
+		if (!std::experimental::filesystem::exists(path_)) {
+			const std::locale utf8_locale = std::locale(std::locale(),
+				new std::codecvt_utf8<wchar_t>());
+
+			std::wofstream fout(path_);
+			fout.imbue(utf8_locale);
+			std::wstring s = to_string(L"", true, false);
+			//std::wcout << s << std::endl;
+			fout << s;
+			fout.close();
+		}
+#else
 		const std::locale utf8_locale = std::locale(std::locale(),
 			new std::codecvt_utf8<wchar_t>());
 
@@ -508,6 +521,7 @@ void JsonObject::write(const string & path_, const string & mode_)
 		//std::wcout << s << std::endl;
 		fout << s;
 		fout.close();
+#endif
 
 		//std::wofstream file(path_);
 		//file.imbue(utf8_locale);
