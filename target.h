@@ -30,16 +30,10 @@ using std::wstring;
 class Target
 {
 public:
-#ifdef  TASK_0_2_5__4
 	Target(const wstring&, const wstring&, std::shared_ptr<ErrorStatus>);
-#else
-	Target(const string&, const string&, std::shared_ptr<ErrorStatus>);
-#endif	
 	~Target();
 
-#ifdef  TASK_0_2_5__4
 	wstring getWName() const;
-#endif
 	string getName() const;
 	string getPath() const;
 	bool isExist() const;
@@ -47,21 +41,12 @@ public:
 	void run(const string& flag_) const;
 
 private:
-#ifdef  TASK_0_2_5__4
 	wstring	m_name;
 	string	m_path;
 	bool	is_exist;
 	string	m_source_dir;
 	string	m_output_dir;
 	string  m_tokens_output;
-#else
-	string	m_name;
-	string	m_path;
-	bool	is_exist;
-	string	m_source_dir;
-	string	m_output_dir;
-	string  m_tokens_output;
-#endif
 	std::shared_ptr<ErrorStatus> p_error;
 
 	FileTree* m_fileTree;

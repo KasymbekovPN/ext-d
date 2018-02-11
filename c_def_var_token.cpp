@@ -175,7 +175,6 @@ void cDefVar::show(int offset_) const
 	cout << cBaseToken::get_offset_string(offset_) << "is struct: " << m_struct << endl;
 }
 
-#ifdef  TASK_0_2_5
 void cDefVar::write(const string & dir_, const string & file_name_, const string & mode_)
 {
 	cBaseToken::write(dir_, file_name_, mode_);
@@ -220,23 +219,4 @@ void cDefVar::write(const string & dir_, const string & file_name_, const string
 	json_object.write(fill_name, "ipynb");
 
 }
-#else
-void cDefVar::write(const string & dir_, const string & file_name_)
-{
 
-	cBaseToken::write(dir_, file_name_);
-
-	string fill_name = dir_ + "\\\\" + file_name_;
-
-	if (!std::experimental::filesystem::exists(fill_name)) {
-		std::ofstream fout(fill_name);
-		fout << ".. ext-d-state:: false" << endl << endl			
-			<< ".. ext-d-version:: " << PROJECT_VERSION << endl << endl			
-			<< ".. ext-d-token-type:: " << cBaseToken::tokenTypeNames[m_type] << endl << endl			
-			<< ".. ext-d-paragraph:: Общее" << endl << endl
-			<< ".. ext-d-code-block:: c-lang" << endl << endl
-			<< getRaw() << ";" << endl;
-		fout.close();
-	}
-}
-#endif

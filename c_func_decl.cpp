@@ -15,15 +15,9 @@ cFuncDecl::cFuncDecl(const string & buffer): cBaseToken(cBaseToken::TokenType::f
 		if (2 <= first_size) {
 
 			setName(first[first_size - 1]);
-#ifdef  TASK_0_2_5__4
 			m_dataType = StringHandler::filter<string, char>(
 				first[first_size - 2], StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' }
 			);
-#else
-			m_dataType = StringHandler::filter(
-				first[first_size - 2], StringHandler::FBE::begin_and_end, {' ', '\t', '\n'}
-			);
-#endif
 
 			for (int i = 0; i < first_size - 2; ++i) {
 				if ("static" == first[i]) {
@@ -41,11 +35,7 @@ cFuncDecl::cFuncDecl(const string & buffer): cBaseToken(cBaseToken::TokenType::f
 		auto second = StringHandler::split(buffer.substr(brace_begin_found + 1, brace_end_found - brace_begin_found - 1), ',');
 		m_args.clear();
 		for (int i = 0; i < second.size(); ++i) {
-#ifdef  TASK_0_2_5__4
 			m_args += StringHandler::filter<string, char>(second[i], StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
-#else
-			m_args += StringHandler::filter(second[i], StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
-#endif			
 			if (i < second.size() - 1) {
 				m_args += ',';
 			}
@@ -64,27 +54,6 @@ void cFuncDecl::show(int offset_) const
 	cout << cBaseToken::get_offset_string(offset_) << "Args : " << (m_args.empty() ? "<none>" : m_args) << endl;
 }
 
-#ifdef  TASK_0_2_5
 void cFuncDecl::write(const string & dir_, const string & file_name_, const string & mode_)
 {
 }
-#else
-void cFuncDecl::write(const string & dir_, const string & file_name_)
-{
-	cBaseToken::write(dir_, file_name_);
-
-	string fill_name = dir_ + "\\\\" + file_name_;
-
-	if (!std::experimental::filesystem::exists(fill_name)) {
-
-		std::ofstream fout(fill_name);
-		fout << ".. ext-d-state:: false" << endl << endl
-			<< ".. ext-d-version:: " << PROJECT_VERSION << endl << endl
-			<< ".. ext-d-token-type:: " << cBaseToken::tokenTypeNames[m_type] << endl << endl
-			<< ".. ext-d-paragraph:: Общее" << endl << endl << endl
-			<< ".. ext-d-code-block:: c-lang" << endl << endl
-			<< getRaw() << ";" << endl;
-		fout.close();
-	}
-}
-#endif

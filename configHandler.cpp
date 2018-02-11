@@ -11,19 +11,10 @@ ConfigHandler::ConfigHandler(const string& path_json_, shared_ptr<ErrorStatus> p
 		return;
 	}
 
-#ifdef  TASK_0_2_5__4
-
-	//std::wcout << file_json.getAsWString() << endl;
-
 	string tmp = file_json.getAsString();
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 	wstring wtmp = converter.from_bytes(tmp);
-
-	//wstring tmp = file_json.getAsWString();
 	JsonObject json_object(wtmp, L"root", p_error);
-#else
-	JsonObject json_object(file_json.getAsString(), "root", p_error);
-#endif	
 
 	if (0 == p_error->get()) {
 		JsonBase::eType type;
@@ -31,11 +22,7 @@ ConfigHandler::ConfigHandler(const string& path_json_, shared_ptr<ErrorStatus> p
 		//
 		// Определяем количество целей
 		//
-#ifdef  TASK_0_2_5__4
 		auto number_of_targets = json_object.get({ L"number-of-targets" }, &type);
-#else
-		auto number_of_targets = json_object.get({ "number-of-targets" }, &type);
-#endif
 		size_t size = 0;
 		try
 		{
@@ -46,16 +33,11 @@ ConfigHandler::ConfigHandler(const string& path_json_, shared_ptr<ErrorStatus> p
 			p_error->set(ErrorStatus::error::json_cnfg_num_of_trt_inv, true);
 		}
 
-#ifdef  TASK_0_2_5__4
 		vector<pair<wstring, wstring>> target_buffer;
-#else
-		vector<pair<string, string>> target_buffer;
-#endif
 
 		if (0 == p_error->get()) {
 
 			for (size_t i = 0; i < size; ++i) {
-#ifdef  TASK_0_2_5__4
 				auto name = json_object.get({ L"targets", L"targets_" + std::to_wstring(i), L"name" }, &type);
 				auto path = json_object.get({ L"targets", L"targets_" + std::to_wstring(i), L"path" }, &type);
 
@@ -70,22 +52,6 @@ ConfigHandler::ConfigHandler(const string& path_json_, shared_ptr<ErrorStatus> p
 				{
 					p_error->set(ErrorStatus::error::json_cnfg_inv_target_name, true);
 				}
-#else
-				auto name = json_object.get({ "targets", "targets_" + std::to_string(i), "name"}, &type);
-				auto path = json_object.get({ "targets", "targets_" + std::to_string(i), "path" }, &type);
-
-				try
-				{
-					target_buffer.push_back(pair<string, string>(
-						StringHandler::replace_all(std::get<string>(name), '/', '\\'),
-						StringHandler::replace_all(std::get<string>(path), '/', '\\')
-						));
-				}
-				catch (const std::bad_variant_access&)
-				{
-					p_error->set(ErrorStatus::error::json_cnfg_inv_target_name, true);
-				}
-#endif
 				
 				if (0 != p_error->get()) {
 					break;
@@ -97,15 +63,9 @@ ConfigHandler::ConfigHandler(const string& path_json_, shared_ptr<ErrorStatus> p
 				for (auto item : target_buffer) {
 					bool need_add = true;
 					for (auto p_target : m_targets) {
-#ifdef  TASK_0_2_5__4
 						if (p_target->getWName() == item.first) {
 							need_add = false;
 						}
-#else
-						if (p_target->getName() == item.first) {
-							need_add = false;
-						}
-#endif
 					}
 
 					if (need_add) {

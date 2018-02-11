@@ -137,11 +137,7 @@ void RstHandler::write2html() const
 
 				auto spl = StringHandler::split(item[1], '|');
 				for (auto s : spl) {
-#ifdef  TASK_0_2_5__4
 					string a_name = StringHandler::filter<string, char>(s, StringHandler::FBE::all, { ' ', '\t' }) + ".html";
-#else
-					string a_name = StringHandler::filter(s, StringHandler::FBE::all, {' ', '\t'}) + ".html";
-#endif
 					string a_item_name = name + "_a_" + std::to_string(a_idx++);
 					dom.set({ "body", name }, Dom::item::a, " href=" + a_name, a_name, a_item_name, 0);
 				}

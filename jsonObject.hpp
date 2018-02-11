@@ -44,55 +44,16 @@ class JsonObject : public JsonBase
 {
 public:
 
-#ifdef TASK_0_2_5__4
 	JsonObject(const wstring& content_, const wstring& name_, shared_ptr<ErrorStatus> error_);
 	JsonObject(const wstring& name_);
-#else
-	JsonObject(const string& content_, const string& name_, shared_ptr<ErrorStatus> error_);
-#ifdef TASK_0_2_5__1
-	JsonObject(const string& name_);
-#endif
-#endif
 
 	~JsonObject();
 
-#ifdef  TASK_0_2_5__4
 	void show(wstring offset) const;
-#else
-	void show(string offset) const;
-#endif
-//#ifdef  TASK_0_2_5__1
-//	void push_back(const string& name, const JsonArray& new_item_);
-//	void push_back(const );
-//#endif
-
-#ifdef  TASK_0_2_5__4
 	virtual void set(vector<wstring> path_, const wstring& name_, JsonBase::eType type_, std::variant<wstring, double, JsonBase::eSimple> arg_) override;
-#else
-#ifdef TASK_0_2_5__1
-	virtual void set(vector<string> path_, const string& name_, JsonBase::eType type_, std::variant<string, double, JsonBase::eSimple> arg_) override;
-#endif
-#endif
-
-#ifdef  TASK_0_2_5__4
 	virtual variant<JsonBase::eSimple, double, wstring, JsonBase::eGetterMsg> get(vector<wstring> path_, eType * type_) const;
-#else
-	variant<JsonBase::eSimple, double, string, JsonBase::eGetterMsg> get(vector<string> path_, eType * type_) const;
-#endif
-
-#ifdef  TASK_0_2_5
-#ifdef  TASK_0_2_5__4
 	virtual wstring to_string(const wstring& offset_, bool without_name_, bool end_with_comma_) const override;
-#else
-	virtual string to_string(const string& offset_, bool without_name_, bool end_with_comma_) const override;
-#endif	
 	void write(const string& path_, const string& mode_);
-#endif
-
-//#ifdef  TASK_0_2_5__1
-//	template <class T>
-//	void set(vector<string> path_, const T& new_item_);
-//#endif
 
 private:
 

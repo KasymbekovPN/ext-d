@@ -43,12 +43,8 @@ public:
 	TokenType getType() const;
 	string getName() const;
 	string getRaw() const;
-#ifdef  TASK_0_2_5__6
 	vector<string> get_raw_Lines(bool line_feed_) const;
-#endif
-#ifdef  TASK_0_2_5__8
 	vector<wstring> get_raw_WLines(bool line_feed_) const;
-#endif
 	string getHash() const;
 
 	void setStatic(bool value_);
@@ -61,16 +57,9 @@ public:
 	bool isVolatile() const;
 	bool isExtern() const;
 
-#ifdef  TASK_0_2_5
 	virtual void write(const string& dir_, const string& file_name_, const string& mode_);
-#else
-	virtual void write(const string& dir_, const string& file_name_);
-#endif	
 	virtual void toRst(string* p_member_, bool root_, const string& patern_name_);
-
-#ifdef TASK_0_2_5__6
 	virtual vector<string> parse_members(bool root_, const string& patern_name_);
-#endif
 
 	static string get_offset_string(int offset_);
 

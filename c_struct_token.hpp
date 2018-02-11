@@ -22,15 +22,8 @@ public:
 
 	void show(int offset_) const;
 
-#ifdef  TASK_0_2_5
 	virtual void write(const string & dir_, const string & file_name_, const string& mode_) override;
-#else
-	void write(const string & dir_, const string & file_name_);
-#endif	
-
-#ifdef TASK_0_2_5__6
 	virtual vector<string> parse_members(bool root_, const string& patern_name_) override;
-#endif
 
 protected:
 

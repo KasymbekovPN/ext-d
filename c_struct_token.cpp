@@ -9,15 +9,9 @@ cStructToken::cStructToken(const string & buffer): cBaseToken(cBaseToken::TokenT
 	size_t found_header = buffer.find_first_of('{');
 	size_t found_footer = buffer.find_last_of('}');
 
-#ifdef  TASK_0_2_5__4
 	string header = StringHandler::filter<string, char>(buffer.substr(0, found_header), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
 	string inner = StringHandler::filter<string, char>(buffer.substr(found_header + 1, found_footer - found_header - 1), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
 	string footer = StringHandler::filter<string, char>(buffer.substr(found_footer + 1), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
-#else
-	string header = StringHandler::filter(buffer.substr(0, found_header), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
-	string inner = StringHandler::filter(buffer.substr(found_header + 1, found_footer - found_header - 1), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
-	string footer = StringHandler::filter(buffer.substr(found_footer + 1), StringHandler::FBE::begin_and_end, { ' ', '\t', '\n' });
-#endif
 
 	setName("");
 
@@ -116,7 +110,6 @@ void cStructToken::show(int offset_) const
 
 }
 
-#ifdef  TASK_0_2_5
 void cStructToken::write(const string & dir_, const string & file_name_, const string & mode_)
 {
 	cBaseToken::write(dir_, file_name_, mode_);
@@ -178,31 +171,6 @@ void cStructToken::write(const string & dir_, const string & file_name_, const s
 
 	json_object.write(fill_name, "ipynb");
 }
-#else
-void cStructToken::write(const string & dir_, const string & file_name_)
-{
-
-	cBaseToken::write(dir_, file_name_);
-
-	string fill_name = dir_ + "\\\\" + file_name_;
-
-	if (!std::experimental::filesystem::exists(fill_name)) {
-
-		string members;
-		toRst(&members, true, "");
-
-		std::ofstream fout(fill_name);
-		fout << ".. ext-d-state:: false" << endl << endl
-			<< ".. ext-d-version:: " << PROJECT_VERSION << endl << endl
-			<< ".. ext-d-token-type:: " << cBaseToken::tokenTypeNames[m_type] << endl << endl
-			<< ".. ext-d-paragraph:: Общее" << endl << endl << endl
-			<< members
-			<< ".. ext-d-code-block:: c-lang" << endl << endl
-			<< getRaw() << endl;
-		fout.close();
-	}
-}
-#endif
 
 void cStructToken::toRst(string * p_members, bool root_, const string& patern_name_)
 {
