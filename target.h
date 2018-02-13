@@ -47,6 +47,9 @@ private:
 	string	m_source_dir;
 	string	m_output_dir;
 	string  m_tokens_output;
+#ifdef  TASK_27__1
+	string  m_user_output;
+#endif
 	std::shared_ptr<ErrorStatus> p_error;
 
 	FileTree* m_fileTree;

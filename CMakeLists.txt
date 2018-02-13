@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(ext-d VERSION 0.2.5)
+project(ext-d VERSION 0.2.7)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

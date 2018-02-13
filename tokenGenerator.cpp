@@ -152,6 +152,40 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, string * p_na
 	cout << endl;
 }
 
+void TokenGenerator::parse(size_t offset_, const string & outdir_, vector<std::experimental::filesystem::path>* file_paths_)
+{
+	if (m_was_header) {
+		parse_file(m_path + ".h");
+	}
+
+	if (m_was_source) {
+		parse_file(m_path + ".c");
+	}
+
+	size_t token_idx = 0;
+
+	cout << "Tokens are generated: " << StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' })
+		<< ": " << token_idx << "/" << m_tokens.size();
+
+	for (auto item : m_tokens) {
+		string name;
+		string pre_name = StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' });
+		auto spl = StringHandler::split(pre_name, '\\');
+		for (size_t i = 0; i < spl.size(); ++i) {
+			name += spl[i] + "-";
+		}
+
+		name += item->getName() + "-" + item->getHash() + ".ipynb";
+		item->write(outdir_, name, "ipynb");
+		//*p_name_list_ += name + '\n';
+		file_paths_->push_back(name);
+
+		cout << "\rTokens are generated: " << StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' })
+			<< ": " << ++token_idx << "/" << m_tokens.size();
+	}
+	cout << endl;
+}
+
 void TokenGenerator::show()
 {
 	cout << endl;

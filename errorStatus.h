@@ -1,5 +1,7 @@
 #pragma once 
 
+#include "config.h"
+
 #include <map>
 #include <string>
 #include <iostream>
@@ -53,6 +55,10 @@ public:
 		json_extdlists_inv_unhand_dir,
 		json_extdlists_inv_tokens_rel,
 		json_extdlists_inv_tokens_path,
+#ifdef  TASK_27__1
+		json_extdlists_inv_user_rel,
+		json_extdlists_inv_user_path,
+#endif
 	};
 
 	explicit ErrorStatus();

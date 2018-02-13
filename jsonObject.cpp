@@ -220,9 +220,9 @@ wstring JsonObject::to_string(const wstring & offset_, bool without_name_, bool 
 	return res;
 }
 
+
 void JsonObject::write(const string & path_, const string & mode_)
 {
-
 	if ("ipynb" == mode_) {
 
 		set({}, L"metadata", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
@@ -264,3 +264,62 @@ void JsonObject::write(const string & path_, const string & mode_)
 
 	}
 }
+
+#ifdef  TASK_27__1
+void JsonObject::write(const string & path_, const string & mode_, bool rewrite_)
+{
+	//
+	// Только для режима "ipynb"
+	//
+	if ("ipynb" == mode_) {
+		set({}, L"metadata", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
+		set({ L"metadata" }, L"kernelspec", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
+		set({ L"metadata", L"kernelspec" }, L"display_name", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"Python 3"));
+		set({ L"metadata", L"kernelspec" }, L"language", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"python"));
+		set({ L"metadata", L"kernelspec" }, L"name", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"python3"));
+		set({ L"metadata" }, L"language_info", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
+		set({ L"metadata", L"language_info" }, L"codemirror_mode", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
+		set({ L"metadata", L"language_info",L"codemirror_mode" }, L"name", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"ipython"));
+		set({ L"metadata", L"language_info",L"codemirror_mode" }, L"version", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(3));
+		set({ L"metadata", L"language_info" }, L"file_extension", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L".py"));
+		set({ L"metadata", L"language_info" }, L"mimetype", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"text/x-python"));
+		set({ L"metadata", L"language_info" }, L"name", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"python"));
+		set({ L"metadata", L"language_info" }, L"nbconvert_exporter", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"python"));
+		set({ L"metadata", L"language_info" }, L"pygments_lexer", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"ipython3"));
+		set({ L"metadata", L"language_info" }, L"version", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"3.6.3"));
+		set({}, L"nbformat", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(4));
+		set({}, L"nbformat_minor", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(2));
+	}
+
+	//
+	// Для режимов "json" и "ipynb"
+	//
+	if ("ipynb" == mode_ || "json" == mode_) {
+
+		//
+		// Существует ли директория, если не существует, то создаем.
+		//
+		size_t found = path_.find_last_of("\\");
+		if (string::npos != found) {
+			string dir_path = path_.substr(0, found);
+			if (false == std::experimental::filesystem::exists(dir_path)) {
+				std::experimental::filesystem::create_directory(dir_path);
+			}
+		}
+
+		//
+		// Файл записывается, он не существует или требуется перезапись
+		//
+		if (!std::experimental::filesystem::exists(path_) || rewrite_) {
+			const std::locale utf8_locale = std::locale(std::locale(),
+				new std::codecvt_utf8<wchar_t>());
+
+			std::wofstream fout(path_);
+			fout.imbue(utf8_locale);
+			std::wstring s = to_string(L"", true, false);
+			fout << s;
+			fout.close();
+		}
+	}
+}
+#endif

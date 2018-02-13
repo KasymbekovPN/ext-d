@@ -111,6 +111,10 @@ void cEnumToken::write(const string & dir_, const string & file_name_, const str
 
 	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_" + std::to_wstring(code_lines.size()), JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"```"));
 
+#ifdef  TASK_27__1
+	json_object.write(fill_name, "ipynb", false);
+#else
 	json_object.write(fill_name, "ipynb");
+#endif
 
 }

@@ -35,7 +35,11 @@ ErrorStatus::ENM ErrorStatus::errorNamesMap {
 	{ ErrorStatus::error::json_extdlists_inv_num_unhand_dir, "ExtDLists - невалидное количество необраб. директорий"},
 	{ ErrorStatus::error::json_extdlists_inv_unhand_dir, "ExtDLists - невалидно заданые необраб. директории"},
 	{ ErrorStatus::error::json_extdlists_inv_tokens_rel, "ExiDLists - невадидный параметр tokens-relative"},
-	{ ErrorStatus::error::json_extdlists_inv_tokens_path, "ExtDLists - невадидный параметр tokens-path"}
+	{ ErrorStatus::error::json_extdlists_inv_tokens_path, "ExtDLists - невадидный параметр tokens-path"},
+#ifdef  TASK_27__1
+	{ ErrorStatus::error::json_extdlists_inv_user_rel, "ExtDLists - невалидный параметр user-rel."},
+	{ ErrorStatus::error::json_extdlists_inv_user_path, "ExtDLists - невалидный параметр user-path."}
+#endif
 };
 
 ErrorStatus::ErrorStatus(): value(0){}

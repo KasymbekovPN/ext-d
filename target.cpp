@@ -131,6 +131,34 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 		p_error->set(ErrorStatus::error::json_extdlists_inv_tokens_path, true);
 	}
 
+#ifdef  TASK_27__1
+	//
+	// Вызрузка параметра user-relative
+	//
+	auto o_user_relative = json_object.get({L"user", L"relative"}, &type);
+	JsonBase::eSimple user_relative;
+	try{
+		user_relative = std::get<JsonBase::eSimple>(o_user_relative);
+	}
+	catch (std::bad_variant_access&) {
+		p_error->set(ErrorStatus::error::json_extdlists_inv_user_rel, true);
+	}
+
+	//
+	// Выгрузка параметра user-path
+	//
+	auto o_user_path = json_object.get({L"user", L"path"}, &type);
+	string user_path;
+	try {
+		user_path = converter.to_bytes(
+			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_user_path), L'/', L'\\')
+		);
+	}
+	catch (std::bad_variant_access&) {
+		p_error->set(ErrorStatus::error::json_extdlists_inv_user_path, true);
+	}
+#endif
+
 	if (0 == p_error->get()) {
 
 		if (JsonBase::eSimple::simple_true == tokens_relative) {
@@ -138,6 +166,13 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 		}
 		else {
 			m_tokens_output = tokens_path;
+		}
+
+		if (JsonBase::eSimple::simple_true == user_relative) {
+			m_user_output = m_output_dir + user_path;
+		}
+		else {
+			m_user_output = user_path;
 		}
 
 		if (!std::experimental::filesystem::exists(m_source_dir)) {
@@ -334,13 +369,38 @@ void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 		}
 	}
 
+#ifdef  TASK_27__1
+
+	vector<std::experimental::filesystem::path> file_paths;
+	for (auto t : tGenerators) {
+		t->parse(m_source_dir.size(), m_tokens_output, &file_paths);
+	}
+
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+
+	JsonObject json_object(L"root");
+	json_object.set({}, L"file_paths", JsonBase::eType::array, variant<wstring, double, JsonBase::eSimple>());
+
+	
+	for (size_t i = 0; i < file_paths.size(); ++i) {
+		json_object.set({ L"file_paths" }, L"path_" + std::to_wstring(i), JsonBase::eType::string, 
+			variant<wstring, double, JsonBase::eSimple>(converter.from_bytes(file_paths[i].string())));
+	}
+
+	json_object.write(m_tokens_output + "\\_tokens_list.json", "json", true);
+#else
+
 	string to_file;
 	for (auto t : tGenerators) {
 		t->parse(m_source_dir.size(), m_tokens_output, &to_file);
 	}
+
+	cout << m_user_output << endl;
+
 	ofstream fTokenList(m_tokens_output + "\\_token_list.txt");
 	fTokenList << to_file;
 	fTokenList.close();
+#endif
 }
 
 void Target::make_source_token_out() const
