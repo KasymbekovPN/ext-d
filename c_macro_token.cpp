@@ -56,6 +56,41 @@ void cMacroToken::show(int offset_) const
 	cout << cBaseToken::get_offset_string(offset_) << "Token Value: " << endl << m_value << endl;
 }
 
+#ifdef  TASK_3_0__1
+void cMacroToken::write(const string & dir_, const string & file_name_, const string & mode_, vector<std::experimental::filesystem::path>* file_paths_)
+{
+	cBaseToken::write(dir_, file_name_, mode_, file_paths_);
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+	string fill_name = dir_ + "\\" + file_name_;
+	file_paths_->push_back(fill_name);
+
+	JsonObject json_object(L"root");
+	json_object.set({}, L"cells", JsonBase::eType::array, variant<wstring, double, JsonBase::eSimple>());
+
+	json_object.set({ L"cells" }, L"cell_0", JsonObject::eType::object, variant<wstring, double, JsonBase::eSimple>());
+	json_object.set({ L"cells", L"cell_0" }, L"cell_type", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"markdown"));
+	json_object.set({ L"cells", L"cell_0" }, L"metadata", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
+	json_object.set({ L"cells", L"cell_0" }, L"source", JsonBase::eType::array, variant<wstring, double, JsonBase::eSimple>());
+	json_object.set({ L"cells", L"cell_0", L"source" }, L"source_0", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"### Общее\\n"));
+	json_object.set({ L"cells", L"cell_0", L"source" }, L"source_1", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"\\n"));
+
+	json_object.set({ L"cells" }, L"cell_1", JsonObject::eType::object, variant<wstring, double, JsonBase::eSimple>());
+	json_object.set({ L"cells", L"cell_1" }, L"cell_type", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"markdown"));
+	json_object.set({ L"cells", L"cell_1" }, L"metadata", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
+	json_object.set({ L"cells", L"cell_1" }, L"source", JsonBase::eType::array, variant<wstring, double, JsonBase::eSimple>());
+	json_object.set({ L"cells", L"cell_1", L"source" }, L"source_0", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"```c\\n"));
+
+	auto code_lines = get_raw_Lines(false);
+	for (size_t i = 0; i < code_lines.size(); ++i) {
+		json_object.set({ L"cells", L"cell_1", L"source" }, L"source_" + std::to_wstring(i),
+			JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(converter.from_bytes(code_lines[i] + "\\n")));
+	}
+
+	json_object.set({ L"cells", L"cell_1", L"source" }, L"source_" + std::to_wstring(code_lines.size()), JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"```"));
+
+	json_object.write(fill_name, "ipynb", false);
+}
+#else
 void cMacroToken::write(const string & dir_, const string & file_name_, const string & mode_)
 {
 	cBaseToken::write(dir_, file_name_, mode_);
@@ -92,3 +127,4 @@ void cMacroToken::write(const string & dir_, const string & file_name_, const st
 	json_object.write(fill_name, "ipynb");
 #endif
 }
+#endif

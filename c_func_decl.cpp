@@ -54,6 +54,12 @@ void cFuncDecl::show(int offset_) const
 	cout << cBaseToken::get_offset_string(offset_) << "Args : " << (m_args.empty() ? "<none>" : m_args) << endl;
 }
 
+#ifdef  TASK_3_0__1
+void cFuncDecl::write(const string & dir_, const string & file_name_, const string & mode_, vector<std::experimental::filesystem::path>* file_paths_)
+{
+}
+#else
 void cFuncDecl::write(const string & dir_, const string & file_name_, const string & mode_)
 {
 }
+#endif

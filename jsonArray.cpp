@@ -73,6 +73,7 @@ JsonArray::JsonArray(const wstring & content_, const wstring & name_, shared_ptr
 			}
 			else {
 				p_error->set(ErrorStatus::error::json_invalidSyntax, true);
+				//cout << 4 << endl;
 			}
 
 			tmp.clear();
@@ -164,6 +165,21 @@ void JsonArray::set(vector<wstring> path_, const wstring & name_, JsonBase::eTyp
 
 	}
 }
+
+#ifdef  TASK_3_0__1
+void JsonArray::reset(vector<wstring> path_, variant<wstring, double, JsonBase::eSimple> content_)
+{
+	if (!path_.empty()) {
+		for (auto iter : m_lists) {
+			if (path_[0] == iter->Name()) {
+				vector<wstring> new_path;
+				std::copy(path_.begin() + 1, path_.end(), std::inserter(new_path, new_path.begin()));
+				iter->reset(new_path, content_);
+			}
+		}
+	}
+}
+#endif
 
 variant<JsonBase::eSimple, double, wstring, JsonBase::eGetterMsg> JsonArray::get(vector<wstring> path_, eType * type_) const
 {

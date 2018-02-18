@@ -9,6 +9,7 @@
 #include <chrono>
 #include <locale>
 #include <codecvt>
+#include <set>
 
 #include "config.h"
 #include "fileHandler.h"
@@ -20,6 +21,7 @@
 #include "tokenHandler.hpp"
 #include "rstHandler.hpp"
 #include "jsonObject.hpp"
+#include "wfileHandler.hpp"
 
 using std::string;
 using std::cout;
@@ -47,6 +49,9 @@ private:
 	string	m_source_dir;
 	string	m_output_dir;
 	string  m_tokens_output;
+#ifdef  TASK_3_0__1
+	string  m_tokens_list_file_path;
+#endif
 #ifdef  TASK_27__1
 	string  m_user_output;
 #endif
@@ -64,6 +69,11 @@ private:
 
 	void make_source_out(std::shared_ptr<vector<string>> res) const;
 	void make_token_generators(std::shared_ptr<vector<string>> res) const;
+
+#ifdef  TASK_3_0__1
+	void check_user_files() const;
+#endif
+
 	void make_source_token_out() const;
 	void make_functional_page() const;
 	void make_tokens_page() const;

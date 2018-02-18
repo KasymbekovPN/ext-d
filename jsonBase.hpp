@@ -41,6 +41,9 @@ public:
 
 	virtual ~JsonBase();	
 
+#ifdef  TASK_3_0__1
+	virtual void reset(vector<wstring> path_, variant<wstring, double, JsonBase::eSimple> content_);
+#endif
 	virtual variant<eSimple, double, wstring, eGetterMsg> get(vector<wstring> path_, eType* type_) const;
 	virtual void show(wstring offset) const;
 	virtual void set(vector<wstring> path_, const wstring& name_, JsonBase::eType type_, std::variant<wstring, double, JsonBase::eSimple> arg_);

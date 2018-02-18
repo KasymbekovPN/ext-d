@@ -66,7 +66,9 @@ void TokenGenerator::parse(size_t offset_, const string& outdir_)
 			name += spl[i] + "-";
 		}
 		name += item->getName() + "-" + item->getHash() + ".rst";
+#ifndef  TASK_3_0__1
 		item->write(outdir_, name, "ipynb");
+#endif
 		fTokenList << name << endl;
 
 		cout << '\r' << "token make - " << m_path << ": " << ++token_idx << "/" << m_tokens.size();
@@ -103,7 +105,9 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, bool start, b
 			name += spl[i] + "-";
 		}
 		name += item->getName() + "-" + item->getHash() + ".rst";
+#ifndef  TASK_3_0__1
 		item->write(outdir_, name, "ipynb");
+#endif
 		to_file += name + '\n';
 
 		cout << '\r' << "token make - " << m_path << ": " << ++token_idx << "/" << m_tokens.size();
@@ -143,7 +147,9 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, string * p_na
 		}
 
 		name += item->getName() + "-" + item->getHash() + ".ipynb";
+#ifndef  TASK_3_0__1
 		item->write(outdir_, name, "ipynb");
+#endif
 		*p_name_list_ += name + '\n';
 
 		cout << "\rTokens are generated: " << StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' })
@@ -175,10 +181,23 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, vector<std::e
 			name += spl[i] + "-";
 		}
 
-		name += item->getName() + "-" + item->getHash() + ".ipynb";
-		item->write(outdir_, name, "ipynb");
+		name += item->getName();
+		name = StringHandler::replace_all<string, char>(name, '(', '_');
+		name = StringHandler::replace_all<string, char>(name, ')', '_');
+		name = StringHandler::replace_all<string, char>(name, ',', '_');
+
+		name += "-" + item->getHash() + ".ipynb";
+
+		item->write(outdir_, name, "ipynb", file_paths_);
 		//*p_name_list_ += name + '\n';
-		file_paths_->push_back(name);
+//#ifdef  TASK_3_0__1
+//		if (cBaseToken::TokenType::func_decl != item->getType()) 
+//		{
+//			file_paths_->push_back(name);
+//		}
+//#else
+//		file_paths_->push_back(name);
+//#endif
 
 		cout << "\rTokens are generated: " << StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' })
 			<< ": " << ++token_idx << "/" << m_tokens.size();

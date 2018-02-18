@@ -24,6 +24,9 @@ public:
 	~JsonNumber();
 
 	void show(wstring offset) const;
+#ifdef  TASK_3_0__1
+	virtual void reset(vector<wstring> path_, variant<wstring, double, JsonBase::eSimple> content_) override;
+#endif
 	variant<JsonBase::eSimple, double, wstring, JsonBase::eGetterMsg> get(vector<wstring> path_, eType * type_) const;
 	virtual wstring to_string(const wstring& offset_, bool without_name_, bool wnd_with_comma_) const override;
 

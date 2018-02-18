@@ -1,5 +1,7 @@
 #include "target.h"
 
+namespace fs = std::experimental::filesystem;
+
 const int Target::cmd_size[Target::number_of_cmd] = {2, 2};
 
 Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<ErrorStatus> p_error_)
@@ -168,6 +170,10 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 			m_tokens_output = tokens_path;
 		}
 
+#ifdef  TASK_3_0__1
+		m_tokens_list_file_path = m_tokens_output + "\\_tokens_list.json";
+#endif
+
 		if (JsonBase::eSimple::simple_true == user_relative) {
 			m_user_output = m_output_dir + user_path;
 		}
@@ -246,6 +252,7 @@ void Target::run(const string& flag_) const
 		//------------------------
 	}
 	else if (tgt_flg_m == flag_) {
+		check_user_files();
 		//----не-удалять----------
 		//make_source_out(res);
 		//make_source_token_out();
@@ -350,6 +357,7 @@ void Target::make_source_out(std::shared_ptr<vector<string>> res) const
 	}
 }
 
+
 void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 {
 	vector<TokenGenerator*> tGenerators;
@@ -380,14 +388,29 @@ void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 
 	JsonObject json_object(L"root");
 	json_object.set({}, L"file_paths", JsonBase::eType::array, variant<wstring, double, JsonBase::eSimple>());
-
 	
-	for (size_t i = 0; i < file_paths.size(); ++i) {
-		json_object.set({ L"file_paths" }, L"path_" + std::to_wstring(i), JsonBase::eType::string, 
-			variant<wstring, double, JsonBase::eSimple>(converter.from_bytes(file_paths[i].string())));
+	std::set<std::experimental::filesystem::path> uniq_file_paths;
+	for (auto iter : file_paths) {
+		uniq_file_paths.emplace(iter);
 	}
 
+#ifdef  TASK_3_0__1
+	json_object.set({}, L"numbers", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(uniq_file_paths.size()));
+#endif
+
+	size_t idx = 0;
+	for (auto iter : uniq_file_paths) {
+		string tmp = StringHandler::replace_all<string, char>(iter.string(), '\\', '/');
+		json_object.set({ L"file_paths" }, L"path_" + std::to_wstring(idx++), JsonBase::eType::string,
+			variant<wstring, double, JsonBase::eSimple>(converter.from_bytes(tmp)));
+	}
+
+#ifdef  TASK_3_0__1
+	json_object.write(m_tokens_list_file_path, "json", true);
+#else
 	json_object.write(m_tokens_output + "\\_tokens_list.json", "json", true);
+#endif
+
 #else
 
 	string to_file;
@@ -402,6 +425,131 @@ void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 	fTokenList.close();
 #endif
 }
+
+#ifdef  TASK_3_0__1
+void Target::check_user_files() const
+{
+
+	//
+	// Получение имен валидных токенов из файла _token_list.json
+	//
+	FileHandler file(m_tokens_list_file_path);
+
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+	JsonObject json_object(converter.from_bytes(file.getAsString()), L"root", p_error);
+
+	JsonBase::eType type;
+	auto o_numbers = json_object.get({L"numbers"}, &type);
+	size_t numbers = 0;
+	try {
+		double tmp = std::get<double>(o_numbers);
+		numbers = 0 > tmp ? 0 : size_t(tmp);
+		
+		if (0 == numbers) {
+			p_error->set(ErrorStatus::error::tokenList_file_paths_empty, true);
+		}
+	}
+	catch (std::bad_variant_access&) {
+		p_error->set(ErrorStatus::error::tokenList_invalid_numbes, true);
+	}
+
+	if (0 != p_error->get()) {
+		return;
+	}
+
+	vector<wstring> file_list;
+	for (size_t i = 0; i < numbers; ++i) {
+		auto o_file_path = json_object.get({L"file_paths", L"file_paths_" + std::to_wstring(i)}, &type);
+		try {
+			wstring file_path = std::get<wstring>(o_file_path);
+			//
+			// Существует ли файл из списка?
+			//
+			if (!std::experimental::filesystem::exists(file_path)) {
+				p_error->set(ErrorStatus::error::tokenList_file_no_exists, true);
+				break;
+			}
+			file_list.push_back(file_path);
+		}
+		catch (std::bad_variant_access&) {
+			p_error->set(ErrorStatus::error::tokenList_invalid_file_paths, true);
+			break;
+		}
+	}
+
+	if (0 != p_error->get()) {
+		return;
+	}
+
+	//
+	// Получение имен пользовательсикй файлов
+	//
+	if (!std::experimental::filesystem::exists(m_user_output)) {
+		p_error->set(ErrorStatus::error::user_directory_no_exists, true);
+		return;
+	}
+
+	for (auto & iter : fs::directory_iterator(m_user_output)) {
+		
+		if (fs::file_type::regular == iter.status().type() && ".ipynb" == iter.path().extension()) {
+			WFileHandler wfile(converter.from_bytes(iter.path().string()));
+			JsonObject json_object(wfile.wstring(), L"root", p_error);
+
+			JsonBase::eType type;
+			size_t cells_idx = 0;			
+			while (true) {
+
+				//
+				// Существует ли ячсейка с индексом cells_idx
+				//
+				auto o_cells = json_object.get({L"cells", L"cells_" + std::to_wstring(cells_idx)}, &type);
+				JsonBase::eGetterMsg msg;
+				try {
+					msg = std::get<JsonBase::eGetterMsg>(o_cells);
+					if (JsonBase::eGetterMsg::is_object != msg) {
+						break;
+					}
+				}
+				catch (std::bad_variant_access&) {
+					break;
+				}
+
+				size_t source_idx = 0;
+				while (true) {
+
+					//
+					// Существует ли строка с индексом source_idx
+					//
+					auto o_source = json_object.get({L"cells", L"cells_" + std::to_wstring(cells_idx), L"source", L"source_" + std::to_wstring(source_idx)},&type);
+					wstring source;
+					try {
+						source = std::get<wstring>(o_source);
+						std::wcout << source << endl;
+					}
+					catch (std::bad_variant_access&) {
+						break;
+					}
+
+					source_idx++;
+				}
+
+				cells_idx++;
+			}
+
+			//json_object.show(L"");
+		}
+	}
+
+	//
+	// Для каждого файла, получение пользовательского содержимого
+	//
+
+	//
+	// Замена невалидных ссылок на файлы токенов.
+	//
+
+}
+#endif
 
 void Target::make_source_token_out() const
 {

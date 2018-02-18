@@ -22,6 +22,7 @@ class cBaseToken
 {
 
 protected:
+#ifndef  TASK_3_0__1
 	enum class TokenType {
 		macro,
 		typedef_enum,
@@ -30,8 +31,20 @@ protected:
 		func_decl,
 		func_def,
 	};
+#endif
 
 public:
+
+#ifdef  TASK_3_0__1
+	enum class TokenType {
+		macro,
+		typedef_enum,
+		def_var,
+		typedef_struct,
+		func_decl,
+		func_def,
+	};
+#endif
 
 	cBaseToken(TokenType type_, const string& raw_);
 	virtual ~cBaseToken();
@@ -57,7 +70,11 @@ public:
 	bool isVolatile() const;
 	bool isExtern() const;
 
+#ifdef  TASK_3_0__1
+	virtual void write(const string& dir_, const string& file_name_, const string& mode_, vector<std::experimental::filesystem::path>* file_paths_);
+#else
 	virtual void write(const string& dir_, const string& file_name_, const string& mode_);
+#endif
 	virtual void toRst(string* p_member_, bool root_, const string& patern_name_);
 	virtual vector<string> parse_members(bool root_, const string& patern_name_);
 

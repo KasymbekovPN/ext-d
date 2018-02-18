@@ -59,6 +59,79 @@ void cFuncDef::show(int offset_) const
 	cout << "Value : " << endl << StringHandler::filter<string, char>(m_value, StringHandler::FBE::all, { ' ', '\n', '\t', '\\' }) << endl;
 }
 
+#ifdef  TASK_3_0__1
+void cFuncDef::write(const string & dir_, const string & file_name_, const string & mode_, vector<std::experimental::filesystem::path>* file_paths_)
+{
+	cBaseToken::write(dir_, file_name_, mode_, file_paths_);
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+	string fill_name = dir_ + "\\" + file_name_;
+	file_paths_->push_back(fill_name);
+	JsonObject json_object(L"root");
+	json_object.set({}, L"cells", JsonBase::eType::array, variant<wstring, double, JsonBase::eSimple>());
+	size_t idx = 0;
+
+	//
+	// Ячейка "Общее"
+	//
+	json_object.set({ L"cells" }, L"cell_" + std::to_wstring(idx), JsonObject::eType::object, variant<wstring, double, JsonBase::eSimple>());
+	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"cell_type", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"markdown"));
+	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"metadata", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
+	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"source", JsonBase::eType::array, variant<wstring, double, JsonBase::eSimple>());
+	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_0", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"### Общее\\n"));
+	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_1", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"\\n"));
+
+	//
+	// Ячейки "Аргументы"
+	//
+	auto args = StringHandler::split(m_args, ',');
+	for (auto arg : args) {
+		idx++;
+		json_object.set({ L"cells" }, L"cell_" + std::to_wstring(idx), JsonObject::eType::object, variant<wstring, double, JsonBase::eSimple>());
+		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"cell_type", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"markdown"));
+		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"metadata", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
+		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"source", JsonBase::eType::array, variant<wstring, double, JsonBase::eSimple>());
+		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_0", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"#### Аргумент:\\n"));
+		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_1",
+			JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(converter.from_bytes(arg) + L"\\n"));
+
+	}
+
+	//
+	// Ячейка "Возвращает"
+	//
+	if ("void" != m_dataType) {
+		idx++;
+		json_object.set({ L"cells" }, L"cell_" + std::to_wstring(idx), JsonObject::eType::object, variant<wstring, double, JsonBase::eSimple>());
+		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"cell_type", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"markdown"));
+		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"metadata", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
+		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"source", JsonBase::eType::array, variant<wstring, double, JsonBase::eSimple>());
+		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_0",
+			JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"#### Возвращает (" + converter.from_bytes(m_dataType) + L"):\\n"));
+	}
+
+	//
+	// Ячейка "Код"
+	//
+	idx++;
+	json_object.set({ L"cells" }, L"cell_" + std::to_wstring(idx), JsonObject::eType::object, variant<wstring, double, JsonBase::eSimple>());
+	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"cell_type", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"markdown"));
+	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"metadata", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
+	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"source", JsonBase::eType::array, variant<wstring, double, JsonBase::eSimple>());
+	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_0", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"```c\\n"));
+
+	auto code_lines = get_raw_WLines(false);
+	for (size_t i = 0; i < code_lines.size(); ++i) {
+		wstring code_line = StringHandler::escape_wchar(code_lines[i], L'"');
+		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_" + std::to_wstring(i),
+			JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(code_line + L"\\n"));
+	}
+
+	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_" + std::to_wstring(code_lines.size()), JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"}\\n"));
+	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_" + std::to_wstring(code_lines.size() + 1), JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"```"));
+
+	json_object.write(fill_name, "ipynb", false);
+}
+#else
 void cFuncDef::write(const string & dir_, const string & file_name_, const string & mode_)
 {
 	cBaseToken::write(dir_, file_name_, mode_);
@@ -133,3 +206,4 @@ void cFuncDef::write(const string & dir_, const string & file_name_, const strin
 	json_object.write(fill_name, "ipynb");
 #endif
 }
+#endif

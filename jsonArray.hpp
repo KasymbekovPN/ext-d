@@ -29,6 +29,9 @@ public:
 	virtual void show(wstring offset) const override;
 
 	virtual void set(vector<wstring> path_, const wstring& name_, JsonBase::eType type_, std::variant<wstring, double, JsonBase::eSimple> arg_) override;
+#ifdef  TASK_3_0__1
+	virtual void reset(vector<wstring> path_, variant<wstring, double, JsonBase::eSimple> content_) override;
+#endif
 	virtual variant<JsonBase::eSimple, double, wstring, JsonBase::eGetterMsg> get(vector<wstring> path_, eType * type_) const override;
 	virtual wstring to_string(const wstring& offset_, bool without_name_, bool end_with_comma_) const override;
 

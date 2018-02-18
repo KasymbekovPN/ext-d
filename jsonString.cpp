@@ -22,6 +22,22 @@ void JsonString::show(wstring offset) const
 	std::wcout << L"\"" << m_content << L"\"" << endl;
 }
 
+#ifdef  TASK_3_0__1
+void JsonString::reset(vector<wstring> path_, variant<wstring, double, JsonBase::eSimple> content_)
+{
+	if (path_.empty()) {
+		wstring tmp;
+		try {
+			tmp = std::get<wstring>(content_);
+		}
+		catch (std::bad_variant_access&) {
+			tmp.clear();
+		}
+		m_content = tmp;
+	}
+}
+#endif
+
 variant<JsonBase::eSimple, double, wstring, JsonBase::eGetterMsg> JsonString::get(vector<wstring> path_, JsonBase::eType * type_) const
 {
 	variant<JsonBase::eSimple, double, wstring, JsonBase::eGetterMsg> res;

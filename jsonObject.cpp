@@ -38,6 +38,7 @@ JsonObject::JsonObject(const wstring & content_, const wstring& name_, shared_pt
 			size_t found_dots = tmp.find_first_of(L':');
 			if (wstring::npos == found_dots) {
 				p_error->set(ErrorStatus::error::json_invalidSyntax, true);
+				//cout << 1 << endl;
 			}
 			else {
 
@@ -84,10 +85,12 @@ JsonObject::JsonObject(const wstring & content_, const wstring& name_, shared_pt
 					}
 					else {
 						p_error->set(ErrorStatus::error::json_invalidSyntax, true);
+						//cout << 2 << endl;
 					}
 				}
 				else {
 					p_error->set(ErrorStatus::error::json_invalidSyntax, true);
+					//cout << 3 << endl;
 				}
 			}
 
@@ -179,6 +182,20 @@ void JsonObject::set(vector<wstring> path_, const wstring & name_, JsonBase::eTy
 
 	}
 }
+
+#ifdef  TASK_3_0__1
+void JsonObject::reset(vector<wstring> path_, variant<wstring, double, JsonBase::eSimple> content_)
+{
+	if (!path_.empty()) {
+
+		for (auto iter : m_lists) {
+			vector<wstring> new_path;
+			std::copy(path_.begin() + 1, path_.end(), std::inserter(new_path, new_path.begin()));
+			iter->reset(new_path, content_);
+		}
+	}
+}
+#endif
 
 variant<JsonBase::eSimple, double, wstring, JsonBase::eGetterMsg> JsonObject::get(vector<wstring> path_, eType * type_) const
 {

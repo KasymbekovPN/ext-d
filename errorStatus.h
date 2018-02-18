@@ -59,6 +59,13 @@ public:
 		json_extdlists_inv_user_rel,
 		json_extdlists_inv_user_path,
 #endif
+#ifdef  TASK_27__1
+		tokenList_invalid_numbes,
+		tokenList_invalid_file_paths,
+		tokenList_file_paths_empty,
+		tokenList_file_no_exists,
+		user_directory_no_exists,
+#endif
 	};
 
 	explicit ErrorStatus();

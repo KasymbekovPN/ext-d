@@ -135,10 +135,16 @@ bool cBaseToken::isExtern() const
 	return m_extern;
 }
 
+#ifdef  TASK_3_0__1
+void cBaseToken::write(const string & dir_, const string & file_name_, const string & mode_, vector<std::experimental::filesystem::path>* file_paths_)
+{
+}
+#else
 void cBaseToken::write(const string & dir_, const string & file_name_, const string & mode_)
 {
 	
 }
+#endif
 
 void cBaseToken::toRst(string * p_member_, bool root_, const string& patern_name_)
 {

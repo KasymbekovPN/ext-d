@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(ext-d VERSION 0.2.7)
+project(ext-d VERSION 0.3.0)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -61,4 +61,6 @@ add_executable(ext-d
                 jsonString.cpp
                 jsonArray.hpp
                 jsonArray.cpp
+                wfileHandler.hpp
+                wfileHandler.cpp
                 )
