@@ -73,7 +73,6 @@ JsonArray::JsonArray(const wstring & content_, const wstring & name_, shared_ptr
 			}
 			else {
 				p_error->set(ErrorStatus::error::json_invalidSyntax, true);
-				//cout << 4 << endl;
 			}
 
 			tmp.clear();

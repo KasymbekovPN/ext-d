@@ -457,7 +457,15 @@ void Target::check_user_files() const
 		return;
 	}
 
+#ifdef  TASK_3_0__3
+	std::shared_ptr<vector<TokenPath>> file_list(new vector<TokenPath>());
+#else
+#ifdef  TASK_3_0__2
+	std::shared_ptr<vector<wstring>> file_list(new vector<wstring>());
+#else
 	vector<wstring> file_list;
+#endif
+#endif
 	for (size_t i = 0; i < numbers; ++i) {
 		auto o_file_path = json_object.get({L"file_paths", L"file_paths_" + std::to_wstring(i)}, &type);
 		try {
@@ -469,7 +477,15 @@ void Target::check_user_files() const
 				p_error->set(ErrorStatus::error::tokenList_file_no_exists, true);
 				break;
 			}
+#ifdef  TASK_3_0__3
+			file_list->push_back(TokenPath(file_path));
+#else
+#ifdef  TASK_3_0__2
+			file_list->push_back(file_path);
+#else
 			file_list.push_back(file_path);
+#endif
+#endif
 		}
 		catch (std::bad_variant_access&) {
 			p_error->set(ErrorStatus::error::tokenList_invalid_file_paths, true);
@@ -524,7 +540,11 @@ void Target::check_user_files() const
 					wstring source;
 					try {
 						source = std::get<wstring>(o_source);
+#ifdef  TASK_3_0__2
+						PartedLine pline(source, file_list);
+#else
 						std::wcout << source << endl;
+#endif
 					}
 					catch (std::bad_variant_access&) {
 						break;

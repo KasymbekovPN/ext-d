@@ -22,6 +22,8 @@
 #include "rstHandler.hpp"
 #include "jsonObject.hpp"
 #include "wfileHandler.hpp"
+#include "parted_line.hpp"
+#include "token_path.hpp"
 
 using std::string;
 using std::cout;

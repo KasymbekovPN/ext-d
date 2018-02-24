@@ -189,16 +189,7 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, vector<std::e
 		name += "-" + item->getHash() + ".ipynb";
 
 		item->write(outdir_, name, "ipynb", file_paths_);
-		//*p_name_list_ += name + '\n';
-//#ifdef  TASK_3_0__1
-//		if (cBaseToken::TokenType::func_decl != item->getType()) 
-//		{
-//			file_paths_->push_back(name);
-//		}
-//#else
-//		file_paths_->push_back(name);
-//#endif
-
+		
 		cout << "\rTokens are generated: " << StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' })
 			<< ": " << ++token_idx << "/" << m_tokens.size();
 	}

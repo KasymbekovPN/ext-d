@@ -38,7 +38,6 @@ JsonObject::JsonObject(const wstring & content_, const wstring& name_, shared_pt
 			size_t found_dots = tmp.find_first_of(L':');
 			if (wstring::npos == found_dots) {
 				p_error->set(ErrorStatus::error::json_invalidSyntax, true);
-				//cout << 1 << endl;
 			}
 			else {
 
@@ -85,12 +84,10 @@ JsonObject::JsonObject(const wstring & content_, const wstring& name_, shared_pt
 					}
 					else {
 						p_error->set(ErrorStatus::error::json_invalidSyntax, true);
-						//cout << 2 << endl;
 					}
 				}
 				else {
 					p_error->set(ErrorStatus::error::json_invalidSyntax, true);
-					//cout << 3 << endl;
 				}
 			}
 

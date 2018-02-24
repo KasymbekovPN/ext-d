@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.9)
 
 project(ext-d VERSION 0.3.0)
 
@@ -7,6 +7,11 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
 endif(MSVC)
+
+#define TASK_27__1
+#define TASK_3_0__1
+#define TASK_3_0__2
+#define TASK_3_0__3
 
 configure_file(config.h.in config.h)
 
@@ -63,4 +68,10 @@ add_executable(ext-d
                 jsonArray.cpp
                 wfileHandler.hpp
                 wfileHandler.cpp
+                parted_line.hpp
+                parted_line.cpp
+                part_pline.hpp
+                part_pline.cpp
+                token_path.hpp
+                token_path.cpp
                 )
