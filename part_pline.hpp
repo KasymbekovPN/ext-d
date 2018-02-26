@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "token_path.hpp"
+#include "stringHandler.h"
 
 using std::wcout;
 using std::cout;

@@ -8,11 +8,6 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
 endif(MSVC)
 
-#define TASK_27__1
-#define TASK_3_0__1
-#define TASK_3_0__2
-#define TASK_3_0__3
-
 configure_file(config.h.in config.h)
 
 add_executable(ext-d 

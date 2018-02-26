@@ -50,7 +50,12 @@ PartedLine::~PartedLine()
 
 wstring PartedLine::processedWString() const
 {
-	return wstring();
+	wstring res;
+	for (auto it : m_parts) {
+		res += it->string();
+	}
+
+	return res;
 }
 
 #ifdef  TASK_3_0__2

@@ -542,6 +542,8 @@ void Target::check_user_files() const
 						source = std::get<wstring>(o_source);
 #ifdef  TASK_3_0__2
 						PartedLine pline(source, file_list);
+						json_object.reset({ L"cells", L"cells_" + std::to_wstring(cells_idx), L"source", L"source_" + std::to_wstring(source_idx) }, 
+							variant<wstring, double, JsonBase::eSimple>(pline.processedWString()));
 #else
 						std::wcout << source << endl;
 #endif
@@ -557,6 +559,7 @@ void Target::check_user_files() const
 			}
 
 			//json_object.show(L"");
+			json_object.write(iter.path().string(),"", true);
 		}
 	}
 

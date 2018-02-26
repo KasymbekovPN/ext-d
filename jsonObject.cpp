@@ -308,7 +308,7 @@ void JsonObject::write(const string & path_, const string & mode_, bool rewrite_
 	//
 	// Для режимов "json" и "ipynb"
 	//
-	if ("ipynb" == mode_ || "json" == mode_) {
+	if ("ipynb" == mode_ || "json" == mode_ || "" == mode_) {
 
 		//
 		// Существует ли директория, если не существует, то создаем.
