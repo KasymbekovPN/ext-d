@@ -6,8 +6,6 @@ JsonObject::JsonObject(const wstring & content_, const wstring& name_, shared_pt
 
 	wstring filtred_content = StringHandler::filter<wstring, wchar_t>(content_, StringHandler::FBE::begin_and_end, { L' ', L'\t', L'\n' });
 
-
-
 	if (L'{' != filtred_content[0] || L'}' != filtred_content[filtred_content.size() - 1]) {
 		cout << "obj" << endl;
 		p_error->set(ErrorStatus::error::json_objectInvalid, true);
@@ -36,6 +34,60 @@ JsonObject::JsonObject(const wstring & content_, const wstring& name_, shared_pt
 			if (i == filtred_content.size() - 2) { tmp += filtred_content[i]; }
 
 			size_t found_dots = tmp.find_first_of(L':');
+#ifdef TASK_3_0__4
+			if (wstring::npos != found_dots) 
+			{
+
+				wstring name = StringHandler::filter<wstring, wchar_t>(tmp.substr(0, found_dots), StringHandler::FBE::begin_and_end, { L' ', L'\t', L'\n' });
+				if (L'"' == name[0] && L'"' == name[name.size() - 1]) {
+					name = name.substr(1, name.size() - 2);
+
+					wstring value = StringHandler::filter<wstring, wchar_t>(tmp.substr(found_dots + 1), StringHandler::FBE::begin_and_end, { L' ', L'\n', L'\t' });
+					bool first_is_double_quot_mark = L'"' == value[0];
+					bool last_is_double_quot_mark = L'"' == value[value.size() - 1];
+					bool first_is_sqr_brack = L'[' == value[0];
+					bool last_is_sqr_brack = L']' == value[value.size() - 1];
+					bool first_is_brace = L'{' == value[0];
+					bool last_is_brace = L'}' == value[value.size() - 1];
+
+					if (first_is_double_quot_mark && last_is_double_quot_mark) {
+						m_lists.push_back(new JsonString(
+							value.substr(1, value.size() - 2),
+							name,
+							p_error
+						));
+					}
+					else if (first_is_brace && last_is_brace) {
+						m_lists.push_back(new JsonObject(value, name, p_error));
+					}
+					else if (first_is_sqr_brack && last_is_sqr_brack) {
+						m_lists.push_back(new JsonArray(value, name, p_error));
+					}
+					else if (!first_is_brace && !first_is_double_quot_mark && !first_is_sqr_brack &&
+						!last_is_brace && !last_is_double_quot_mark && !last_is_sqr_brack)
+					{
+						if (L"null" == value) {
+							m_lists.push_back(new JsonSimple(JsonBase::eSimple::simple_null, name, p_error));
+						}
+						else if (L"false" == value) {
+							m_lists.push_back(new JsonSimple(JsonBase::eSimple::simple_false, name, p_error));
+						}
+						else if (L"true" == value) {
+							m_lists.push_back(new JsonSimple(JsonBase::eSimple::simple_true, name, p_error));
+						}
+						else {
+							m_lists.push_back(new JsonNumber(value, name, p_error));
+						}
+					}
+					else {
+						p_error->set(ErrorStatus::error::json_invalidSyntax, true);
+					}
+				}
+				else {
+					p_error->set(ErrorStatus::error::json_invalidSyntax, true);
+				}
+			}
+#else
 			if (wstring::npos == found_dots) {
 				p_error->set(ErrorStatus::error::json_invalidSyntax, true);
 			}
@@ -90,6 +142,7 @@ JsonObject::JsonObject(const wstring & content_, const wstring& name_, shared_pt
 					p_error->set(ErrorStatus::error::json_invalidSyntax, true);
 				}
 			}
+#endif
 
 			tmp.clear();
 		}
