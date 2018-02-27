@@ -27,9 +27,7 @@ public:
 	void parse(size_t offset_, const string& outdir_);
 	void parse(size_t offset_, const string& outdir_, bool start, bool stop);
 	void parse(size_t offset_, const string& outdir_, string* p_name_list_);
-#ifdef  TASK_27__1
 	void parse(size_t offset_, const string& outdir_, vector<std::experimental::filesystem::path>* file_paths_);
-#endif
 
 	void show();
 

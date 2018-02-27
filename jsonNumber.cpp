@@ -30,7 +30,6 @@ void JsonNumber::show(wstring offset) const
 	cout << m_content << endl;
 }
 
-#ifdef  TASK_3_0__1
 void JsonNumber::reset(vector<wstring> path_, variant<wstring, double, JsonBase::eSimple> content_)
 {
 	if (path_.empty()) {
@@ -44,7 +43,6 @@ void JsonNumber::reset(vector<wstring> path_, variant<wstring, double, JsonBase:
 		m_content = tmp;
 	}
 }
-#endif
 
 variant<JsonBase::eSimple, double, wstring, JsonBase::eGetterMsg> JsonNumber::get(vector<wstring> path_, eType * type_) const
 {

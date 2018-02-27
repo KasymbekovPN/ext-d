@@ -2,11 +2,5 @@
 #define CONFIG_H
 
 #cmakedefine PROJECT_VERSION "@PROJECT_VERSION@"
-
-#define TASK_27__1
-#define TASK_3_0__1
-#define TASK_3_0__2
-#define TASK_3_0__3
-#define TASK_3_0__4
  
 #endif // CONFIG_H

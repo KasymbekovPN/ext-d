@@ -165,7 +165,6 @@ void JsonArray::set(vector<wstring> path_, const wstring & name_, JsonBase::eTyp
 	}
 }
 
-#ifdef  TASK_3_0__1
 void JsonArray::reset(vector<wstring> path_, variant<wstring, double, JsonBase::eSimple> content_)
 {
 	if (!path_.empty()) {
@@ -178,7 +177,6 @@ void JsonArray::reset(vector<wstring> path_, variant<wstring, double, JsonBase::
 		}
 	}
 }
-#endif
 
 variant<JsonBase::eSimple, double, wstring, JsonBase::eGetterMsg> JsonArray::get(vector<wstring> path_, eType * type_) const
 {

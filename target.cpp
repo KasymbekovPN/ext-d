@@ -133,7 +133,6 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 		p_error->set(ErrorStatus::error::json_extdlists_inv_tokens_path, true);
 	}
 
-#ifdef  TASK_27__1
 	//
 	// Вызрузка параметра user-relative
 	//
@@ -159,7 +158,6 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 	catch (std::bad_variant_access&) {
 		p_error->set(ErrorStatus::error::json_extdlists_inv_user_path, true);
 	}
-#endif
 
 	if (0 == p_error->get()) {
 
@@ -170,9 +168,7 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 			m_tokens_output = tokens_path;
 		}
 
-#ifdef  TASK_3_0__1
 		m_tokens_list_file_path = m_tokens_output + "\\_tokens_list.json";
-#endif
 
 		if (JsonBase::eSimple::simple_true == user_relative) {
 			m_user_output = m_output_dir + user_path;
@@ -377,8 +373,6 @@ void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 		}
 	}
 
-#ifdef  TASK_27__1
-
 	vector<std::experimental::filesystem::path> file_paths;
 	for (auto t : tGenerators) {
 		t->parse(m_source_dir.size(), m_tokens_output, &file_paths);
@@ -394,9 +388,7 @@ void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 		uniq_file_paths.emplace(iter);
 	}
 
-#ifdef  TASK_3_0__1
 	json_object.set({}, L"numbers", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(uniq_file_paths.size()));
-#endif
 
 	size_t idx = 0;
 	for (auto iter : uniq_file_paths) {
@@ -405,28 +397,10 @@ void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 			variant<wstring, double, JsonBase::eSimple>(converter.from_bytes(tmp)));
 	}
 
-#ifdef  TASK_3_0__1
 	json_object.write(m_tokens_list_file_path, "json", true);
-#else
-	json_object.write(m_tokens_output + "\\_tokens_list.json", "json", true);
-#endif
 
-#else
-
-	string to_file;
-	for (auto t : tGenerators) {
-		t->parse(m_source_dir.size(), m_tokens_output, &to_file);
-	}
-
-	cout << m_user_output << endl;
-
-	ofstream fTokenList(m_tokens_output + "\\_token_list.txt");
-	fTokenList << to_file;
-	fTokenList.close();
-#endif
 }
 
-#ifdef  TASK_3_0__1
 void Target::check_user_files() const
 {
 
@@ -457,15 +431,7 @@ void Target::check_user_files() const
 		return;
 	}
 
-#ifdef  TASK_3_0__3
 	std::shared_ptr<vector<TokenPath>> file_list(new vector<TokenPath>());
-#else
-#ifdef  TASK_3_0__2
-	std::shared_ptr<vector<wstring>> file_list(new vector<wstring>());
-#else
-	vector<wstring> file_list;
-#endif
-#endif
 	for (size_t i = 0; i < numbers; ++i) {
 		auto o_file_path = json_object.get({L"file_paths", L"file_paths_" + std::to_wstring(i)}, &type);
 		try {
@@ -477,15 +443,7 @@ void Target::check_user_files() const
 				p_error->set(ErrorStatus::error::tokenList_file_no_exists, true);
 				break;
 			}
-#ifdef  TASK_3_0__3
 			file_list->push_back(TokenPath(file_path));
-#else
-#ifdef  TASK_3_0__2
-			file_list->push_back(file_path);
-#else
-			file_list.push_back(file_path);
-#endif
-#endif
 		}
 		catch (std::bad_variant_access&) {
 			p_error->set(ErrorStatus::error::tokenList_invalid_file_paths, true);
@@ -540,13 +498,9 @@ void Target::check_user_files() const
 					wstring source;
 					try {
 						source = std::get<wstring>(o_source);
-#ifdef  TASK_3_0__2
 						PartedLine pline(source, file_list);
 						json_object.reset({ L"cells", L"cells_" + std::to_wstring(cells_idx), L"source", L"source_" + std::to_wstring(source_idx) }, 
 							variant<wstring, double, JsonBase::eSimple>(pline.processedWString()));
-#else
-						std::wcout << source << endl;
-#endif
 					}
 					catch (std::bad_variant_access&) {
 						break;
@@ -558,21 +512,10 @@ void Target::check_user_files() const
 				cells_idx++;
 			}
 
-			//json_object.show(L"");
 			json_object.write(iter.path().string(),"", true);
 		}
 	}
-
-	//
-	// Для каждого файла, получение пользовательского содержимого
-	//
-
-	//
-	// Замена невалидных ссылок на файлы токенов.
-	//
-
 }
-#endif
 
 void Target::make_source_token_out() const
 {

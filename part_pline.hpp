@@ -32,11 +32,7 @@ public:
 	};
 
 	PartPLine(const wstring& content_);
-#ifdef  TASK_3_0__3
 	PartPLine(const wstring& head_link_, const wstring& link_, shared_ptr<vector<TokenPath>> token_file_list_);
-#else
-	PartPLine(const wstring& head_link, const wstring& link, shared_ptr<vector<wstring>> token_file_list_);
-#endif
 
 	~PartPLine();
 	wstring string() const;

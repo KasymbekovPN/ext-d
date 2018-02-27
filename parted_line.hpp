@@ -20,11 +20,7 @@ using std::array;
 class PartedLine
 {
 public:
-#ifdef  TASK_3_0__3
 	PartedLine(const wstring& source_line_, shared_ptr<vector<TokenPath>> token_file_list_);
-#else
-	PartedLine(const wstring& source_line_, shared_ptr<vector<wstring>> token_file_lists_);
-#endif
 	~PartedLine();
 
 	wstring processedWString() const;
@@ -33,8 +29,6 @@ private:
 
 	vector<PartPLine*> m_parts;
 
-#ifdef  TASK_3_0__2
 	static bool check_founds(const array<size_t, 4> founds_);
-#endif
 };
 

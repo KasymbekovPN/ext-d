@@ -13,11 +13,9 @@ JsonBase::~JsonBase()
 {
 }
 
-#ifdef  TASK_3_0__1
 void JsonBase::reset(vector<wstring> path_, variant<wstring, double, JsonBase::eSimple> content_)
 {
 }
-#endif
 
 variant<JsonBase::eSimple, double, wstring, JsonBase::eGetterMsg> JsonBase::get(vector<wstring> path_, eType * type_) const
 {

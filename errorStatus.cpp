@@ -36,17 +36,13 @@ ErrorStatus::ENM ErrorStatus::errorNamesMap {
 	{ ErrorStatus::error::json_extdlists_inv_unhand_dir, "ExtDLists - невалидно заданые необраб. директории"},
 	{ ErrorStatus::error::json_extdlists_inv_tokens_rel, "ExiDLists - невадидный параметр tokens-relative"},
 	{ ErrorStatus::error::json_extdlists_inv_tokens_path, "ExtDLists - невадидный параметр tokens-path"},
-#ifdef  TASK_27__1
 	{ ErrorStatus::error::json_extdlists_inv_user_rel, "ExtDLists - невалидный параметр user-rel."},
 	{ ErrorStatus::error::json_extdlists_inv_user_path, "ExtDLists - невалидный параметр user-path."},
-#endif
-#ifdef  TASK_3_0__1
 	{ ErrorStatus::error::tokenList_invalid_numbes, "_tokens_list - невалидный параметр numbers."},
 	{ ErrorStatus::error::tokenList_invalid_file_paths, "_token_list - невалидный параметр file_paths."},
 	{ ErrorStatus::error::tokenList_file_paths_empty, "_token_list - file_paths пуст."},
 	{ ErrorStatus::error::tokenList_file_no_exists, "_token_list - файл из списка не существует."},
 	{ ErrorStatus::error::user_directory_no_exists, "Директория с пользовательскими файлами не существует."}
-#endif
 };
 
 ErrorStatus::ErrorStatus(): value(0){}

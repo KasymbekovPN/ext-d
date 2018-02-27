@@ -1,13 +1,7 @@
 #include "parted_line.hpp"
 
-#ifndef  TASK_3_0__3
-PartedLine::PartedLine(const wstring & source_line_, shared_ptr<vector<wstring>> token_file_lists_)
-#else
 PartedLine::PartedLine(const wstring & source_line_, shared_ptr<vector<TokenPath>> token_file_list_)
-#endif
 {
-	//cout << "---" << endl;
-	//std::wcout << source_line_ << endl;
 
 	array<size_t, 4> founds;
 	size_t start = 0;
@@ -37,8 +31,6 @@ PartedLine::PartedLine(const wstring & source_line_, shared_ptr<vector<TokenPath
 			m_parts.push_back(new PartPLine(str));
 		}
 	}
-
-	//cout << "---" << endl;
 }
 
 PartedLine::~PartedLine()
@@ -58,7 +50,6 @@ wstring PartedLine::processedWString() const
 	return res;
 }
 
-#ifdef  TASK_3_0__2
 bool PartedLine::check_founds(const array<size_t, 4> founds_)
 {
 	bool cond = true;
@@ -74,4 +65,3 @@ bool PartedLine::check_founds(const array<size_t, 4> founds_)
 
 	return cond;
 }
-#endif
