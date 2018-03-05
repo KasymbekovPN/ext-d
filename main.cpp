@@ -1,23 +1,9 @@
 
-#include "config.h"
 #include "fileHandler.h"
 #include "configHandler.h"
-#include "stringHandler.h"
-#include "errorStatus.h"
-#include "dom.hpp"
-#include "dirHandler.hpp"
-#include <jsonObject.hpp>
 
 #include <consoleCmdHandler.h>
-#include <iostream>
 #include <clocale>
-#include <vector>
-#include <string>
-#include <map>
-#include <algorithm>
-#include <iomanip>
-#include <codecvt>
-#include <locale>
 
 using std::cout;
 using std::endl;

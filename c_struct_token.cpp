@@ -125,17 +125,17 @@ void cStructToken::write(const string & dir_, const string & file_name_, const s
 	size_t idx = 0;
 
 	//
-	// Ячейка "Общее"
+	// пїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅ"
 	//
 	json_object.set({ L"cells" }, L"cell_" + std::to_wstring(idx), JsonObject::eType::object, variant<wstring, double, JsonBase::eSimple>());
 	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"cell_type", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"markdown"));
 	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"metadata", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
 	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"source", JsonBase::eType::array, variant<wstring, double, JsonBase::eSimple>());
-	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_0", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"### Общее\\n"));
+	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_0", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"### пїЅпїЅпїЅпїЅпїЅ\\n"));
 	json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_1", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"\\n"));
 
 	//
-	// Ячейки "Члены структуры"
+	// пїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 	//
 	auto struct_members = parse_members(true, "");
 	for (auto member : struct_members) {
@@ -153,7 +153,7 @@ void cStructToken::write(const string & dir_, const string & file_name_, const s
 	}
 
 	//
-	// Ячейка "Код"
+	// пїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅ"
 	//
 	idx++;
 	json_object.set({ L"cells" }, L"cell_" + std::to_wstring(idx), JsonObject::eType::object, variant<wstring, double, JsonBase::eSimple>());
@@ -173,18 +173,18 @@ void cStructToken::write(const string & dir_, const string & file_name_, const s
 	json_object.write(fill_name, "ipynb", false);
 }
 
-void cStructToken::toRst(string * p_members, bool root_, const string& patern_name_)
-{
-
-	string prefix = (!root_ ? patern_name_ : "") + m_name + ".";
-
-	for (auto item : m_value) {
-		if (TokenType::def_var == item->getType() || TokenType::typedef_struct == item->getType()) {
-			*p_members += ".. ext-d-struct-member:: " + prefix + item->getName() + "\n\n";
-			item->toRst(p_members, false, prefix);
-		}
-	}
-}
+//void cStructToken::toRst(string * p_members, bool root_, const string& patern_name_)
+//{
+//
+//	string prefix = (!root_ ? patern_name_ : "") + m_name + ".";
+//
+//	for (auto item : m_value) {
+//		if (TokenType::def_var == item->getType() || TokenType::typedef_struct == item->getType()) {
+//			*p_members += ".. ext-d-struct-member:: " + prefix + item->getName() + "\n\n";
+//			item->toRst(p_members, false, prefix);
+//		}
+//	}
+//}
 
 vector<string> cStructToken::parse_members(bool root_, const string & patern_name_)
 {

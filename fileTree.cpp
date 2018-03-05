@@ -7,7 +7,7 @@ FileTree::FileTree(const string & path_, std::shared_ptr<ErrorStatus> p_error_, 
 {
 
 	//
-	// Определяемся с языком.
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 	//
 	m_ll["c-lang"] = FileTreeLang::c_lang;
 
@@ -27,14 +27,14 @@ FileTree::FileTree(const string & path_, std::shared_ptr<ErrorStatus> p_error_, 
 		for (auto & iter : fs::directory_iterator(path_)) {
 
 			//
-			// Обработка директории
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 			//
 			if (fs::file_type::directory == iter.status().type()) {
 				std::stringstream str_dir_name;
 				str_dir_name << iter;
 
 				//
-				// Директория не должна быть помечена как необрабатываемая
+				// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 				//
 				bool unhandled = false;
 				for (auto ud : unhand_dir_) {
@@ -97,8 +97,8 @@ void FileTree::filePaths(std::shared_ptr<vector<string>> path_out, bool need_cle
 	}
 }
 
-string FileTree::getIndexRstName() const
-{
-	return m_index_rst;
-}
+//string FileTree::getIndexRstName() const
+//{
+//	return m_index_rst;
+//}
 

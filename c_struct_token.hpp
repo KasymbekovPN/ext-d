@@ -35,7 +35,7 @@ private:
 	
 	vector<cBaseToken*> m_value;
 
-	void toRst(string* p_members, bool root_, const string& patern_name_);
+//	void toRst(string* p_members, bool root_, const string& patern_name_);
 
 
 };

@@ -139,9 +139,9 @@ void cBaseToken::write(const string & dir_, const string & file_name_, const str
 {
 }
 
-void cBaseToken::toRst(string * p_member_, bool root_, const string& patern_name_)
-{
-}
+//void cBaseToken::toRst(string * p_member_, bool root_, const string& patern_name_)
+//{
+//}
 
 string cBaseToken::get_offset_string(int offset_)
 {

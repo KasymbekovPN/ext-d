@@ -16,10 +16,10 @@
 #include "stringHandler.h"
 #include "fileTree.h"
 #include "errorStatus.h"
-#include "dom.hpp"
+//#include "dom.hpp"
 #include "tokenGenerator.hpp"
-#include "tokenHandler.hpp"
-#include "rstHandler.hpp"
+//#include "tokenHandler.hpp"
+//#include "rstHandler.hpp"
 #include "jsonObject.hpp"
 #include "wfileHandler.hpp"
 #include "parted_line.hpp"
@@ -65,14 +65,14 @@ private:
 	const static int number_of_cmd = 2;
 	const static int cmd_size[number_of_cmd];
 
-	void make_source_out(std::shared_ptr<vector<string>> res) const;
+//	void make_source_out(std::shared_ptr<vector<string>> res) const;
 	void make_token_generators(std::shared_ptr<vector<string>> res) const;
 
 	void check_user_files() const;
 
-	void make_source_token_out() const;
-	void make_functional_page() const;
-	void make_tokens_page() const;
-	void make_sources_page() const;
-	void make_main_out() const;
+//	void make_source_token_out() const;
+//	void make_functional_page() const;
+//	void make_tokens_page() const;
+//	void make_sources_page() const;
+//	void make_main_out() const;
 };

@@ -43,111 +43,111 @@ bool TokenGenerator::equal(const string & path_)
 	return res;
 }
 
-void TokenGenerator::parse(size_t offset_, const string& outdir_)
-{
+//void TokenGenerator::parse(size_t offset_, const string& outdir_)
+//{
+//
+//	ofstream fTokenList(outdir_ + "\\_token_list.txt");
+//
+//	if (m_was_header) {
+//		parse_file(m_path + ".h");
+//	}
+//
+//	if (m_was_source) {
+//		parse_file(m_path + ".c");
+//	}
+//
+//	size_t token_idx = 0;
+//	cout <<"token make - " << m_path << ": " << token_idx << "/" << m_tokens.size();
+//	for (auto item : m_tokens) {
+//		string name;
+//		string pre_name = StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' });
+//		auto spl = StringHandler::split(pre_name, '\\');
+//		for (size_t i = 0; i < spl.size(); ++i) {
+//			name += spl[i] + "-";
+//		}
+//		name += item->getName() + "-" + item->getHash() + ".rst";
+//		fTokenList << name << endl;
+//
+//		cout << '\r' << "token make - " << m_path << ": " << ++token_idx << "/" << m_tokens.size();
+//	}
+//	cout << endl;
+//
+//	fTokenList.close();
+//}
 
-	ofstream fTokenList(outdir_ + "\\_token_list.txt");
+//void TokenGenerator::parse(size_t offset_, const string & outdir_, bool start, bool stop)
+//{
+//
+//	string to_file;
+//	if (start) {
+//		to_file.clear();
+//		cout << "+" << endl;
+//	}
+//
+//	if (m_was_header) {
+//		parse_file(m_path + ".h");
+//	}
+//
+//	if (m_was_source) {
+//		parse_file(m_path + ".c");
+//	}
+//
+//	size_t token_idx = 0;
+//	cout << "token make - " << m_path << ": " << token_idx << "/" << m_tokens.size();
+//	for (auto item : m_tokens) {
+//		string name;
+//		string pre_name = StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' });
+//		auto spl = StringHandler::split(pre_name, '\\');
+//		for (size_t i = 0; i < spl.size(); ++i) {
+//			name += spl[i] + "-";
+//		}
+//		name += item->getName() + "-" + item->getHash() + ".rst";
+//		to_file += name + '\n';
+//
+//		cout << '\r' << "token make - " << m_path << ": " << ++token_idx << "/" << m_tokens.size();
+//	}
+//	cout << endl;
+//
+//	if (stop) {
+//		ofstream fTokenList(outdir_ + "\\_token_list.txt");
+//		fTokenList << to_file;
+//		fTokenList.close();
+//		cout << "++" << endl;
+//	}
+//}
 
-	if (m_was_header) {
-		parse_file(m_path + ".h");
-	}
-
-	if (m_was_source) {
-		parse_file(m_path + ".c");
-	}
-
-	size_t token_idx = 0;
-	cout <<"token make - " << m_path << ": " << token_idx << "/" << m_tokens.size();
-	for (auto item : m_tokens) {
-		string name;
-		string pre_name = StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' });
-		auto spl = StringHandler::split(pre_name, '\\');
-		for (size_t i = 0; i < spl.size(); ++i) {
-			name += spl[i] + "-";
-		}
-		name += item->getName() + "-" + item->getHash() + ".rst";
-		fTokenList << name << endl;
-
-		cout << '\r' << "token make - " << m_path << ": " << ++token_idx << "/" << m_tokens.size();
-	}
-	cout << endl;
-
-	fTokenList.close();
-}
-
-void TokenGenerator::parse(size_t offset_, const string & outdir_, bool start, bool stop)
-{
-
-	string to_file;
-	if (start) {
-		to_file.clear();
-		cout << "+" << endl;
-	}
-
-	if (m_was_header) {
-		parse_file(m_path + ".h");
-	}
-
-	if (m_was_source) {
-		parse_file(m_path + ".c");
-	}
-
-	size_t token_idx = 0;
-	cout << "token make - " << m_path << ": " << token_idx << "/" << m_tokens.size();
-	for (auto item : m_tokens) {
-		string name;
-		string pre_name = StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' });
-		auto spl = StringHandler::split(pre_name, '\\');
-		for (size_t i = 0; i < spl.size(); ++i) {
-			name += spl[i] + "-";
-		}
-		name += item->getName() + "-" + item->getHash() + ".rst";
-		to_file += name + '\n';
-
-		cout << '\r' << "token make - " << m_path << ": " << ++token_idx << "/" << m_tokens.size();
-	}
-	cout << endl;
-
-	if (stop) {
-		ofstream fTokenList(outdir_ + "\\_token_list.txt");
-		fTokenList << to_file;
-		fTokenList.close();
-		cout << "++" << endl;
-	}
-}
-
-void TokenGenerator::parse(size_t offset_, const string & outdir_, string * p_name_list_)
-{
-
-	if (m_was_header) {
-		parse_file(m_path + ".h");
-	}
-
-	if (m_was_source) {
-		parse_file(m_path + ".c");
-	}
-
-	size_t token_idx = 0;
-
-	cout << "Tokens are generated: " << StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' }) 
-		<< ": " << token_idx << "/" << m_tokens.size();
-
-	for (auto item : m_tokens) {
-		string name;
-		string pre_name = StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' });
-		auto spl = StringHandler::split(pre_name, '\\');
-		for (size_t i = 0; i < spl.size(); ++i) {
-			name += spl[i] + "-";
-		}
-
-		name += item->getName() + "-" + item->getHash() + ".ipynb";
-		*p_name_list_ += name + '\n';
-
-		cout << "\rTokens are generated: " << StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' })
-			<< ": " << ++token_idx << "/" << m_tokens.size();
-	}
-	cout << endl;
-}
+//void TokenGenerator::parse(size_t offset_, const string & outdir_, string * p_name_list_)
+//{
+//
+//	if (m_was_header) {
+//		parse_file(m_path + ".h");
+//	}
+//
+//	if (m_was_source) {
+//		parse_file(m_path + ".c");
+//	}
+//
+//	size_t token_idx = 0;
+//
+//	cout << "Tokens are generated: " << StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' })
+//		<< ": " << token_idx << "/" << m_tokens.size();
+//
+//	for (auto item : m_tokens) {
+//		string name;
+//		string pre_name = StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' });
+//		auto spl = StringHandler::split(pre_name, '\\');
+//		for (size_t i = 0; i < spl.size(); ++i) {
+//			name += spl[i] + "-";
+//		}
+//
+//		name += item->getName() + "-" + item->getHash() + ".ipynb";
+//		*p_name_list_ += name + '\n';
+//
+//		cout << "\rTokens are generated: " << StringHandler::filter<string, char>(m_path.substr(offset_), StringHandler::FBE::begin, { '\\' })
+//			<< ": " << ++token_idx << "/" << m_tokens.size();
+//	}
+//	cout << endl;
+//}
 
 void TokenGenerator::parse(size_t offset_, const string & outdir_, vector<std::experimental::filesystem::path>* file_paths_)
 {
@@ -214,7 +214,7 @@ void TokenGenerator::parse_file(const string & file_name)
 	for (int i = 0; i < buffer.size(); ++i) {
 
 		//
-		// Начало/конец блочного комментария
+		// пїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		//
 		if (0 == (m_flags & m_flag_is_comment) && "/*" == buffer.substr(i, 2)) {
 			m_flags |= m_flag_block_comment;
@@ -227,7 +227,7 @@ void TokenGenerator::parse_file(const string & file_name)
 		}
 
 		//
-		// Начало/конец строчного  комментария
+		// пїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		//
 		if (0 == (m_flags & m_flag_is_comment) && "//" == buffer.substr(i, 2)) {
 			m_flags |= m_flag_line_comment;
@@ -245,14 +245,14 @@ void TokenGenerator::parse_file(const string & file_name)
 
 					if ("#define" == buffer.substr(i, 7)) {
 						//
-						// Начало куска "#define"
+						// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ "#define"
 						//
 						m_flags |= m_flag_prepro_define;
 						chank.clear();
 					}
 					else {
 						//
-						// Начало куска "#?????"
+						// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ "#?????"
 						//
 						m_flags |= m_flag_prepro_except_define;
 						chank.clear();
@@ -265,7 +265,7 @@ void TokenGenerator::parse_file(const string & file_name)
 			}
 
 			//
-			// Переключение с general_rec на general_brace
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ general_rec пїЅпїЅ general_brace
 			//
 			if (m_flags & m_flag_general_rec) {
 				if ('(' == buffer[i]) {
@@ -325,7 +325,7 @@ void TokenGenerator::parse_file(const string & file_name)
 			}
 
 			//
-			// Переключение с general_rec на struct_rec
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ general_rec пїЅпїЅ struct_rec
 			//
 			if (m_flags & m_flag_general_rec) {
 				if ("struct" == buffer.substr(i, 6)) {
@@ -335,7 +335,7 @@ void TokenGenerator::parse_file(const string & file_name)
 			}
 
 			//
-			// Окончание куска "struct"
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ "struct"
 			//
 			if (m_flags & m_flag_struct_rec) {
 				if ('{' == buffer[i]) {
@@ -363,7 +363,7 @@ void TokenGenerator::parse_file(const string & file_name)
 			}
 
 			//
-			// Окончание куска "#define"
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ "#define"
 			//
 			if (m_flag_prepro_define & m_flags) {
 
@@ -383,7 +383,7 @@ void TokenGenerator::parse_file(const string & file_name)
 			}
 
 			//
-			// Окочание куска "#??????"
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ "#??????"
 			//
 			if (m_flags & m_flag_prepro_except_define) {
 				if ('\n' == buffer[i]) {
@@ -392,7 +392,7 @@ void TokenGenerator::parse_file(const string & file_name)
 			}
 
 			//
-			// Окончание куска general_rec
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ general_rec
 			//
 			if (m_flags & m_flag_general_rec) {
 				if (';' == buffer[i]) {
@@ -402,7 +402,7 @@ void TokenGenerator::parse_file(const string & file_name)
 			}
 
 			//
-			// Запись куска
+			// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 			//
 			if (m_flag_rec & m_flags) {
 				chank += buffer[i];

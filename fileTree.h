@@ -34,11 +34,11 @@ public:
 	~FileTree();
 
 	void filePaths(std::shared_ptr<vector<string>>, bool);
-	string getIndexRstName() const;
+//	string getIndexRstName() const;
 
 private:
 
-	string m_index_rst;
+//	string m_index_rst;
 	string m_path;
 	FileTreeLang m_lang;
 	map<string, FileTreeLang> m_ll;

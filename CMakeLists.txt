@@ -8,7 +8,11 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
 endif(MSVC)
 
-configure_file(config.h.in config.h)
+#configure_file(config.h.in config.h)
+
+configure_file(
+        "${PROJECT_SOURCE_DIR}/config.h.in"
+        "${PROJECT_SOURCE_DIR}/config.h")
 
 add_executable(ext-d 
                 main.cpp 
@@ -27,8 +31,6 @@ add_executable(ext-d
                 fileTree.cpp
                 errorStatus.h
                 errorStatus.cpp
-                dom.hpp
-                dom.cpp
                 tokenGenerator.hpp
                 tokenGenerator.cpp
                 c_base_token.hpp
@@ -45,10 +47,8 @@ add_executable(ext-d
                 c_func_decl.cpp
                 c_func_def.hpp
                 c_func_def.cpp
-                tokenHandler.hpp
-                tokenHandler.cpp
-                rstHandler.hpp
-                rstHandler.cpp
+#                tokenHandler.hpp
+#                tokenHandler.cpp
                 jsonBase.hpp
                 jsonBase.cpp
                 jsonNumber.hpp
