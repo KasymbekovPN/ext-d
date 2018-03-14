@@ -43,6 +43,10 @@ ConsoleCmdHandler::~ConsoleCmdHandler()
 	delete m_config;
 }
 
+void ConsoleCmdHandler::helpTest()
+{
+}
+
 void ConsoleCmdHandler::helpHandler(vector<string> command_)
 {
 
@@ -51,11 +55,13 @@ void ConsoleCmdHandler::helpHandler(vector<string> command_)
 		return;
 	}
 
-	cout << "  --help - вызов справки." << endl;
-	cout << "  --version - версия." << endl;
-	cout << "  --target.show.all - показать все цели." << endl;
-	cout << "  --target.show <target name> - показать цель target name" << endl;
-	cout << "  --target.run <target name> - запустить цель target name" << endl;
+    cout << "  --help - вызов справки." << endl;
+    cout << "  --version - версия." << endl;
+    cout << "  --target.show.all - показать все цели." << endl;
+    cout << "  --target.show <target name> - показать цель <target name>." << endl;
+    cout << "  --target.run <target name> <flag> - выполнить цель <target name>" << endl;
+    cout << "    -d - получить токены кода." << endl;
+    cout << "    -m - проверить пользовательские файлы." << endl;
 }
 
 void ConsoleCmdHandler::versionHandler(vector<string> command_)

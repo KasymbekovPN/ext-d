@@ -97,8 +97,3 @@ void FileTree::filePaths(std::shared_ptr<vector<string>> path_out, bool need_cle
 	}
 }
 
-//string FileTree::getIndexRstName() const
-//{
-//	return m_index_rst;
-//}
-

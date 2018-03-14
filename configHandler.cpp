@@ -12,9 +12,13 @@ ConfigHandler::ConfigHandler(const string& path_json_, shared_ptr<ErrorStatus> p
 	}
 
 	string tmp = file_json.getAsString();
+#ifdef  TASK_0_3_1__1
+	JsonObject json_object(StringHandler::str2wstr(tmp), L"root", p_error);
+#else
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 	wstring wtmp = converter.from_bytes(tmp);
 	JsonObject json_object(wtmp, L"root", p_error);
+#endif	
 
 	if (0 == p_error->get()) {
 		JsonBase::eType type;

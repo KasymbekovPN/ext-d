@@ -209,7 +209,11 @@ variant<JsonBase::eSimple, double, wstring, JsonBase::eGetterMsg> JsonObject::ge
 	}
 
 	*type_ = m_type;
+#ifdef  TASK_0_3_1__1
+	res = JsonBase::eGetterMsg::not_exist;
+#else
 	res = JsonObject::eGetterMsg::not_exist;
+#endif
 	return res;
 }
 
@@ -241,15 +245,24 @@ void JsonObject::write(const string & path_, const string & mode_)
 		set({ L"metadata" }, L"language_info", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
 		set({ L"metadata", L"language_info" }, L"codemirror_mode", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
 		set({ L"metadata", L"language_info",L"codemirror_mode" }, L"name", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"ipython"));
+#ifdef  TASK_0_3_1__1
+		set({ L"metadata", L"language_info",L"codemirror_mode" }, L"version", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(3.0));
+#else
 		set({ L"metadata", L"language_info",L"codemirror_mode" }, L"version", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(3));
+#endif
 		set({ L"metadata", L"language_info" }, L"file_extension", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L".py"));
 		set({ L"metadata", L"language_info" }, L"mimetype", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"text/x-python"));
 		set({ L"metadata", L"language_info" }, L"name", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"python"));
 		set({ L"metadata", L"language_info" }, L"nbconvert_exporter", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"python"));
 		set({ L"metadata", L"language_info" }, L"pygments_lexer", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"ipython3"));
 		set({ L"metadata", L"language_info" }, L"version", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"3.6.3"));
+#ifdef  TASK_0_3_1__1
+		set({}, L"nbformat", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(4.0));
+		set({}, L"nbformat_minor", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(2.0));
+#else
 		set({}, L"nbformat", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(4));
 		set({}, L"nbformat_minor", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(2));
+#endif
 
 		size_t found = path_.find_last_of("\\");
 		if (string::npos != found) {
@@ -287,15 +300,24 @@ void JsonObject::write(const string & path_, const string & mode_, bool rewrite_
 		set({ L"metadata" }, L"language_info", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
 		set({ L"metadata", L"language_info" }, L"codemirror_mode", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
 		set({ L"metadata", L"language_info",L"codemirror_mode" }, L"name", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"ipython"));
+#ifdef  TASK_0_3_1__1
+		set({ L"metadata", L"language_info",L"codemirror_mode" }, L"version", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(3.0));
+#else
 		set({ L"metadata", L"language_info",L"codemirror_mode" }, L"version", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(3));
+#endif
 		set({ L"metadata", L"language_info" }, L"file_extension", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L".py"));
 		set({ L"metadata", L"language_info" }, L"mimetype", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"text/x-python"));
 		set({ L"metadata", L"language_info" }, L"name", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"python"));
 		set({ L"metadata", L"language_info" }, L"nbconvert_exporter", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"python"));
 		set({ L"metadata", L"language_info" }, L"pygments_lexer", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"ipython3"));
 		set({ L"metadata", L"language_info" }, L"version", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"3.6.3"));
+#ifdef  TASK_0_3_1__1
+		set({}, L"nbformat", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(4.0));
+		set({}, L"nbformat_minor", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(2.0));
+#else
 		set({}, L"nbformat", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(4));
 		set({}, L"nbformat_minor", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(2));
+#endif
 	}
 
 	//

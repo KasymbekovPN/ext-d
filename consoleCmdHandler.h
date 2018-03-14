@@ -11,6 +11,7 @@
 #include <vector>
 #include <iterator>
 #include <memory>
+#include <functional>
 
 using std::cout;
 using std::endl;
@@ -39,6 +40,8 @@ private:
 
 	typedef void (ConsoleCmdHandler::*ptrHandler)(vector<string>);
 	map<string, ptrHandler> cmdHandlers;
+
+	void helpTest();
 
 	void helpHandler(vector<string>);
 	void versionHandler(vector<string>);

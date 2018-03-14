@@ -2,17 +2,26 @@
 
 namespace fs = std::experimental::filesystem;
 
-const int Target::cmd_size[Target::number_of_cmd] = {2, 2};
-
 Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<ErrorStatus> p_error_)
 {
 
+	flag_handlers = {
+		{"-d", std::bind(&Target::flag_d_handler, this)},
+		{"-m", std::bind(&Target::flag_m_handler, this)}
+	};
+
+#ifndef  TASK_0_3_1__1
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+#endif
 	m_fileTree = nullptr;
 
 	p_error = p_error_;
 	m_name = name_;
+#ifdef  TASK_0_3_1__1
+	m_path = StringHandler::wstr2str(path_);
+#else
 	m_path = converter.to_bytes(path_);
+#endif
 
 	FileHandler file(m_path);
 	if (!file.isExist()) {
@@ -20,17 +29,27 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 		return;
 	}
 
+#ifdef  TASK_0_3_1__1
+	JsonObject json_object(StringHandler::str2wstr(file.getAsString()), L"root", p_error_);
+#else
 	string tmp = file.getAsString();
 	wstring wtmp = converter.from_bytes(tmp);
-
 	JsonObject json_object(wtmp, L"root", p_error_);
+#endif
+
 	JsonBase::eType type;
 
 	auto source_dir = json_object.get({ L"source-dir" }, &type);
 	try {
+#ifdef  TASK_0_3_1__1
+		m_source_dir = StringHandler::wstr2str(
+			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(source_dir), L'/', L'\\')
+		);
+#else
 		m_source_dir = converter.to_bytes(
 			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(source_dir), L'/', L'\\')
 		);
+#endif
 	}
 	catch (const std::bad_variant_access&) {
 		p_error->set(ErrorStatus::error::json_extdlists_source_dir_inv, true);
@@ -39,9 +58,15 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 	auto out_dir = json_object.get({ L"out-dir" }, &type);
 	try
 	{
+#ifdef TASK_0_3_1__1
+		m_output_dir = StringHandler::wstr2str(
+			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(out_dir), L'/', L'\\')
+		);
+#else
 		m_output_dir = converter.to_bytes(
 			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(out_dir), L'/', L'\\')
 		);
+#endif
 	}
 	catch (const std::bad_variant_access&)
 	{
@@ -52,9 +77,15 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 	string supp_lang;
 	try
 	{
+#ifdef   TASK_0_3_1__1
+		supp_lang = StringHandler::wstr2str(
+			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(lang), '/', '\\')
+		);
+#else
 		supp_lang = converter.to_bytes(
 			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(lang), '/', '\\')
 		);
+#endif
 	}
 	catch (const std::bad_variant_access&)
 	{
@@ -76,9 +107,17 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 	for (size_t i = 0; i < number_unhand_files; ++i) {
 		auto o_unhand_files = json_object.get({ L"unhandled", L"files", L"names", L"names_" + std::to_wstring(i) }, &type);
 		try {
+#ifdef  TASK_0_3_1__1
+			unhand_files.push_back(
+				StringHandler::wstr2str(
+					StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_unhand_files), L'/', L'\\')
+				)
+			);
+#else
 			unhand_files.push_back(converter.to_bytes(
 				StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_unhand_files), L'/', L'\\')
 			));
+#endif
 		}
 		catch (std::bad_variant_access&) {
 			unhand_files.clear();
@@ -102,9 +141,17 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 	for (size_t i = 0; i < number_unhand_directory; ++i) {
 		auto o_unhand_directory = json_object.get({ L"unhandled", L"directory", L"names", L"names_" + std::to_wstring(i) }, &type);
 		try {
+#ifdef TASK_0_3_1__1
+			unhand_dir.push_back(
+				StringHandler::wstr2str(
+					StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_unhand_directory), L'/', L'\\')
+				)
+			);
+#else
 			unhand_dir.push_back(converter.to_bytes(
 				StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_unhand_directory), L'/', L'\\')
 			));
+#endif
 		}
 		catch (std::bad_variant_access&) {
 			unhand_dir.clear();
@@ -125,9 +172,15 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 	auto o_tokens_path = json_object.get({ L"tokens", L"path" }, &type);
 	string tokens_path;
 	try {
+#ifdef  TASK_0_3_1__1
+		tokens_path = StringHandler::wstr2str(
+			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_tokens_path), L'/', L'\\')
+		);
+#else
 		tokens_path = converter.to_bytes(
 			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_tokens_path), L'/', L'\\')
 		);
+#endif
 	}
 	catch (std::bad_variant_access&) {
 		p_error->set(ErrorStatus::error::json_extdlists_inv_tokens_path, true);
@@ -151,9 +204,15 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 	auto o_user_path = json_object.get({L"user", L"path"}, &type);
 	string user_path;
 	try {
+#ifdef   TASK_0_3_1__1
+		user_path = StringHandler::wstr2str(
+			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_user_path), L'/', L'\\')
+		);
+#else
 		user_path = converter.to_bytes(
 			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_user_path), L'/', L'\\')
 		);
+#endif
 	}
 	catch (std::bad_variant_access&) {
 		p_error->set(ErrorStatus::error::json_extdlists_inv_user_path, true);
@@ -203,18 +262,12 @@ wstring Target::getWName() const
 
 string Target::getName() const
 {
+#ifdef  TASK_0_3_1__1
+	return StringHandler::wstr2str(m_name);
+#else
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
 	return converter.to_bytes(m_name);
-}
-
-string Target::getPath() const
-{
-	return m_path;
-}
-
-bool Target::isExist() const
-{
-	return is_exist;
+#endif
 }
 
 void Target::toConsole() const
@@ -239,112 +292,22 @@ void Target::run(const string& flag_) const
 		return;
 	}
 
-	std::shared_ptr<vector<string>> res(new vector<string>());
-	m_fileTree->filePaths(res, true);
-
-	if (tgt_flg_d == flag_) {
-		make_token_generators(res);
+	auto iter = flag_handlers.find(flag_);
+	if (flag_handlers.end() != iter)
+	{
+		iter->second();
 	}
-	else if (tgt_flg_m == flag_) {
-		check_user_files();
-	}
-	else {
+	else
+	{
 		p_error->set(ErrorStatus::error::target_invalidFlag, true);
 	}
 }
 
-//void Target::make_source_out(std::shared_ptr<vector<string>> res) const
-//{
-//	for (auto p_file_name = res->begin(); p_file_name != res->end(); ++p_file_name) {
-//
-//		string short_name = p_file_name->substr(m_source_dir.size());
-//		string sfn;
-//		for (int i = 0; i < short_name.size(); ++i) {
-//			sfn += ('.' == short_name[i] ? '_' : short_name[i]);
-//		}
-//
-//		string out_file_name = m_output_dir + "\\\\source" + sfn + ".html";
-//		FileHandler file(*p_file_name);
-//
-//		vector<string> codeLines = StringHandler::file2line(file.getAsString(), false);
-//
-//		int line_idx = 0;
-//		vector<int> tab_offsets_even;
-//		vector<int> tab_offsets_odd;
-//		bool is_even = true;
-//
-//		Dom dom(Dom::item::html, true, out_file_name, "", "", "html", 0);
-//		dom.set(Dom::item::head, "", "", "head", 0);
-//		dom.set({ "head" }, Dom::item::title, "", "���� " + short_name, "title", 0);
-//		dom.set(Dom::item::body, " class = body", "", "body", 0);
-//
-//		dom.set({ "body" }, Dom::item::table, " class = table", "", "table", codeLines.size());
-//
-//		std::cout << short_name << " : " << line_idx << " / " << codeLines.size();
-//
-//		for (auto line : codeLines) {
-//
-//			string tr_name = "tr_" + std::to_string(line_idx);
-//			dom.set({ "body", "table" }, Dom::item::tr, "", "", tr_name, 0);
-//			dom.set({ "body", "table", tr_name }, Dom::item::td, " class = num_colon", std::to_string(line_idx + 1), "line_num_" + std::to_string(line_idx + 1), 0);
-//
-//			int tab_num = 0;
-//			for (int i = 0; i < line.size(); ++i) {
-//				if ('\t' != line[i]) {
-//					break;
-//				}
-//				tab_num++;
-//			}
-//
-//			if (is_even) {
-//				if (tab_offsets_even.end() == std::find(tab_offsets_even.begin(), tab_offsets_even.end(), tab_num)) {
-//					tab_offsets_even.push_back(tab_num);
-//				}
-//			}
-//			else {
-//				if (tab_offsets_odd.end() == std::find(tab_offsets_odd.begin(), tab_offsets_odd.end(), tab_num)) {
-//					tab_offsets_odd.push_back(tab_num);
-//				}
-//			}
-//
-//			string class_name = "code_line_";
-//			class_name += (is_even ? "even_" : "odd_");
-//			class_name += std::to_string(tab_num);
-//
-//			dom.set({ "body", "table", tr_name }, Dom::item::td, " class = " + class_name, line, "line_code_" + std::to_string(line_idx + 1), 0);
-//
-//			is_even = !is_even;
-//
-//			line_idx++;
-//			std::cout << '\r' << short_name << " : " << line_idx << " / " << codeLines.size();
-//		}
-//		cout << endl;
-//
-//		string style_str = "\n<!-- ";
-//
-//		for (auto item : tab_offsets_even) {
-//			style_str += "\n.code_line_even_" + std::to_string(item) + \
-//				" { padding-left: " + std::to_string(20 + item * 40) + "px; background: #e6e6f2; }";
-//		}
-//
-//		for (auto item : tab_offsets_odd) {
-//			style_str += "\n.code_line_odd_" + std::to_string(item) + \
-//				" { padding-left: " + std::to_string(20 + item * 40) + "px; background: #c1d5f5; }";
-//		}
-//
-//		style_str += "\n.num_colon { background: #8d8d94; padding-left: 20px; color: #58c6fc; width: 50px;}";
-//		style_str += "\n.table {border-spacing: 0px; margin: 0px; width: 100%;}";
-//		style_str += "\n.body {padding: 0px; margin: 0px;}";
-//		style_str += "\n-->";
-//		dom.set({ "head" }, Dom::item::style, " text = \"text/css\"", style_str, "style", 0);
-//
-//		dom.make_doc();
-//	}
-//}
+void Target::flag_d_handler() {
 
+	std::shared_ptr<vector<string>> res(new vector<string>());
+	m_fileTree->filePaths(res, true);
 
-void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
-{
 	vector<TokenGenerator*> tGenerators;
 
 	for (auto p_file_name = res->begin(); p_file_name != res->end(); ++p_file_name) {
@@ -367,39 +330,52 @@ void Target::make_token_generators(std::shared_ptr<vector<string>> res) const
 		t->parse(m_source_dir.size(), m_tokens_output, &file_paths);
 	}
 
+#ifndef  TASK_0_3_1__1
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+#endif
 
 	JsonObject json_object(L"root");
 	json_object.set({}, L"file_paths", JsonBase::eType::array, variant<wstring, double, JsonBase::eSimple>());
-	
+
 	std::set<std::experimental::filesystem::path> uniq_file_paths;
 	for (auto iter : file_paths) {
 		uniq_file_paths.emplace(iter);
 	}
 
+#ifdef  TASK_0_3_1__1
+	json_object.set({}, L"numbers", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(double(uniq_file_paths.size())));
+#else
 	json_object.set({}, L"numbers", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(uniq_file_paths.size()));
+#endif
 
 	size_t idx = 0;
 	for (auto iter : uniq_file_paths) {
 		string tmp = StringHandler::replace_all<string, char>(iter.string(), '\\', '/');
+#ifdef  TASK_0_3_1__1
+		json_object.set({ L"file_paths" }, L"path_" + std::to_wstring(idx++), JsonBase::eType::string,
+			variant<wstring, double, JsonBase::eSimple>(StringHandler::str2wstr(tmp)));
+#else
 		json_object.set({ L"file_paths" }, L"path_" + std::to_wstring(idx++), JsonBase::eType::string,
 			variant<wstring, double, JsonBase::eSimple>(converter.from_bytes(tmp)));
+#endif
 	}
 
 	json_object.write(m_tokens_list_file_path, "json", true);
-
 }
 
-void Target::check_user_files() const
-{
+void Target::flag_m_handler() {
 
 	//
 	// ��������� ���� �������� ������� �� ����� _token_list.json
 	//
 	FileHandler file(m_tokens_list_file_path);
 
+#ifdef  TASK_0_3_1__1
+	JsonObject json_object(StringHandler::str2wstr(file.getAsString()), L"root", p_error);
+#else
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
 	JsonObject json_object(converter.from_bytes(file.getAsString()), L"root", p_error);
+#endif
 
 	JsonBase::eType type;
 	auto o_numbers = json_object.get({L"numbers"}, &type);
@@ -455,7 +431,11 @@ void Target::check_user_files() const
 	for (auto & iter : fs::directory_iterator(m_user_output)) {
 		
 		if (fs::file_type::regular == iter.status().type() && ".ipynb" == iter.path().extension()) {
+#ifdef  TASK_0_3_1__1
+			WFileHandler wfile(StringHandler::str2wstr(iter.path().string()));
+#else
 			WFileHandler wfile(converter.from_bytes(iter.path().string()));
+#endif
 			JsonObject json_object(wfile.wstring(), L"root", p_error);
 
 			JsonBase::eType type;
@@ -504,70 +484,5 @@ void Target::check_user_files() const
 			json_object.write(iter.path().string(),"", true);
 		}
 	}
+
 }
-
-//void Target::make_source_token_out() const
-//{
-//
-//	FileHandler fTokenList(m_output_dir + "\\tokens\\descr\\_token_list.txt");
-//
-//	auto file_names = StringHandler::split(fTokenList.getAsString(), '\n');
-//
-//	for (auto name : file_names) {
-//		std::experimental::filesystem::path name_(m_output_dir + "\\tokens\\descr\\" + name);
-//		if (std::experimental::filesystem::exists(name_)) {
-//			if (".rst" == name_.extension()) {
-//				RstHandler rstH(name_.string(), m_output_dir + "\\tokens\\html");
-//				rstH.write2html();
-//			}
-//		}
-//	}
-//}
-
-//void Target:: make_functional_page() const
-//{
-//
-//	string content = "..ext-d-state:: true\n\n";
-//	content += ".. ext-d-version:: " + string(PROJECT_VERSION) + "\n\n";
-//	content += ".. ext-d-nav:: index | functional | tokens | sources\n\n";
-//	content += ".. ext-d-paragraph:: ����������\n\n";
-//	content += "����������\n";
-//
-//	RstHandler rstH("functional.rst", m_output_dir, content);
-//	rstH.write2html();
-//}
-//
-//void Target::make_tokens_page() const
-//{
-//	string content = "..ext-d-state:: true\n\n";
-//	content += ".. ext-d-version:: " + string(PROJECT_VERSION) + "\n\n";
-//	content += ".. ext-d-nav:: index | functional | tokens | sources\n\n";
-//	content += ".. ext-d-paragraph:: ������\n\n";
-//	content += "������\n";
-//
-//	RstHandler rstH("tokens.rst", m_output_dir, content);
-//	rstH.write2html();
-//}
-//
-//void Target::make_sources_page() const
-//{
-//	string content = "..ext-d-state:: true\n\n";
-//	content += ".. ext-d-version:: " + string(PROJECT_VERSION) + "\n\n";
-//	content += ".. ext-d-nav:: index | functional | tokens | sources\n\n";
-//	content += ".. ext-d-paragraph:: �������� ���\n\n";
-//	content += "�������� ���\n";
-//
-//	RstHandler rstH("sources.rst", m_output_dir, content);
-//	rstH.write2html();
-//}
-//
-///*!
-// * ��������� ������-�����.
-// *
-//*/
-//void Target::make_main_out() const
-//{
-//	string index_name = m_source_dir + "\\" + m_fileTree->getIndexRstName();
-//	RstHandler rstH(index_name, m_output_dir);
-//	rstH.write2html();
-//}

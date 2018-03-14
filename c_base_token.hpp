@@ -57,7 +57,6 @@ public:
 	bool isExtern() const;
 
 	virtual void write(const string& dir_, const string& file_name_, const string& mode_, vector<std::experimental::filesystem::path>* file_paths_);
-//	virtual void toRst(string* p_member_, bool root_, const string& patern_name_);
 	virtual vector<string> parse_members(bool root_, const string& patern_name_);
 
 	static string get_offset_string(int offset_);

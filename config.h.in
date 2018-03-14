@@ -2,5 +2,9 @@
 #define CONFIG_H
 
 #cmakedefine PROJECT_VERSION "@PROJECT_VERSION@"
- 
+
+//#cmakedefine DEPR_STR_CVT_OPTION_EN
+
+#cmakedefine TASK_0_3_1__1
+
 #endif // CONFIG_H

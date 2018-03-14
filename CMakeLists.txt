@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 
-project(ext-d VERSION 0.3.0)
+project(ext-d VERSION 0.3.1)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -8,11 +8,13 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
 endif(MSVC)
 
-#configure_file(config.h.in config.h)
+option(DEPR_STR_CVT_OPTION_EN "Enable deprecation string convert" ON)
+option(TASK_0_3_1__1 "Enable" ON)
 
 configure_file(
         "${PROJECT_SOURCE_DIR}/config.h.in"
-        "${PROJECT_SOURCE_DIR}/config.h")
+        "${PROJECT_SOURCE_DIR}/config.h"
+		@ONLY)
 
 add_executable(ext-d 
                 main.cpp 

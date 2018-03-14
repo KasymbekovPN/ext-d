@@ -62,7 +62,9 @@ void cFuncDef::show(int offset_) const
 void cFuncDef::write(const string & dir_, const string & file_name_, const string & mode_, vector<std::experimental::filesystem::path>* file_paths_)
 {
 	cBaseToken::write(dir_, file_name_, mode_, file_paths_);
+#ifndef  TASK_0_3_1__1
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+#endif
 	string fill_name = dir_ + "\\" + file_name_;
 	file_paths_->push_back(fill_name);
 	JsonObject json_object(L"root");
@@ -90,8 +92,13 @@ void cFuncDef::write(const string & dir_, const string & file_name_, const strin
 		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"metadata", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
 		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"source", JsonBase::eType::array, variant<wstring, double, JsonBase::eSimple>());
 		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_0", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"#### Аргумент:\\n"));
+#ifdef  TASK_0_3_1__1
+		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_1",
+			JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(StringHandler::str2wstr(arg) + L"\\n"));
+#else
 		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_1",
 			JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(converter.from_bytes(arg) + L"\\n"));
+#endif
 
 	}
 
@@ -104,8 +111,13 @@ void cFuncDef::write(const string & dir_, const string & file_name_, const strin
 		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"cell_type", JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"markdown"));
 		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"metadata", JsonBase::eType::object, variant<wstring, double, JsonBase::eSimple>());
 		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx) }, L"source", JsonBase::eType::array, variant<wstring, double, JsonBase::eSimple>());
+#ifdef  TASK_0_3_1__1
+		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_0",
+			JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"#### Возвращает (" + StringHandler::str2wstr(m_dataType) + L"):\\n"));
+#else
 		json_object.set({ L"cells", L"cell_" + std::to_wstring(idx), L"source" }, L"source_0",
 			JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"#### Возвращает (" + converter.from_bytes(m_dataType) + L"):\\n"));
+#endif
 	}
 
 	//

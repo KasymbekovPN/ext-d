@@ -23,16 +23,12 @@ public:
 	~TokenGenerator();
 
 	bool equal(const string& path_);
-//	void parse(size_t offset_, const string& outdir_);
-//	void parse(size_t offset_, const string& outdir_, bool start, bool stop);
-//	void parse(size_t offset_, const string& outdir_, string* p_name_list_);
 	void parse(size_t offset_, const string& outdir_, vector<std::experimental::filesystem::path>* file_paths_);
 
 	void show();
 
 private:
 
-//	string m_module_name;
 	string m_path; 
 	bool m_was_source;
 	bool m_was_header;

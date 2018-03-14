@@ -59,7 +59,9 @@ void cMacroToken::show(int offset_) const
 void cMacroToken::write(const string & dir_, const string & file_name_, const string & mode_, vector<std::experimental::filesystem::path>* file_paths_)
 {
 	cBaseToken::write(dir_, file_name_, mode_, file_paths_);
+#ifndef TASK_0_3_1__1
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+#endif
 	string fill_name = dir_ + "\\" + file_name_;
 	file_paths_->push_back(fill_name);
 
@@ -81,8 +83,13 @@ void cMacroToken::write(const string & dir_, const string & file_name_, const st
 
 	auto code_lines = get_raw_Lines(false);
 	for (size_t i = 0; i < code_lines.size(); ++i) {
+#ifdef  TASK_0_3_1__1
+		json_object.set({ L"cells", L"cell_1", L"source" }, L"source_" + std::to_wstring(i),
+			JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(StringHandler::str2wstr(code_lines[i] + "\\n")));
+#else
 		json_object.set({ L"cells", L"cell_1", L"source" }, L"source_" + std::to_wstring(i),
 			JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(converter.from_bytes(code_lines[i] + "\\n")));
+#endif
 	}
 
 	json_object.set({ L"cells", L"cell_1", L"source" }, L"source_" + std::to_wstring(code_lines.size()), JsonBase::eType::string, variant<wstring, double, JsonBase::eSimple>(L"```"));
