@@ -23,7 +23,7 @@ ErrorStatus::ENM ErrorStatus::errorNamesMap {
 	{ ErrorStatus::error::fileTree_noExists, "FileTree - не удалось сформировать."},
 	{ ErrorStatus::error::json_objectInvalid, "Json - Объект невалиден."},
 	{ ErrorStatus::error::json_invalidSyntax, "Json - невалидный синтаксис."},
-	{ ErrorStatus::error::json_cnfg_num_of_trt_inv, "Json-conf - невалидный параметр : numder-of-targets"},
+	{ ErrorStatus::error::json_cnfg_num_of_trt_inv, "Json-conf - нет целей"},
 	{ ErrorStatus::error::json_cnfg_inv_target_name, "Json-conf - невалидный параметр цели : name"},
 	{ ErrorStatus::error::json_cnfg_inv_target_path, "Json-conf - невалидный параметр цели : path" },
 	{ ErrorStatus::error::json_extdlists_no_exists, "Json-conf - файл описания цели не существует."},
@@ -31,7 +31,7 @@ ErrorStatus::ENM ErrorStatus::errorNamesMap {
 	{ ErrorStatus::error::json_extdlists_out_dir_inv, "ExtDLists - невалидный параметр out_dir" },
 	{ ErrorStatus::error::json_extdlists_lang_inv, "ExtDLists - невалидный параметр lang" },
 	{ ErrorStatus::error::json_extdlists_inv_num_unhand_files, "ExtDLists - невалидное количество необраб. файлов"},
-	{ ErrorStatus::error::json_extdlists_inv_unhand_files, "ExtDLists - невалидно заданные необраб. файлы"},
+	{ ErrorStatus::error::json_extdlists_inv_unhand_files, "ExtDLists - невалидно заданные необраб. файлы"},_
 	{ ErrorStatus::error::json_extdlists_inv_num_unhand_dir, "ExtDLists - невалидное количество необраб. директорий"},
 	{ ErrorStatus::error::json_extdlists_inv_unhand_dir, "ExtDLists - невалидно заданые необраб. директории"},
 	{ ErrorStatus::error::json_extdlists_inv_tokens_rel, "ExiDLists - невадидный параметр tokens-relative"},

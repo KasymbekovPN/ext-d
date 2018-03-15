@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 
-project(ext-d VERSION 0.3.1)
+project(ext-d VERSION 0.3.4)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -10,6 +10,7 @@ endif(MSVC)
 
 option(DEPR_STR_CVT_OPTION_EN "Enable deprecation string convert" ON)
 option(TASK_0_3_1__1 "Enable" ON)
+option(TASK_0_3_4__1 "Enabke" ON)
 
 configure_file(
         "${PROJECT_SOURCE_DIR}/config.h.in"
