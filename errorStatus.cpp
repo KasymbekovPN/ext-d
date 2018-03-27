@@ -31,7 +31,7 @@ ErrorStatus::ENM ErrorStatus::errorNamesMap {
 	{ ErrorStatus::error::json_extdlists_out_dir_inv, "ExtDLists - невалидный параметр out_dir" },
 	{ ErrorStatus::error::json_extdlists_lang_inv, "ExtDLists - невалидный параметр lang" },
 	{ ErrorStatus::error::json_extdlists_inv_num_unhand_files, "ExtDLists - невалидное количество необраб. файлов"},
-	{ ErrorStatus::error::json_extdlists_inv_unhand_files, "ExtDLists - невалидно заданные необраб. файлы"},_
+	{ ErrorStatus::error::json_extdlists_inv_unhand_files, "ExtDLists - невалидно заданные необраб. файлы"},
 	{ ErrorStatus::error::json_extdlists_inv_num_unhand_dir, "ExtDLists - невалидное количество необраб. директорий"},
 	{ ErrorStatus::error::json_extdlists_inv_unhand_dir, "ExtDLists - невалидно заданые необраб. директории"},
 	{ ErrorStatus::error::json_extdlists_inv_tokens_rel, "ExiDLists - невадидный параметр tokens-relative"},
@@ -42,7 +42,9 @@ ErrorStatus::ENM ErrorStatus::errorNamesMap {
 	{ ErrorStatus::error::tokenList_invalid_file_paths, "_token_list - невалидный параметр file_paths."},
 	{ ErrorStatus::error::tokenList_file_paths_empty, "_token_list - file_paths пуст."},
 	{ ErrorStatus::error::tokenList_file_no_exists, "_token_list - файл из списка не существует."},
-	{ ErrorStatus::error::user_directory_no_exists, "Директория с пользовательскими файлами не существует."}
+	{ ErrorStatus::error::user_directory_no_exists, "Директория с пользовательскими файлами не существует."},
+	{ ErrorStatus::error::json_extdlists_inv_unhand_file_array, "ExtDLists - отсутствует массив необрабатываемых файлов."},
+	{ ErrorStatus::error::json_extdlists_inv_unhand_dir_array, "ExtDLists - отсутствует массиы необрабатываемых директорий."}
 };
 
 ErrorStatus::ErrorStatus(): value(0){}

@@ -92,6 +92,87 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 		p_error->set(ErrorStatus::error::json_extdlists_lang_inv, true);
 	}
 
+#ifdef  TASK_0_3_4__1
+	//
+	// Проверяем наличие массива имен необрабатываемых файлов.
+	//
+	auto o_unhand_file_array = json_object.get({L"unhandled", L"files", L"names"}, &type);
+	JsonBase::eGetterMsg msg_file;
+	try
+	{
+		msg_file = std::get<JsonBase::eGetterMsg>(o_unhand_file_array);
+		if (JsonBase::eGetterMsg::is_array != msg_file)
+		{
+			p_error->set(ErrorStatus::error::json_extdlists_inv_unhand_file_array, true);
+		}
+	}
+	catch (std::bad_variant_access&)
+	{
+		p_error->set(ErrorStatus::error::json_extdlists_inv_unhand_file_array, true);
+	}
+
+	//
+	// Проверяем наличие массива имен необрабатываемых директорий.
+	//
+	auto o_unhand_dir_array = json_object.get({L"unhandled", L"directory", L"names"}, &type);
+	JsonBase::eGetterMsg msg_dir;
+	try
+	{
+		msg_dir = std::get<JsonBase::eGetterMsg>(o_unhand_dir_array);
+		if (JsonBase::eGetterMsg::is_array != msg_dir)
+		{
+			p_error->set(ErrorStatus::error::json_extdlists_inv_unhand_dir_array, true);
+		}
+	}
+	catch (std::bad_variant_access&)
+	{
+		p_error->set(ErrorStatus::error::json_extdlists_inv_unhand_dir_array, true);
+	}
+
+	//
+	// Опрделяем списки необрабатываемых директорий и файлов.
+	//
+	vector<string> unhand_files;
+	vector<string> unhand_dir;
+	if (0 == p_error->get())
+	{
+		size_t idx = 0;
+		while (true)
+		{
+			auto o_unhand_file = json_object.get({L"unhandled", L"files", L"names", L"names_" + std::to_wstring(idx++)}, &type);
+			try
+			{
+				unhand_files.push_back(
+					StringHandler::wstr2str(
+						StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_unhand_file), L'/', L'\\')
+					)
+				);
+			}
+			catch (std::bad_variant_access&) 
+			{
+				break;
+			}
+		}
+
+		idx = 0;
+		while (true)
+		{
+			auto o_unhand_directory = json_object.get({L"unhandled", L"directory", L"names", L"names_" + std::to_wstring(idx++)}, &type);
+			try
+			{
+				unhand_dir.push_back(
+					StringHandler::wstr2str(
+						StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_unhand_directory), L'/', L'\\')
+					)
+				);
+			}
+			catch (std::bad_variant_access&) 
+			{
+				break;
+			}
+		}
+	}
+#else
 	auto o_number_unhand_files = json_object.get({ L"unhandled", L"files", L"number" }, &type);
 	size_t number_unhand_files = 0;
 	try {
@@ -159,6 +240,7 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 			break;
 		}
 	}
+#endif//TASK_0_3_4__1
 
 	auto o_tokens_relative = json_object.get({ L"tokens", L"relative" }, &type);
 	JsonBase::eSimple tokens_relative;
@@ -342,10 +424,12 @@ void Target::flag_d_handler() {
 		uniq_file_paths.emplace(iter);
 	}
 
+#ifndef  TASK_0_3_4__1
 #ifdef  TASK_0_3_1__1
 	json_object.set({}, L"numbers", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(double(uniq_file_paths.size())));
 #else
 	json_object.set({}, L"numbers", JsonBase::eType::number, variant<wstring, double, JsonBase::eSimple>(uniq_file_paths.size()));
+#endif
 #endif
 
 	size_t idx = 0;
@@ -377,6 +461,30 @@ void Target::flag_m_handler() {
 	JsonObject json_object(converter.from_bytes(file.getAsString()), L"root", p_error);
 #endif
 
+#ifdef  TASK_0_3_4__1
+	JsonBase::eType type;
+	size_t idx = 0;
+	std::shared_ptr<vector<TokenPath>> file_list(new vector<TokenPath>());
+	while (true)
+	{
+		auto o_file_path = json_object.get({L"file_paths", L"file_paths_" + std::to_wstring(idx++)}, &type);
+		try
+		{
+			wstring file_path = std::get<wstring>(o_file_path);
+
+			if (!std::experimental::filesystem::exists(file_path))
+			{
+				p_error->set(ErrorStatus::error::tokenList_file_no_exists, true);
+				break;
+			}
+			file_list->push_back(TokenPath(file_path));
+		}
+		catch (std::bad_variant_access&)
+		{
+			break;
+		}
+	}
+#else
 	JsonBase::eType type;
 	auto o_numbers = json_object.get({L"numbers"}, &type);
 	size_t numbers = 0;
@@ -415,6 +523,7 @@ void Target::flag_m_handler() {
 			break;
 		}
 	}
+#endif
 
 	if (0 != p_error->get()) {
 		return;
