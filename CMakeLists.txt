@@ -11,6 +11,7 @@ endif(MSVC)
 option(DEPR_STR_CVT_OPTION_EN "Enable deprecation string convert" ON)
 option(TASK_0_3_1__1 "Enable" ON)
 option(TASK_0_3_4__1 "Enabke" ON)
+option(TASK_0_3_5__1 "Enable" ON)
 
 configure_file(
         "${PROJECT_SOURCE_DIR}/config.h.in"

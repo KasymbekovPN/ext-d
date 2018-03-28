@@ -7,7 +7,6 @@ JsonObject::JsonObject(const wstring & content_, const wstring& name_, shared_pt
 	wstring filtred_content = StringHandler::filter<wstring, wchar_t>(content_, StringHandler::FBE::begin_and_end, { L' ', L'\t', L'\n' });
 
 	if (L'{' != filtred_content[0] || L'}' != filtred_content[filtred_content.size() - 1]) {
-		cout << "obj" << endl;
 		p_error->set(ErrorStatus::error::json_objectInvalid, true);
 		return;
 	}

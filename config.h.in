@@ -7,5 +7,6 @@
 
 #cmakedefine TASK_0_3_1__1
 #cmakedefine TASK_0_3_4__1
+#cmakedefine TASK_0_3_5__1
 
 #endif // CONFIG_H

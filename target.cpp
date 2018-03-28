@@ -242,6 +242,22 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 	}
 #endif//TASK_0_3_4__1
 
+#ifdef  TASK_0_3_5__1
+
+	auto o_token_path = json_object.get({L"tokens", L"path"}, &type);
+	string token_path;
+	try
+	{
+		token_path = StringHandler::wstr2str(
+			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_token_path), L'/', L'\\')
+		);
+	}
+	catch (std::bad_variant_access&) 
+	{
+		p_error->set(ErrorStatus::error::json_extdlists_inv_tokens_path, true);
+	}
+
+#else
 	auto o_tokens_relative = json_object.get({ L"tokens", L"relative" }, &type);
 	JsonBase::eSimple tokens_relative;
 	try {
@@ -267,7 +283,24 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 	catch (std::bad_variant_access&) {
 		p_error->set(ErrorStatus::error::json_extdlists_inv_tokens_path, true);
 	}
+#endif
 
+#ifdef  TASK_0_3_5__1
+
+	auto o_user_path = json_object.get({L"user", L"path"}, &type);
+	string user_path;
+	try 
+	{
+		user_path = StringHandler::wstr2str(
+			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_user_path), L'/', L'\\')
+		);
+	}
+	catch (std::bad_variant_access&) 
+	{
+		p_error->set(ErrorStatus::error::json_extdlists_inv_user_path, true);
+	}
+
+#else
 	//
 	// �������� ��������� user-relative
 	//
@@ -299,9 +332,15 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 	catch (std::bad_variant_access&) {
 		p_error->set(ErrorStatus::error::json_extdlists_inv_user_path, true);
 	}
+#endif
 
 	if (0 == p_error->get()) {
 
+#ifdef  TASK_0_3_5__1
+		m_tokens_output = m_output_dir + token_path;
+		m_user_output = m_output_dir + user_path;
+		m_tokens_list_file_path = m_tokens_output + "\\_tokens_list.json";
+#else
 		if (JsonBase::eSimple::simple_true == tokens_relative) {
 			m_tokens_output = m_output_dir + tokens_path;
 		}
@@ -317,6 +356,7 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 		else {
 			m_user_output = user_path;
 		}
+#endif
 
 		if (!std::experimental::filesystem::exists(m_source_dir)) {
 			p_error->set(ErrorStatus::error::target_sourceDirNoExists, true);
@@ -449,9 +489,6 @@ void Target::flag_d_handler() {
 
 void Target::flag_m_handler() {
 
-	//
-	// ��������� ���� �������� ������� �� ����� _token_list.json
-	//
 	FileHandler file(m_tokens_list_file_path);
 
 #ifdef  TASK_0_3_1__1
