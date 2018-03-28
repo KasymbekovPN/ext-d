@@ -62,10 +62,8 @@ public:
 		tokenList_file_paths_empty,
 		tokenList_file_no_exists,
 		user_directory_no_exists,
-#ifdef  TASK_0_3_4__1
 		json_extdlists_inv_unhand_file_array,
 		json_extdlists_inv_unhand_dir_array
-#endif
 	};
 
 	explicit ErrorStatus();

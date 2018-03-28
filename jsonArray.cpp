@@ -198,11 +198,7 @@ variant<JsonBase::eSimple, double, wstring, JsonBase::eGetterMsg> JsonArray::get
 	}
 
 	*type_ = m_type;
-#ifdef  TASK_0_3_4__1
 	res = JsonBase::eGetterMsg::not_exist;
-#else
-	res = JsonBase::eGetterMsg::is_array;
-#endif
 	return res;
 }
 

@@ -45,10 +45,8 @@ public:
 	static vector<string> file2line(const string& file, bool replace_tab);
 	static wstring escape_wchar(const wstring& line_, wchar_t ch_);
 
-#ifdef  TASK_0_3_1__1
 	static wstring str2wstr(const string& in);
 	static string wstr2str(const wstring& in);
-#endif//TASK_0_3_1__1
 
 	template <class T, class C> 
 	static T filter(const T& line, FBE, vector<C>);

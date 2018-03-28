@@ -82,12 +82,8 @@ vector<wstring> cBaseToken::get_raw_WLines(bool line_feed_) const
 	vector<string> raw_lines = get_raw_Lines(line_feed_);
 	for (auto raw_line : raw_lines) {
 		wchar_t warray[4096];
-#ifdef  TASK_0_3_1__1
 		int size = int(raw_line.size());
 		MultiByteToWideChar(CP_ACP, 0, raw_line.c_str(), size, warray, size);
-#else
-		MultiByteToWideChar(CP_ACP, 0, raw_line.c_str(), raw_line.size(), warray, raw_line.size());
-#endif
 		wstring ws(warray, 0, raw_line.size());
 		res.push_back(ws);
 	}

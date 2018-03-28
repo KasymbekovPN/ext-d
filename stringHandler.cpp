@@ -118,7 +118,6 @@ wstring StringHandler::escape_wchar(const wstring & line_, wchar_t ch_)
 	return res;
 }
 
-#ifdef TASK_0_3_1__1
 wstring StringHandler::str2wstr(const string & in)
 {
 #ifdef DEPR_STR_CVT_OPTION_EN
@@ -155,4 +154,3 @@ string StringHandler::wstr2str(const wstring & in)
 	return str;
 #endif
 }
-#endif
