@@ -49,6 +49,9 @@ private:
 	string	m_source_dir;
 	string	m_output_dir;
 	string  m_tokens_output;
+#ifdef  TASK_0_3_6__1
+	string  m_relative_tokens_output;
+#endif
 	string  m_tokens_list_file_path;
 	string  m_user_output;
 	std::shared_ptr<ErrorStatus> p_error;

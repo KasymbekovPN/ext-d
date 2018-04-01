@@ -1,6 +1,10 @@
 #include "parted_line.hpp"
 
+#ifndef  TASK_0_3_6__1
 PartedLine::PartedLine(const wstring & source_line_, shared_ptr<vector<TokenPath>> token_file_list_)
+#else
+PartedLine::PartedLine(const wstring & source_line_, shared_ptr<vector<TokenPath>> token_file_list_, const string& token_output_)
+#endif
 {
 
 	array<size_t, 4> founds;
@@ -18,17 +22,17 @@ PartedLine::PartedLine(const wstring & source_line_, shared_ptr<vector<TokenPath
 
 		if (cond) {			
 			wstring str = source_line_.substr(start, founds[0] - start);
-			m_parts.push_back(new PartPLine(str));			
+			m_parts.push_back(new PartPLine(str, token_output_));			
 
 			wstring head_link = source_line_.substr(founds[0] + 1, founds[1] - founds[0] - 1);
 			wstring link = source_line_.substr(founds[2] + 1, founds[3] - founds[2] - 1);
-			m_parts.push_back(new PartPLine(head_link, link, token_file_list_));
+			m_parts.push_back(new PartPLine(head_link, link, token_file_list_, token_output_));
 
 			start = founds[3] + 1;
 		}
 		else {
 			wstring str = source_line_.substr(start);
-			m_parts.push_back(new PartPLine(str));
+			m_parts.push_back(new PartPLine(str, token_output_));
 		}
 	}
 }
