@@ -181,9 +181,7 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 		// 3. Файла со списком файлов-токенов.
 		//
 		m_tokens_output = m_output_dir + token_path;
-#ifdef  TASK_0_3_6__1
 		m_relative_tokens_output = token_path;
-#endif
 		m_user_output = m_output_dir + user_path;
 		m_tokens_list_file_path = m_tokens_output + "\\_tokens_list.json";
 

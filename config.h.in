@@ -5,7 +5,4 @@
 
 //#cmakedefine DEPR_STR_CVT_OPTION_EN
 
-#cmakedefine TASK_0_3_6__1
-#cmakedefine TASK_0_3_7__1
-
 #endif // CONFIG_H

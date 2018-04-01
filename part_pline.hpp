@@ -31,13 +31,8 @@ public:
 		link
 	};
 
-#ifdef  TASK_0_3_6__1
 	PartPLine(const wstring& content_, const string& token_output_);
 	PartPLine(const wstring& head_link_, const wstring& link_, shared_ptr<vector<TokenPath>> token_file_list_, const string& token_output_);
-#else
-	PartPLine(const wstring& content_);
-	PartPLine(const wstring& head_link_, const wstring& link_, shared_ptr<vector<TokenPath>> token_file_list_);
-#endif
 
 	~PartPLine();
 	wstring string() const;
@@ -48,7 +43,5 @@ private:
 	wstring m_content;
 	wstring m_head_link;
 	wstring m_link;
-#ifdef TASK_0_3_6__1
 	wstring m_relative_token_output;
-#endif
 };
