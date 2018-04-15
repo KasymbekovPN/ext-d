@@ -1,8 +1,8 @@
 #pragma once 
 
-#include "c_base_token.hpp"
+#include "tokens/c_base_token.hpp"
 #include "stringHandler.h"
-#include "jsonObject.hpp"
+#include "json/jsonObject.hpp"
 
 #include <string>
 #include <iostream>

@@ -3,7 +3,7 @@
 #include "config.h"
 #include "configHandler.h"
 #include "errorStatus.h"
-#include "jsonObject.hpp"
+#include "json/jsonObject.hpp"
 
 #include <iostream>
 #include <string>

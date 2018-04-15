@@ -22,19 +22,78 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 		return;
 	}
 
-	JsonObject json_object(StringHandler::str2wstr(file.getAsString()), L"root", p_error_);
-	JsonBase::eType type;
+    JsonObject json_object(StringHandler::str2wstr(file.getAsString()), L"root", p_error_);
 
-	auto source_dir = json_object.get({ L"source-dir" }, &type);
+#ifdef  TASK_0_4_0_001
+    variantItem<wstring> vi_source_dir = json_object.variantExp<wstring>({ L"source-dir" },
+                                                                         ErrorStatus::error::json_extdlists_source_dir_inv);
+    if (!vi_source_dir.except_flag)
+    {
+        m_source_dir = StringHandler::wstr2str(
+            StringHandler::replace_all<wstring, wchar_t>(vi_source_dir.value, L'/', L'\\')
+        );
+    }
+//    else
+//    {
+//        p_error->set(ErrorStatus::error::json_extdlists_source_dir_inv, true);
+//    }
+#else
+
+#ifndef  TASK_0_4_0_002
+	JsonBase::eType type;
+#endif
+
+#ifdef  TASK_0_4_0_002
+
+    variantItem<wstring> vi_source_dir = json_object.variantExp<wstring>({ L"source-dir" },
+                                                                         ErrorStatus::error::json_extdlists_source_dir_inv);
+    if (!vi_source_dir.except_flag)
+    {
+        m_source_dir = StringHandler::wstr2str(
+            StringHandler::replace_all<wstring, wchar_t>(vi_source_dir.value, L'/', L'\\')
+        );
+    }
+
+#else
+    auto o_source_dir = json_object.get({ L"source-dir" }, &type);
 	try {
 		m_source_dir = StringHandler::wstr2str(
-			StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(source_dir), L'/', L'\\')
+            StringHandler::replace_all<wstring, wchar_t>(std::get<wstring>(o_source_dir), L'/', L'\\')
 		);
 	}
 	catch (const std::bad_variant_access&) {
 		p_error->set(ErrorStatus::error::json_extdlists_source_dir_inv, true);
 	}
+#endif//TASK_0_4_0_002
+#endif//TASK_0_4_0_001
 
+#ifdef TASK_0_4_0_001
+    variantItem<wstring> vi_output_dir = json_object.variantExp<wstring>({ L"out-dir" },
+                                                                         ErrorStatus::error::json_extdlists_out_dir_inv);
+    if (!vi_output_dir.except_flag)
+    {
+        m_output_dir = StringHandler::wstr2str(
+            StringHandler::replace_all<wstring, wchar_t>(vi_output_dir.value, L'/', L'\\')
+        );
+    }
+//    else
+//    {
+//        p_error->set(ErrorStatus::error::json_extdlists_out_dir_inv, true);
+//    }
+#else
+
+#ifdef TASK_0_4_0_002
+
+    variantItem<wstring> vi_output_dir = json_object.variantExp<wstring>({ L"out-dir" },
+                                                                         ErrorStatus::error::json_extdlists_out_dir_inv);
+    if (!vi_output_dir.except_flag)
+    {
+        m_output_dir = StringHandler::wstr2str(
+            StringHandler::replace_all<wstring, wchar_t>(vi_output_dir.value, L'/', L'\\')
+        );
+    }
+
+#else
 	auto out_dir = json_object.get({ L"out-dir" }, &type);
 	try
 	{
@@ -46,7 +105,32 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 	{
 		p_error->set(ErrorStatus::error::json_extdlists_out_dir_inv, true);
 	}
+#endif//TASK_0_4_0_002
+#endif//TASK_0_4_0_001
 
+#ifdef  TASK_0_4_0_001
+    variantItem<wstring> vi_supp_lang = json_object.variantExp<wstring>({ L"lang" },
+                                                                        ErrorStatus::error::json_extdlists_lang_inv);
+    string supp_lang;
+    if (!vi_supp_lang.except_flag)
+    {
+        supp_lang = StringHandler::wstr2str(
+            StringHandler::replace_all<wstring, wchar_t>(vi_supp_lang.value, '/', '\\')
+        );
+    }
+#else
+
+#ifdef  TASK_0_4_0_002
+    variantItem<wstring> vi_supp_lang = json_object.variantExp<wstring>({ L"lang" },
+                                                                        ErrorStatus::error::json_extdlists_lang_inv);
+    string supp_lang;
+    if (!vi_supp_lang.except_flag)
+    {
+        supp_lang = StringHandler::wstr2str(
+            StringHandler::replace_all<wstring, wchar_t>(vi_supp_lang.value, '/', '\\')
+        );
+    }
+#else
 	auto lang = json_object.get({ L"lang" }, &type);
 	string supp_lang;
 	try
@@ -59,10 +143,33 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 	{
 		p_error->set(ErrorStatus::error::json_extdlists_lang_inv, true);
 	}
+#endif
+#endif//TASK_0_4_0_001
 
 	//
 	// Проверяем наличие массива имен необрабатываемых файлов.
 	//
+#ifdef  TASK_0_4_0_001
+    variantItem<JsonObject::eGetterMsg> vi_unhand_file_array = json_object.variantExp<JsonBase::eGetterMsg>(
+                {L"unhandled", L"files", L"names"}
+                );
+
+    if (vi_unhand_file_array.except_flag || JsonBase::eGetterMsg::is_array != vi_unhand_file_array.value)
+    {
+        p_error->set(ErrorStatus::error::json_extdlists_inv_unhand_file_array, true);
+    }
+#else
+
+#ifdef  TASK_0_4_0_002
+    variantItem<JsonObject::eGetterMsg> vi_unhand_file_array = json_object.variantExp<JsonBase::eGetterMsg>(
+                {L"unhandled", L"files", L"names"}
+                );
+
+    if (vi_unhand_file_array.except_flag || JsonBase::eGetterMsg::is_array != vi_unhand_file_array.value)
+    {
+        p_error->set(ErrorStatus::error::json_extdlists_inv_unhand_file_array, true);
+    }
+#else
 	auto o_unhand_file_array = json_object.get({L"unhandled", L"files", L"names"}, &type);
 	JsonBase::eGetterMsg msg_file;
 	try
@@ -77,10 +184,33 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 	{
 		p_error->set(ErrorStatus::error::json_extdlists_inv_unhand_file_array, true);
 	}
+#endif//TASK_0_4_0_002
+#endif//TASK_0_4_0_001
 
 	//
 	// Проверяем наличие массива имен необрабатываемых директорий.
 	//
+#ifdef  TASK_0_4_0_001
+    variantItem<JsonBase::eGetterMsg> vi_unhand_dir_array = json_object.variantExp<JsonBase::eGetterMsg>(
+                {L"unhandled", L"directory", L"names"}
+                );
+
+    if (vi_unhand_dir_array.except_flag || JsonBase::eGetterMsg::is_array != vi_unhand_dir_array.value)
+    {
+        p_error->set(ErrorStatus::error::json_extdlists_inv_unhand_dir_array, true);
+    }
+#else
+
+#ifdef  TASK_0_4_0_002
+    variantItem<JsonBase::eGetterMsg> vi_unhand_dir_array = json_object.variantExp<JsonBase::eGetterMsg>(
+                {L"unhandled", L"directory", L"names"}
+                );
+
+    if (vi_unhand_dir_array.except_flag || JsonBase::eGetterMsg::is_array != vi_unhand_dir_array.value)
+    {
+        p_error->set(ErrorStatus::error::json_extdlists_inv_unhand_dir_array, true);
+    }
+#else
 	auto o_unhand_dir_array = json_object.get({L"unhandled", L"directory", L"names"}, &type);
 	JsonBase::eGetterMsg msg_dir;
 	try
@@ -95,6 +225,8 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 	{
 		p_error->set(ErrorStatus::error::json_extdlists_inv_unhand_dir_array, true);
 	}
+#endif//TASK_0_4_0_002
+#endif//p_error->set(ErrorStatus::error::json_extdlists_inv_unhand_file_array, true);
 
 	//
 	// Опрделяем списки необрабатываемых директорий и файлов.
@@ -106,6 +238,42 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 		size_t idx = 0;
 		while (true)
 		{
+#ifdef  TASK_0_4_0_001
+            variantItem<wstring> vi_unhand_file = json_object.variantExp<wstring>(
+                        {L"unhandled", L"files", L"names", L"names_" + std::to_wstring(idx++)});
+
+            if (!vi_unhand_file.except_flag)
+            {
+                unhand_files.push_back(
+                    StringHandler::wstr2str(
+                        StringHandler::replace_all<wstring, wchar_t>(vi_unhand_file.value, L'/', L'\\')
+                    )
+                );
+            }
+            else
+            {
+                break;
+            }
+#else
+
+#ifdef  TASK_0_4_0_002
+            variantItem<wstring> vi_unhand_file = json_object.variantExp<wstring>(
+                        {L"unhandled", L"files", L"names", L"names_" + std::to_wstring(idx++)});
+
+            if (!vi_unhand_file.except_flag)
+            {
+                unhand_files.push_back(
+                    StringHandler::wstr2str(
+                        StringHandler::replace_all<wstring, wchar_t>(vi_unhand_file.value, L'/', L'\\')
+                    )
+                );
+            }
+            else
+            {
+                break;
+            }
+#else
+
 			auto o_unhand_file = json_object.get({L"unhandled", L"files", L"names", L"names_" + std::to_wstring(idx++)}, &type);
 			try
 			{
@@ -119,11 +287,48 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 			{
 				break;
 			}
+#endif//TASK_0_4_0_002
+#endif//TASK_0_4_0_001
 		}
 
 		idx = 0;
 		while (true)
 		{
+#ifdef  TASK_0_4_0_001
+            variantItem<wstring> vi_unhand_directory = json_object.variantExp<wstring>(
+                        {L"unhandled", L"directory", L"names", L"names_" + std::to_wstring(idx++)});
+
+            if (!vi_unhand_directory.except_flag)
+            {
+                unhand_dir.push_back(
+                    StringHandler::wstr2str(
+                        StringHandler::replace_all<wstring, wchar_t>(vi_unhand_directory.value, L'/', L'\\')
+                    )
+                );
+            }
+            else
+            {
+                break;
+            }
+#else
+
+#ifdef  TASK_0_4_0_002
+            variantItem<wstring> vi_unhand_directory = json_object.variantExp<wstring>(
+                        {L"unhandled", L"directory", L"names", L"names_" + std::to_wstring(idx++)});
+
+            if (!vi_unhand_directory.except_flag)
+            {
+                unhand_dir.push_back(
+                    StringHandler::wstr2str(
+                        StringHandler::replace_all<wstring, wchar_t>(vi_unhand_directory.value, L'/', L'\\')
+                    )
+                );
+            }
+            else
+            {
+                break;
+            }
+#else
 			auto o_unhand_directory = json_object.get({L"unhandled", L"directory", L"names", L"names_" + std::to_wstring(idx++)}, &type);
 			try
 			{
@@ -137,12 +342,39 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 			{
 				break;
 			}
+#endif//TASK_0_4_0_002
+#endif//TASK_0_4_0_001
 		}
 	}
 
 	//
 	// Получаем путь (относительный) до пааки с файлами-токенами.
 	//
+#ifdef  TASK_0_4_0_001
+    variantItem<wstring> vi_token_path = json_object.variantExp<wstring>({L"tokens", L"path"},
+                                                                         ErrorStatus::error::json_extdlists_inv_tokens_path);
+
+    string token_path;
+    if (!vi_token_path.except_flag)
+    {
+        token_path = StringHandler::wstr2str(
+            StringHandler::replace_all<wstring, wchar_t>(vi_token_path.value, L'/', L'\\')
+        );
+    }
+#else
+
+#ifdef  TASK_0_4_0_002
+    variantItem<wstring> vi_token_path = json_object.variantExp<wstring>({L"tokens", L"path"},
+                                                                         ErrorStatus::error::json_extdlists_inv_tokens_path);
+
+    string token_path;
+    if (!vi_token_path.except_flag)
+    {
+        token_path = StringHandler::wstr2str(
+            StringHandler::replace_all<wstring, wchar_t>(vi_token_path.value, L'/', L'\\')
+        );
+    }
+#else
 	auto o_token_path = json_object.get({L"tokens", L"path"}, &type);
 	string token_path;
 	try
@@ -155,10 +387,37 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 	{
 		p_error->set(ErrorStatus::error::json_extdlists_inv_tokens_path, true);
 	}
+#endif//TASK_0_4_0_002
+#endif//TASK_0_4_0_001
 
 	//
 	// Получаем путь (относительный) до папки с пользовательскими файлами.
 	//
+#ifdef  TASK_0_4_0_001
+//    variantItem<wstring> vi_user_path = json_object.variantExp<wstring>({L"user", L"path"},
+//                                                                        ErrorStatus::error::json_extdlists_inv_user_path);
+
+    string user_path;
+//    if (!vi_user_path.except_flag)
+//    {
+//        user_path = StringHandler::wstr2str(
+//            StringHandler::replace_all<wstring, wchar_t>(vi_user_path.value, L'/', L'\\')
+//        );
+//    }
+#else
+
+#ifdef  TASK_0_4_0_002
+    variantItem<wstring> vi_user_path = json_object.variantExp<wstring>({L"user", L"path"},
+                                                                        ErrorStatus::error::json_extdlists_inv_user_path);
+
+    string user_path;
+    if (!vi_user_path.except_flag)
+    {
+        user_path = StringHandler::wstr2str(
+            StringHandler::replace_all<wstring, wchar_t>(vi_user_path.value, L'/', L'\\')
+        );
+    }
+#else
 	auto o_user_path = json_object.get({L"user", L"path"}, &type);
 	string user_path;
 	try 
@@ -171,6 +430,8 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 	{
 		p_error->set(ErrorStatus::error::json_extdlists_inv_user_path, true);
 	}
+#endif//TASK_0_4_0_002
+#endif//TASK_0_4_0_001
 
 	if (0 == p_error->get()) {
 
@@ -182,7 +443,7 @@ Target::Target(const wstring & name_, const wstring & path_, std::shared_ptr<Err
 		//
 		m_tokens_output = m_output_dir + token_path;
 		m_relative_tokens_output = token_path;
-		m_user_output = m_output_dir + user_path;
+        m_user_output = m_output_dir + user_path;
 		m_tokens_list_file_path = m_tokens_output + "\\_tokens_list.json";
 
 		if (!std::experimental::filesystem::exists(m_source_dir)) {
@@ -352,7 +613,7 @@ void Target::flag_m_handler() {
 					msg = std::get<JsonBase::eGetterMsg>(o_cells);
 					if (JsonBase::eGetterMsg::is_object != msg) {
 						break;
-					}
+					}                    
 				}
 				catch (std::bad_variant_access&) {
 					break;

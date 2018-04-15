@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 
-project(ext-d VERSION 0.3.7)
+project(ext-d VERSION 0.4.0)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -9,13 +9,15 @@ if(MSVC)
 endif(MSVC)
 
 option(DEPR_STR_CVT_OPTION_EN "Enable deprecation string convert" ON)
+option(TASK_0_4_0_001 "Enable" ON)
+option(TASK_0_4_0_002 "Enable" ON)
 
 configure_file(
         "${PROJECT_SOURCE_DIR}/config.h.in"
         "${PROJECT_SOURCE_DIR}/config.h"
 		@ONLY)
 
-add_executable(ext-d 
+add_executable(ext-d
                 main.cpp 
                 config.h.in 
                 fileHandler.h 
@@ -34,34 +36,34 @@ add_executable(ext-d
                 errorStatus.cpp
                 tokenGenerator.hpp
                 tokenGenerator.cpp
-                c_base_token.hpp
-                c_base_token.cpp
-                c_def_var_token.hpp
-                c_def_var_token.cpp
-                c_enum_token.hpp
-                c_enum_token.cpp
-                c_macro_token.hpp
-                c_macro_token.cpp
-                c_struct_token.hpp
-                c_struct_token.cpp
-                c_func_decl.hpp
-                c_func_decl.cpp
-                c_func_def.hpp
-                c_func_def.cpp
+                tokens/c_base_token.hpp
+                tokens/c_base_token.cpp
+                tokens/c_def_var_token.hpp
+                tokens/c_def_var_token.cpp
+                tokens/c_enum_token.hpp
+                tokens/c_enum_token.cpp
+                tokens/c_macro_token.hpp
+                tokens/c_macro_token.cpp
+                tokens/c_struct_token.hpp
+                tokens/c_struct_token.cpp
+                tokens/c_func_decl.hpp
+                tokens/c_func_decl.cpp
+                tokens/c_func_def.hpp
+                tokens/c_func_def.cpp
 #                tokenHandler.hpp
 #                tokenHandler.cpp
-                jsonBase.hpp
-                jsonBase.cpp
-                jsonNumber.hpp
-                jsonNumber.cpp
-                jsonObject.hpp
-                jsonObject.cpp
-                jsonSimple.hpp
-                jsonSimple.cpp
-                jsonString.hpp
-                jsonString.cpp
-                jsonArray.hpp
-                jsonArray.cpp
+                json/jsonBase.hpp
+                json/jsonBase.cpp
+                json/jsonNumber.hpp
+                json/jsonNumber.cpp
+                json/jsonObject.hpp
+                json/jsonObject.cpp
+                json/jsonSimple.hpp
+                json/jsonSimple.cpp
+                json/jsonString.hpp
+                json/jsonString.cpp
+                json/jsonArray.hpp
+                json/jsonArray.cpp
                 wfileHandler.hpp
                 wfileHandler.cpp
                 parted_line.hpp

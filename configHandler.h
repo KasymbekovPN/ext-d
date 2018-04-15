@@ -4,7 +4,7 @@
 #include "target.h"
 #include "errorStatus.h"
 #include "stringHandler.h"
-#include "jsonObject.hpp"
+#include "json/jsonObject.hpp"
 
 #include <string>
 #include <vector>

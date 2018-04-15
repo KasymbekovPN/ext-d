@@ -3,9 +3,9 @@
 #include <iostream>
 #include <string>
 
-#include "c_base_token.hpp"
+#include "tokens/c_base_token.hpp"
 #include "stringHandler.h"
-#include "jsonObject.hpp"
+#include "json/jsonObject.hpp"
 
 class cMacroToken : public cBaseToken
 {

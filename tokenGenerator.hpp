@@ -1,13 +1,13 @@
 #pragma once
 
 #include "fileHandler.h"
-#include "c_base_token.hpp"
-#include "c_macro_token.hpp"
-#include "c_enum_token.hpp"
-#include "c_struct_token.hpp"
-#include "c_def_var_token.hpp"
-#include "c_func_decl.hpp"
-#include "c_func_def.hpp"
+#include "tokens/c_base_token.hpp"
+#include "tokens/c_macro_token.hpp"
+#include "tokens/c_enum_token.hpp"
+#include "tokens/c_struct_token.hpp"
+#include "tokens/c_def_var_token.hpp"
+#include "tokens/c_func_decl.hpp"
+#include "tokens/c_func_def.hpp"
 
 #include <iostream>
 #include <string>

@@ -19,7 +19,7 @@
 #include "fileTree.h"
 #include "errorStatus.h"
 #include "tokenGenerator.hpp"
-#include "jsonObject.hpp"
+#include "json/jsonObject.hpp"
 #include "wfileHandler.hpp"
 #include "parted_line.hpp"
 #include "token_path.hpp"
