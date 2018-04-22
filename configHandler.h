@@ -28,7 +28,6 @@ public:
 	void showTarget(const string&) const;
 
 private:
-	const string cmd_settarget = "SETTARGET";
 
 	vector<Target*> m_targets;
 	bool isExist;

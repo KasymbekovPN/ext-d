@@ -4,6 +4,8 @@
 #include <string>
 #include <filesystem>
 
+#include "config.h"
+
 using std::wstring;
 using std::wcout;
 using std::endl;
@@ -17,7 +19,6 @@ public:
 	~TokenPath();
 
 	std::wstring clean_file_name() const;
-	std::wstring hash_of_file_name() const;
 
 private:
 

@@ -81,15 +81,6 @@ void TokenGenerator::parse(size_t offset_, const string & outdir_, vector<std::e
 	cout << endl;
 }
 
-void TokenGenerator::show()
-{
-	cout << endl;
-	cout << m_path << endl;
-	cout << "h : " << m_was_header << endl;
-	cout << "c : " << m_was_source << endl;
-	cout << endl;
-}
-
 void TokenGenerator::parse_file(const string & file_name)
 {
 

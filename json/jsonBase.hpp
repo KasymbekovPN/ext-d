@@ -20,21 +20,6 @@ using std::variant;
 using std::shared_ptr;
 using std::wstring;
 
-//#ifdef  TASK_0_4_0_001
-//template <class T>
-//class variantItem
-//{
-//public:
-//    variantItem() {
-//        except_flag = false;
-//    }
-
-//    T value;
-//    bool except_flag;
-//};
-//#endif
-
-//#ifdef  TASK_0_4_0_001
 template <class T>
 class variantItem
 {
@@ -42,7 +27,6 @@ public:
     T value;
     bool except_flag;
 };
-//#endif//TASK_0_4_0_001
 
 class JsonBase
 {
@@ -71,22 +55,11 @@ public:
 	virtual void set(vector<wstring> path_, const wstring& name_, JsonBase::eType type_, std::variant<wstring, double, JsonBase::eSimple> arg_);
 	virtual wstring to_string(const wstring& offset_, bool without_name, bool end_with_comma_) const;
 
-//#ifdef  TASK_0_4_0_001
-//    template <class T>
-//    T variantExp(variant<eSimple, double, wstring, eGetterMsg> variant_, bool* except_flag_) const;
-
-//    template <class T>
-//    variantItem<T> varExp(variant<eSimple, double, wstring, eGetterMsg> variant_) const;
-
-//    template <class T>
-//    variantItem<T> variantExp(variant<eSimple, double, wstring, eGetterMsg> variant_) const;
-
     template <class T>
     variantItem<T> variantExp(const vector<wstring>& path_) const;
 
     template <class T>
     variantItem<T> variantExp(const vector<wstring>& path_, ErrorStatus::error error_);
-//#endif
 
 	wstring Name() const;
 
@@ -99,7 +72,6 @@ private:
 
 };
 
-//#ifdef  TASK_0_4_0_001
 template<class T>
 variantItem<T> JsonBase::variantExp(const vector<wstring>& path_) const
 {
@@ -140,54 +112,3 @@ variantItem<T> JsonBase::variantExp(const vector<wstring>& path_, ErrorStatus::e
 
     return result;
 }
-//template<class T>
-//variantItem<T> JsonBase::variantExp(variant<JsonBase::eSimple, double, std::wstring, JsonBase::eGetterMsg> variant_) const
-//{
-//    variantItem<T> result;
-//    try
-//    {
-//        result.value = std::get<T>(variant_);
-//        result.except_flag = false;
-//    }
-//    catch(std::bad_variant_access&)
-//    {
-//        result.except_flag = true;
-//    }
-
-//    return result;
-//}
-//#endif
-
-//template<class T>
-//variantItem<T> JsonBase::varExp(variant<JsonBase::eSimple, double, std::wstring, JsonBase::eGetterMsg> variant_) const
-//{
-//    variantItem<T> result;
-//    try
-//    {
-//        result = std::get<T>(variant_);
-//    }
-//    catch(std::bad_variant_access&)
-//    {
-//        result.except_flag = true;
-//    }
-
-//    return result;
-//}
-
-//#ifdef  TASK_0_4_0_001
-//template<class T>
-//T JsonBase::variantExp(variant<JsonBase::eSimple, double, std::wstring, JsonBase::eGetterMsg> variant_, bool *except_flag_) const
-//{
-//    T result;
-//    try
-//    {
-//        result = std::get<T>(variant_);
-//    }
-//    catch (std::bad_variant_access&)
-//    {
-//        *except_flag_ = true;
-//    }
-
-//    return result;
-//}
-//#endif

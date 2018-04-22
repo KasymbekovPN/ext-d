@@ -41,8 +41,6 @@ private:
 	typedef void (ConsoleCmdHandler::*ptrHandler)(vector<string>);
 	map<string, ptrHandler> cmdHandlers;
 
-	void helpTest();
-
 	void helpHandler(vector<string>);
 	void versionHandler(vector<string>);
 	void targetShowAllHandler(vector<string>);

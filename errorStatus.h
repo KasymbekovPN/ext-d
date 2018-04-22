@@ -70,9 +70,7 @@ public:
 
 	void clear();
 	void set(error error_, bool act_);
-	void set(ErrorStatus error_);
 	unsigned long long get();
-
 	void display() const;
 
 private:

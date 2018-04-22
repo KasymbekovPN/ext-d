@@ -28,7 +28,6 @@ public:
 	~WFileHandler();
 
 	const wstring& wstring() const;
-	bool is_exists() const;
 
 private:
 	std::wstring m_file_content;

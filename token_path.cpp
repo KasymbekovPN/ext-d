@@ -39,8 +39,3 @@ std::wstring TokenPath::clean_file_name() const
 {
 	return m_clean_file_name;
 }
-
-std::wstring TokenPath::hash_of_file_name() const
-{
-	return m_hash_of_file_name;
-}

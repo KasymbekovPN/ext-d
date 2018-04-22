@@ -25,8 +25,6 @@ public:
 	bool equal(const string& path_);
 	void parse(size_t offset_, const string& outdir_, vector<std::experimental::filesystem::path>* file_paths_);
 
-	void show();
-
 private:
 
 	string m_path; 

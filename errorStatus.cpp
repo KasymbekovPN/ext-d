@@ -64,11 +64,6 @@ void ErrorStatus::set(error error_, bool act_)
 	}
 }
 
-void ErrorStatus::set(ErrorStatus error_)
-{
-	value |= error_.get();
-}
-
 unsigned long long ErrorStatus::get()
 {
 	return value;

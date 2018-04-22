@@ -28,14 +28,7 @@ public:
 	~FileHandler();
 
 	const string& getAsString() const;
-	vector<string> getAsLineList() const;
 	bool isExist() const;
-	char get();
-
-	vector<vector<string>> getCmdLists();
-	vector<string> getCmdArgList(const string&);
-
-	string getStream();
 
 private:
 

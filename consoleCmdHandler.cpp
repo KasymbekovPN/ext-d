@@ -43,10 +43,6 @@ ConsoleCmdHandler::~ConsoleCmdHandler()
 	delete m_config;
 }
 
-void ConsoleCmdHandler::helpTest()
-{
-}
-
 void ConsoleCmdHandler::helpHandler(vector<string> command_)
 {
 

@@ -27,8 +27,3 @@ const wstring & WFileHandler::wstring() const
 {
 	return m_file_content;
 }
-
-bool WFileHandler::is_exists() const
-{
-	return m_file_exist;
-}
